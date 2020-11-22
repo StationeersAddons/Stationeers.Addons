@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Name>StationeersAddonsExample</Name>
+  <Author>Erdroy</Author>
+  <Version>0.2.2582.12315</Version>
+  <Description>This mod serves to demonstrate the correct format of a custom mod folder for Stationeers with scripting/content support.</Description>
+</ModMetadata>
