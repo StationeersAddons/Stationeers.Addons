@@ -36,6 +36,9 @@ namespace Stationeers.Addons.Patcher.Core
             {
                 Logger.Current.LogFatal(e.ToString());
             }
+
+            // Dispose the patcher
+            patcher.Dispose();
         }
     }
 }

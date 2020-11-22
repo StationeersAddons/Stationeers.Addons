@@ -17,6 +17,8 @@ namespace Stationeers.Addons.Loader.Plugins
 
         public static PluginManager Instance { get; private set; }
 
+        public int NumLoadedPlugins => _plugins.Count;
+
         private readonly Dictionary<string, PluginInfo> _plugins = new Dictionary<string, PluginInfo>();
 
         public PluginManager()

@@ -6,9 +6,9 @@ using System.IO;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace Stationeers.Addons.AddonManager
+namespace Stationeers.Addons.PluginCompiler
 {
-    public static class PluginCompiler
+    public static class Compiler
     {
         private static readonly string[] GameAssemblies = {
             "mscorlib.dll",
@@ -32,7 +32,7 @@ namespace Stationeers.Addons.AddonManager
             // Parse all files
             foreach (var sourceFile in sourceFiles)
             {
-                Console.WriteLine($"Compiling '{sourceFile}'...");
+                Console.WriteLine($"Compiling file '{sourceFile}'...");
 
                 if (!File.Exists(sourceFile))
                 {
@@ -108,7 +108,7 @@ namespace Stationeers.Addons.AddonManager
                 }
 
                 // Output as AddonsCache/AddonName-Assembly.dll
-                var assemblyFile = "../AddonsCache/" + assemblyName + ".dll";
+                var assemblyFile = "AddonsCache/" + assemblyName + ".dll";
                 using (var fs = new FileStream(assemblyFile, FileMode.Create))
                 {
                     fs.Write(ms.GetBuffer(), 0, (int)ms.Length);

@@ -20,7 +20,7 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
         public const string AssemblyDir = "Managed";
         public const string AssemblyName = "Assembly-CSharp.dll";
 
-        private const string TargetType = "Assets.Scripts.MenuCutscene";
+        private const string TargetType = "Assets.Scripts.MenuCutscene"; // BUG: Not called on server builds, we have to find better place for this - some bootstrap class or something.
         private const string TargetFunction = "Awake";
 
         private const string Signature = "StationeersModLoader";
@@ -29,27 +29,28 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
         private ModuleDefinition _module;
         private TypeDefinition _type;
 
-        public string AssemblyFileName =>
+        public string AssemblyFileName => 
             Path.Combine(Environment.CurrentDirectory, Constants.ResourcesDir, AssemblyDir, AssemblyName);
+        public string TemporaryAssemblyFileName => 
+            Path.Combine(Environment.CurrentDirectory, Constants.ResourcesDir, AssemblyDir, AssemblyName + ".temp.dll");
 
         /// <inheritdoc />
         public void Load(string gameExe)
         {
             if (!File.Exists(AssemblyFileName))
                 Logger.Current.LogFatal($"Could not find game assembly '{AssemblyFileName}'.");
-
+            
             // Copy the assembly into temporary file
-            var assemblyName = Path.GetTempFileName();
-            File.Copy(AssemblyFileName, assemblyName, true);
+            File.Copy(AssemblyFileName, TemporaryAssemblyFileName, true);
 
-            Logger.Current.Log("Temporary file " + assemblyName);
+            Logger.Current.Log($"Coped game assembly into temporary file '{TemporaryAssemblyFileName}'");
 
-            // Read the original assembly
-            _assembly = AssemblyDefinition.ReadAssembly(assemblyName);
+            // Read the original, temporary assembly
+            _assembly = AssemblyDefinition.ReadAssembly(TemporaryAssemblyFileName);
 
             if (_assembly == null)
             {
-                Logger.Current.LogFatal($"Could not read game assembly '{assemblyName}'.");
+                Logger.Current.LogFatal($"Could not read game assembly '{TemporaryAssemblyFileName}'.");
                 return;
             }
 
@@ -58,11 +59,11 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
 
             if (_module == null)
             {
-                Logger.Current.LogFatal($"Could not read game assembly (MainModule not found) '{assemblyName}'.");
+                Logger.Current.LogFatal($"Could not read game assembly (MainModule not found) '{TemporaryAssemblyFileName}'.");
                 return;
             }
 
-            Logger.Current.Log("Found module: " + _module.FileName);
+            Logger.Current.Log($"Found module: {_module.FileName}");
 
             // Find target to inject into
             _type = _module.Types.FirstOrDefault(x => x.FullName == TargetType);
@@ -70,6 +71,20 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
             if (_type == null)
                 Logger.Current.LogFatal($"Could not find target type '{TargetType}'. " +
                                         "Please make sure that you have the latest version of Stationeers.ModLoader!");
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            // Dispose the assembly if loaded
+            _assembly?.Dispose();
+
+            // Delete the temporary assembly file
+            if (File.Exists(TemporaryAssemblyFileName))
+            {
+                Logger.Current.Log($"Deleting temporary assembly file '{TemporaryAssemblyFileName}'");
+                File.Delete(TemporaryAssemblyFileName);
+            }
         }
 
         /// <inheritdoc />
@@ -144,10 +159,14 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
             _type.Fields.Add(new FieldDefinition(Signature, FieldAttributes.Private,
                 _module.ImportReference(typeof(int))));
 
+            var cd = Environment.CurrentDirectory;
+            Environment.CurrentDirectory = Path.GetDirectoryName(AssemblyFileName);
+
             // Write modified assembly
             Logger.Current.Log("Saving modified assembly");
-            _assembly.Write(AssemblyFileName);
-            _assembly.Dispose();
+            _assembly.Write(AssemblyName); // AssemblyName because we've changed the current directory
+
+            Environment.CurrentDirectory = cd;
 
             Logger.Current.Log("Successfully patched!");
         }

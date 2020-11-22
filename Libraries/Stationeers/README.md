@@ -4,6 +4,11 @@ Please copy these .DLL files into this directory:
 * Assembly-CSharp.dll
 * Assembly-CSharp-firstpass.dll
 * mscorlib.dll
+* netstandard.dll
+* System.dll
+* System.Core.dll
+* System.Data.dll
+* System.Xml.dll
 * UnityEngine.CoreModule.dll
 * UnityEngine.dll
 * UnityEngine.IMGUIModule.dll

@@ -1,11 +1,13 @@
 ﻿// Stationeers.Addons (c) 2018-2020 Damian 'Erdroy' Korczowski & Contributors
 
+using System;
+
 namespace Stationeers.Addons.Patcher.Core
 {
     /// <summary>
     ///     Game patcher interface, provides basic schema on how to implement a custom patcher.
     /// </summary>
-    public interface IGamePatcher
+    public interface IGamePatcher : IDisposable
     {
         /// <summary>
         ///     Loads game into memory.
