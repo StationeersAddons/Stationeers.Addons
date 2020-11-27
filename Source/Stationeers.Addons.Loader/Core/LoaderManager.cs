@@ -36,78 +36,26 @@ namespace Stationeers.Addons.Core
         }
 
         private readonly List<IModule> _modules = new List<IModule>();
-        private WorkshopModule _workshop;
-        private PluginCompilerModule _pluginCompiler;
-        private PluginLoaderModule _pluginLoader;
-        private HarmonyModule _harmony;
 
         /// <summary>
         ///     Workshop module reference
         /// </summary>
-        public WorkshopModule Workshop
-        {
-            get
-            {
-                if (_workshop == null)
-                {
-                    _workshop = new WorkshopModule();
-                    _modules.Add(new WorkshopModule());
-                }
-
-                return _workshop;
-            }
-        }
+        public WorkshopModule Workshop { get; private set; }
 
         /// <summary>
         ///     PluginCompiler module reference
         /// </summary>
-        public PluginCompilerModule PluginCompiler
-        {
-            get
-            {
-                if (_pluginCompiler == null)
-                {
-                    _pluginCompiler = new PluginCompilerModule();
-                    _modules.Add(new PluginCompilerModule());
-                }
-
-                return _pluginCompiler;
-            }
-        }
+        public PluginCompilerModule PluginCompiler { get; private set; }
 
         /// <summary>
         ///     PluginLoader module reference
         /// </summary>
-        public PluginLoaderModule PluginLoader
-        {
-            get
-            {
-                if (_pluginLoader == null)
-                {
-                    _pluginLoader = new PluginLoaderModule();
-                    _modules.Add(new PluginLoaderModule());
-                }
-
-                return _pluginLoader;
-            }
-        }
+        public PluginLoaderModule PluginLoader { get; private set; }
 
         /// <summary>
         ///     Harmony module reference
         /// </summary>
-        public HarmonyModule Harmony
-        {
-            get
-            {
-                if (_harmony == null)
-                {
-                    _harmony = new HarmonyModule();
-                    _modules.Add(new HarmonyModule());
-                }
-
-                return _harmony;
-            }
-        }
+        public HarmonyModule Harmony { get; private set; }
 
         public void Activate()
         {
@@ -118,11 +66,11 @@ namespace Stationeers.Addons.Core
         {
             DontDestroyOnLoad(gameObject);
 
-            Workshop.Initialize();
-            //BundleLoader.Initialize(); // TODO: Unity asset bundle loader
-            PluginCompiler.Initialize();
-            PluginLoader.Initialize();
-            Harmony.Initialize();
+            Workshop = InitializeModule<WorkshopModule>();
+            //BundleLoader = InitializeModule<BundleLoaderModule>(); // TODO: Unity asset bundle loader
+            PluginCompiler = InitializeModule<PluginCompilerModule>();
+            PluginLoader = InitializeModule<PluginLoaderModule>();
+            Harmony = InitializeModule<HarmonyModule>();
         }
 
         private IEnumerator Start()
@@ -159,6 +107,14 @@ namespace Stationeers.Addons.Core
         {
             GUI.color = new Color(1.0f, 1.0f, 1.0f, 0.15f);
             GUI.Label(new Rect(5.0f, 5.0f, Screen.width, 25.0f), $"Stationeers.Addons - v0.1.0 - Loaded {PluginLoader.NumLoadedPlugins} plugins");
+        }
+
+        private TModuleType InitializeModule<TModuleType>() where TModuleType : IModule, new()
+        {
+            var moduleInstance = new TModuleType();
+            _modules.Add(moduleInstance);
+            moduleInstance.Initialize();
+            return moduleInstance;
         }
     }
 }
