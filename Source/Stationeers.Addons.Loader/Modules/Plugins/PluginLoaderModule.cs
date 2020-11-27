@@ -10,7 +10,7 @@ namespace Stationeers.Addons.Loader.Modules.Plugins
 {
     internal class PluginLoaderModule : IModule
     {
-        private struct PluginInfo
+        internal struct PluginInfo
         {
             public Assembly Assembly { get; set; }
             public IPlugin[] Plugins { get; set; }
@@ -18,6 +18,7 @@ namespace Stationeers.Addons.Loader.Modules.Plugins
 
         private readonly Dictionary<string, PluginInfo> _plugins = new Dictionary<string, PluginInfo>();
 
+        public Dictionary<string, PluginInfo>.ValueCollection LoadedPlugins => _plugins.Values;
         public int NumLoadedPlugins => _plugins.Count;
         public string LoadingCaption => "Starting up plugins...";
 
@@ -29,6 +30,9 @@ namespace Stationeers.Addons.Loader.Modules.Plugins
         /// <inheritdoc />
         public IEnumerator Load()
         {
+            // Using PluginCompilerModule.CompiledPlugins we have to be sure that it has been created
+            // TODO: Better way to reference cross-module or don't reference it at all.
+
             foreach (var compiledPlugin in PluginCompilerModule.CompiledPlugins)
             {
                 Debug.Log($"Loading plugin assembly '{compiledPlugin.AssemblyFile}'");
@@ -62,6 +66,7 @@ namespace Stationeers.Addons.Loader.Modules.Plugins
             Debug.Log("Plugin assembly " + pluginAssembly + " loaded ");
 
             var plugins = new List<IPlugin>();
+            // TODO: Maybe we do not want to allow multiple plugins per addon...?
             foreach (var type in assembly.GetTypes())
             {
                 if (typeof(IPlugin).IsAssignableFrom(type))

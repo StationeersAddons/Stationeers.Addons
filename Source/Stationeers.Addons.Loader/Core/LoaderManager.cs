@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.UI;
 using Stationeers.Addons.Loader.Modules;
+using Stationeers.Addons.Loader.Modules.HarmonyLib;
 using Stationeers.Addons.Loader.Modules.Plugins;
 using Stationeers.Addons.Loader.Modules.Workshop;
 using UnityEngine;
@@ -38,6 +39,7 @@ namespace Stationeers.Addons.Loader.Core
         private WorkshopModule _workshop;
         private PluginCompilerModule _pluginCompiler;
         private PluginLoaderModule _pluginLoader;
+        private HarmonyModule _harmony;
 
         /// <summary>
         ///     Workshop module reference
@@ -90,6 +92,23 @@ namespace Stationeers.Addons.Loader.Core
             }
         }
 
+        /// <summary>
+        ///     Harmony module reference
+        /// </summary>
+        public HarmonyModule Harmony
+        {
+            get
+            {
+                if (_harmony == null)
+                {
+                    _harmony = new HarmonyModule();
+                    _modules.Add(new HarmonyModule());
+                }
+
+                return _harmony;
+            }
+        }
+
         public void Activate()
         {
             Debug.Log("ModLoader activated!");
@@ -100,9 +119,10 @@ namespace Stationeers.Addons.Loader.Core
             DontDestroyOnLoad(gameObject);
 
             Workshop.Initialize();
+            //BundleLoader.Initialize(); // TODO: Unity asset bundle loader
             PluginCompiler.Initialize();
             PluginLoader.Initialize();
-            //BundleLoader.Initialize();
+            Harmony.Initialize();
         }
 
         private IEnumerator Start()
