@@ -34,7 +34,61 @@ namespace Stationeers.Addons.Loader.Core
             }
         }
 
-        private List<IModule> _modules = new List<IModule>();
+        private readonly List<IModule> _modules = new List<IModule>();
+        private WorkshopModule _workshop;
+        private PluginCompilerModule _pluginCompiler;
+        private PluginLoaderModule _pluginLoader;
+
+        /// <summary>
+        ///     Workshop module reference
+        /// </summary>
+        public WorkshopModule Workshop
+        {
+            get
+            {
+                if (_workshop == null)
+                {
+                    _workshop = new WorkshopModule();
+                    _modules.Add(new WorkshopModule());
+                }
+
+                return _workshop;
+            }
+        }
+
+        /// <summary>
+        ///     PluginCompiler module reference
+        /// </summary>
+        public PluginCompilerModule PluginCompiler
+        {
+            get
+            {
+                if (_pluginCompiler == null)
+                {
+                    _pluginCompiler = new PluginCompilerModule();
+                    _modules.Add(new PluginCompilerModule());
+                }
+
+                return _pluginCompiler;
+            }
+        }
+
+        /// <summary>
+        ///     PluginLoader module reference
+        /// </summary>
+        public PluginLoaderModule PluginLoader
+        {
+            get
+            {
+                if (_pluginLoader == null)
+                {
+                    _pluginLoader = new PluginLoaderModule();
+                    _modules.Add(new PluginLoaderModule());
+                }
+
+                return _pluginLoader;
+            }
+        }
 
         public void Activate()
         {
@@ -45,20 +99,17 @@ namespace Stationeers.Addons.Loader.Core
         {
             DontDestroyOnLoad(gameObject);
 
-            _modules.Add(new WorkshopModule());
-            _modules.Add(new PluginCompilerModule());
-            _modules.Add(new PluginLoaderModule());
-            //_modules.Add(new BundleLoaderModule());
+            Workshop.Initialize();
+            PluginCompiler.Initialize();
+            PluginLoader.Initialize();
+            //BundleLoader.Initialize();
         }
 
         private IEnumerator Start()
         {
             ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
-            ProgressPanel.Instance.UpdateProgressBarCaption("Initializing modules...");
+            ProgressPanel.Instance.UpdateProgressBarCaption("Loading modules...");
             ProgressPanel.Instance.UpdateProgressBar(0.1f);
-
-            foreach (var module in _modules)
-                module.Initialize();
 
             var numModules = _modules.Count;
             var moduleIdx = 0;
@@ -87,7 +138,7 @@ namespace Stationeers.Addons.Loader.Core
         private void OnGUI()
         {
             GUI.color = new Color(1.0f, 1.0f, 1.0f, 0.15f);
-            GUI.Label(new Rect(5.0f, 5.0f, Screen.width, 25.0f), $"Stationeers.Addons - v0.1.0 - Loaded {PluginManager.Instance.NumLoadedPlugins} plugins");
+            GUI.Label(new Rect(5.0f, 5.0f, Screen.width, 25.0f), $"Stationeers.Addons - v0.1.0 - Loaded {PluginLoader.NumLoadedPlugins} plugins");
         }
     }
 }
