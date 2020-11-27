@@ -7,9 +7,9 @@ using System.Linq;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace Stationeers.Addons.Loader.Plugins
+namespace Stationeers.Addons.Loader.Modules.Plugins
 {
-    public class PluginCompiler : IDisposable
+    internal class PluginCompiler : IDisposable
     {
         private ProcessStartInfo _compilerStartInfo;
 

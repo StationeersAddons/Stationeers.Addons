@@ -92,11 +92,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Plugins\IPlugin.cs" />
+    <Compile Include="Modules\IModule.cs" />
+    <Compile Include="Modules\Plugins\PluginLoaderModule.cs" />
+    <Compile Include="Modules\Workshop\WorkshopModule.cs" />
+    <Compile Include="IPlugin.cs" />
     <Compile Include="Core\LoaderManager.cs" />
     <Compile Include="Loader.cs" />
-    <Compile Include="Plugins\PluginCompiler.cs" />
-    <Compile Include="Plugins\PluginManager.cs" />
+    <Compile Include="Modules\Plugins\PluginCompiler.cs" />
+    <Compile Include="Modules\Plugins\PluginCompilerModule .cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

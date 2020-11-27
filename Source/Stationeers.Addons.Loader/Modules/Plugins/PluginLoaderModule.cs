@@ -1,13 +1,14 @@
 ﻿// Stationeers.Addons (c) 2018-2020 Damian 'Erdroy' Korczowski & Contributors
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-namespace Stationeers.Addons.Loader.Plugins
+namespace Stationeers.Addons.Loader.Modules.Plugins
 {
-    internal class PluginManager
+    internal class PluginLoaderModule : IModule
     {
         private struct PluginInfo
         {
@@ -15,15 +16,32 @@ namespace Stationeers.Addons.Loader.Plugins
             public IPlugin[] Plugins { get; set; }
         }
 
-        public static PluginManager Instance { get; private set; }
-
-        public int NumLoadedPlugins => _plugins.Count;
-
         private readonly Dictionary<string, PluginInfo> _plugins = new Dictionary<string, PluginInfo>();
 
-        public PluginManager()
+        public int NumLoadedPlugins => _plugins.Count;
+        public string LoadingCaption => "Starting up plugins...";
+
+        /// <inheritdoc />
+        public void Initialize()
         {
-            Instance = this;
+        }
+
+        /// <inheritdoc />
+        public IEnumerator Load()
+        {
+            foreach (var compiledPlugin in PluginCompilerModule.CompiledPlugins)
+            {
+                Debug.Log($"Loading plugin assembly '{compiledPlugin.AssemblyFile}'");
+                LoadPlugin(compiledPlugin.AddonName, compiledPlugin.AssemblyFile);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+
+        /// <inheritdoc />
+        public void Shutdown()
+        {
+            // Cleanup
+            UnloadAllPlugins();
         }
 
         /// <summary>
