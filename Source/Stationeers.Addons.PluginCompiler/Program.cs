@@ -29,7 +29,12 @@ namespace Stationeers.Addons.PluginCompiler
             Console.WriteLine($"Compiling addon '{addonName}'...");
 
             // TODO: Disable trusted code
-            Compiler.Compile(addonName, scriptFiles.ToArray(), true); // TODO: fix issue with missing files
+            var output = Compiler.Compile(addonName, scriptFiles.ToArray(), true);
+
+            if (string.IsNullOrEmpty(output))
+            {
+                Console.WriteLine($"ERROR: Failed to compile addon '{addonName}'!");
+            }
         }
     }
 }
