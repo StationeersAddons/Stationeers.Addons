@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="0Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lib.Harmony.2.0.4\lib\net45\0Harmony.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\Libraries\Stationeers\Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -63,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Scripts\ExampleMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripts\SimplePatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="About\About.xml" />
@@ -77,6 +81,9 @@
       <Project>{cc37b64d-6637-4e11-ab99-30a82343cd8c}</Project>
       <Name>Stationeers.Addons</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

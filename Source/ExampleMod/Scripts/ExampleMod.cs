@@ -1,9 +1,9 @@
 ﻿// Stationeers.Addons (c) 2018-2020 Damian 'Erdroy' Korczowski & Contributors
 
-using Stationeers.Addons.Loader;
+using Stationeers.Addons;
 using UnityEngine;
 
-namespace ExampleMod
+namespace ExampleMod.Scripts
 {
     public class ExampleMod : IPlugin
     {

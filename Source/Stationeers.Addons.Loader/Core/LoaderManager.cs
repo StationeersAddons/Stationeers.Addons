@@ -75,6 +75,8 @@ namespace Stationeers.Addons.Core
 
         private IEnumerator Start()
         {
+            // TODO: Start loading only when the initial main menu loading is finished
+
             ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
             ProgressPanel.Instance.UpdateProgressBarCaption("Loading modules...");
             ProgressPanel.Instance.UpdateProgressBar(0.1f);
