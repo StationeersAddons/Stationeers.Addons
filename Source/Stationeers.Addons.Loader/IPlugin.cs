@@ -1,6 +1,6 @@
 ﻿// Stationeers.Addons (c) 2018-2020 Damian 'Erdroy' Korczowski & Contributors
 
-namespace Stationeers.Addons.Loader
+namespace Stationeers.Addons
 {
     /// <summary>
     ///     IPlugin interface. Interface for plugins loaded by the ModLoader.

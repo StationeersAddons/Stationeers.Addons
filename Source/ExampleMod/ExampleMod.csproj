@@ -61,20 +61,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameData\ExampleMod.cs" />
+    <Compile Include="Scripts\ExampleMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Stationeers.Addons.Loader\Stationeers.Addons.Loader.csproj">
-      <Project>{cc37b64d-6637-4e11-ab99-30a82343cd8c}</Project>
-      <Name>Stationeers.Addons.Loader</Name>
-      <Private>False</Private>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="About\About.xml" />
     <Content Include="About\Preview.png" />
     <Content Include="About\thumb.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GameData\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Stationeers.Addons.Loader\Stationeers.Addons.csproj">
+      <Project>{cc37b64d-6637-4e11-ab99-30a82343cd8c}</Project>
+      <Name>Stationeers.Addons</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,13 +3,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.UI;
-using Stationeers.Addons.Loader.Modules;
-using Stationeers.Addons.Loader.Modules.HarmonyLib;
-using Stationeers.Addons.Loader.Modules.Plugins;
-using Stationeers.Addons.Loader.Modules.Workshop;
+using Stationeers.Addons.Modules;
+using Stationeers.Addons.Modules.HarmonyLib;
+using Stationeers.Addons.Modules.Plugins;
+using Stationeers.Addons.Modules.Workshop;
 using UnityEngine;
 
-namespace Stationeers.Addons.Loader.Core
+namespace Stationeers.Addons.Core
 {
     /// <summary>
     ///     ModManager class. Implements loader base component.

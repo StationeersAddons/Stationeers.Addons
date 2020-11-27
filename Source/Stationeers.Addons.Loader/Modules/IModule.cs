@@ -2,7 +2,7 @@
 
 using System.Collections;
 
-namespace Stationeers.Addons.Loader.Modules
+namespace Stationeers.Addons.Modules
 {
     /// <summary>
     ///     Basic module interface.

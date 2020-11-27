@@ -7,7 +7,7 @@ using System.Linq;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace Stationeers.Addons.Loader.Modules.Plugins
+namespace Stationeers.Addons.Modules.Plugins
 {
     internal class PluginCompiler : IDisposable
     {

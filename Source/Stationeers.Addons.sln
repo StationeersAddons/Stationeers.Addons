@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30709.132
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stationeers.Addons.Patcher", "Stationeers.Addons.Patcher\Stationeers.Addons.Patcher.csproj", "{BBF54E3C-CE06-4939-B792-CA77C080BC24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stationeers.Addons.Loader", "Stationeers.Addons.Loader\Stationeers.Addons.Loader.csproj", "{CC37B64D-6637-4E11-AB99-30A82343CD8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stationeers.Addons", "Stationeers.Addons.Loader\Stationeers.Addons.csproj", "{CC37B64D-6637-4E11-AB99-30A82343CD8C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleMod", "ExampleMod\ExampleMod.csproj", "{C7C7E2F0-A1EC-42F8-A031-4C857B8E5616}"
 EndProject

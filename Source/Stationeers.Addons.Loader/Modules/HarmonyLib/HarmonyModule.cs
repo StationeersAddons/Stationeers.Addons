@@ -2,10 +2,10 @@
 
 using System.Collections;
 using HarmonyLib;
-using Stationeers.Addons.Loader.Core;
+using Stationeers.Addons.Core;
 using UnityEngine;
 
-namespace Stationeers.Addons.Loader.Modules.HarmonyLib
+namespace Stationeers.Addons.Modules.HarmonyLib
 {
     /// <summary>
     ///     HarmonyLib module. Provides support for dynamic game assembly patching.

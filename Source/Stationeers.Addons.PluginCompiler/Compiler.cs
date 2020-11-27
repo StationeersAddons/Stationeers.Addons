@@ -20,7 +20,7 @@ namespace Stationeers.Addons.PluginCompiler
         };
 
         private static readonly string[] AdditionalAssemblies = {
-            "Stationeers.Addons.Loader.dll",
+            "Stationeers.Addons.dll",
             "0Harmony.dll"
         };
 

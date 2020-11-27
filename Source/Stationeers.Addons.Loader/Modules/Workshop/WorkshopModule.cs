@@ -4,7 +4,7 @@ using System.Collections;
 using Assets.Scripts;
 using UnityEngine;
 
-namespace Stationeers.Addons.Loader.Modules.Workshop
+namespace Stationeers.Addons.Modules.Workshop
 {
     /// <summary>
     ///     WorkshopModule module class. This is required,

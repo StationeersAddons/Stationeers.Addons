@@ -1,6 +1,6 @@
 ﻿// Stationeers.Addons (c) 2018-2020 Damian 'Erdroy' Korczowski & Contributors
 
-using Stationeers.Addons.Loader.Plugins;
+using Stationeers.Addons.Loader;
 using UnityEngine;
 
 namespace ExampleMod

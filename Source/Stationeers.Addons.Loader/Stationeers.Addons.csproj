@@ -7,8 +7,8 @@
     <ProjectGuid>{CC37B64D-6637-4E11-AB99-30A82343CD8C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Stationeers.Addons.Loader</RootNamespace>
-    <AssemblyName>Stationeers.Addons.Loader</AssemblyName>
+    <RootNamespace>Stationeers.Addons</RootNamespace>
+    <AssemblyName>Stationeers.Addons</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

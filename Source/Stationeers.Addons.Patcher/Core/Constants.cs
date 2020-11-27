@@ -6,8 +6,8 @@ namespace Stationeers.Addons.Patcher.Core
     {
         public const string GameExe = "../rocketstation.exe";
         public const string ResourcesDir = "../rocketstation_Data";
-        public const string LoaderAssemblyFileName = "AddonManager/Stationeers.Addons.Loader.dll";
-        public const string LoaderTypeName = "Stationeers.Addons.Loader.Loader";
+        public const string LoaderAssemblyFileName = "AddonManager/Stationeers.Addons.dll";
+        public const string LoaderTypeName = "Stationeers.Addons.Loader";
         public const string LoaderFunctionName = "Load";
     }
 }

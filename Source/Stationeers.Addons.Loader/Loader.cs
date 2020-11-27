@@ -1,6 +1,6 @@
 ﻿// Stationeers.Addons (c) 2018-2020 Damian 'Erdroy' Korczowski & Contributors
 
-using Stationeers.Addons.Loader.Core;
+using Stationeers.Addons.Core;
 using UnityEngine;
 
 /*
@@ -9,7 +9,7 @@ using UnityEngine;
  * We cannot change access modifiers, names or types.
  */
 
-namespace Stationeers.Addons.Loader
+namespace Stationeers.Addons
 {
     public class Loader
     {

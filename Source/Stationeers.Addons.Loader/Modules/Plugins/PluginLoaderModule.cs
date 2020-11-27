@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-namespace Stationeers.Addons.Loader.Modules.Plugins
+namespace Stationeers.Addons.Modules.Plugins
 {
     internal class PluginLoaderModule : IModule
     {
