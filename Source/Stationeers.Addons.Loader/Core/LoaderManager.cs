@@ -1,6 +1,7 @@
 ﻿// Stationeers.Addons (c) 2018-2020 Damian 'Erdroy' Korczowski & Contributors
 
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts;
 using Assets.Scripts.UI;
@@ -16,7 +17,20 @@ namespace Stationeers.Addons.Loader.Core
     /// </summary>
     internal class LoaderManager : MonoBehaviour
     {
+        private readonly struct AddonPlugin
+        {
+            public readonly string AddonName;
+            public readonly string AssemblyFile;
+
+            public AddonPlugin(string addonName, string assemblyFile)
+            {
+                AddonName = addonName;
+                AssemblyFile = assemblyFile;
+            }
+        }
+
         private static LoaderManager _instance;
+        private static readonly List<AddonPlugin> CompiledPlugins = new List<AddonPlugin>();
 
         /// <summary>
         ///     LoaderManager's instance.
@@ -98,6 +112,8 @@ namespace Stationeers.Addons.Loader.Core
 
         private static IEnumerator CompilePlugins()
         {
+            CompiledPlugins.Clear();
+
             ProgressPanel.Instance.UpdateProgressBar(0.35f);
             ProgressPanel.Instance.UpdateProgressBarCaption("Compiling plugins..."); 
 
@@ -124,18 +140,28 @@ namespace Stationeers.Addons.Loader.Core
 
                     if (addonScripts.Length == 0) continue;
 
+                    // TODO: Detect when plugin doesn't need to be compiled (not changed etc.)
+                    // TODO: Add non-compiled (skipped) plugins to the CompiledPlugins list
+
                     var addonDirectory = pchFolder;
                     var addonName = "workshop-" + workshopItemID.m_PublishedFileId;
+                    var assemblyName = addonName + "-Assembly"; // TODO: Make some shared project for string constants etc.
+                    var assemblyFile = "AddonManager/AddonsCache/" + assemblyName + ".dll";
+
+                    if (File.Exists(assemblyFile))
+                    {
+                        Debug.Log($"Removing old plugin assembly file '{assemblyFile}'");
+                        File.Delete(assemblyFile);
+                    }
+
                     pluginCompiler.CompileScripts(addonName, addonDirectory, addonScripts);
 
-                    // TODO: Add dir+name to some list or something
+                    CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
                 }
 
                 pluginIndex++;
                 yield return new WaitForEndOfFrame();
             }
-
-            // TODO: Detect when plugin doesn't need to be compiled (not changed etc.)
 
             // Dispose the compiler
             pluginCompiler.Dispose();
@@ -145,7 +171,14 @@ namespace Stationeers.Addons.Loader.Core
         {
             ProgressPanel.Instance.UpdateProgressBar(0.7f);
             ProgressPanel.Instance.UpdateProgressBarCaption("Loading plugins...");
-            yield return new WaitForSeconds(0.6f);
+            yield return new WaitForSeconds(0.1f);
+
+            foreach (var compiledPlugin in CompiledPlugins)
+            {
+                Debug.Log($"Loading plugin assembly '{compiledPlugin.AssemblyFile}'");
+                PluginManager.Instance.LoadPlugin(compiledPlugin.AddonName, compiledPlugin.AssemblyFile);
+                yield return new WaitForEndOfFrame();
+            }
         }
 
         private static IEnumerator LoadBundles()
