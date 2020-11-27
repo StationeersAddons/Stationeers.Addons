@@ -25,8 +25,6 @@ namespace Stationeers.Addons.PluginCompiler
 
         public static string Compile(string addonName, string[] sourceFiles, bool trustedCode = false)
         {
-            // based on http://www.tugberkugurlu.com/archive/compiling-c-sharp-code-into-memory-and-executing-it-with-roslyn
-
             var syntaxTrees = new List<SyntaxTree>();
 
             // Parse all files

@@ -16,12 +16,16 @@ namespace Stationeers.Addons.PluginCompiler
 
             var scriptFiles = new List<string>();
 
+            Console.WriteLine($"Addon directory '{addonDirectory}'");
+
             foreach (var addonScript in addonScripts)
             {
-                scriptFiles.Add(Path.Combine(addonDirectory, addonScript));
+                //var addonScriptFile  = Path.Combine(addonDirectory + addonScript); // TODO: Fix this shit, not working for some reason, because of an leading slash?
+
+                var addonScriptFile = addonDirectory + addonScript;
+                scriptFiles.Add(addonScriptFile);
             }
 
-            Console.WriteLine("CD: " + Environment.CurrentDirectory);
             Console.WriteLine($"Compiling addon '{addonName}'...");
 
             // TODO: Disable trusted code
