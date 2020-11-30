@@ -2,6 +2,8 @@
 
 Addons TODO
 
+https://trello.com/b/zSHKh2XO/stationeersaddons
+
 ## Installation
 TODO
 
