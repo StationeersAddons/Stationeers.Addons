@@ -11,6 +11,7 @@ Please copy these .DLL files into this directory:
 * System.Xml.dll
 * UnityEngine.CoreModule.dll
 * UnityEngine.dll
+* UnityEngine.AssetBundleModule.dll
 * UnityEngine.IMGUIModule.dll
 * UnityEngine.InputLegacyModule.dll
 * UnityEngine.JSONSerializeModule.dll

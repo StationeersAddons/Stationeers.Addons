@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets.Scripts.UI;
 using Stationeers.Addons.Modules;
+using Stationeers.Addons.Modules.Bundles;
 using Stationeers.Addons.Modules.HarmonyLib;
 using Stationeers.Addons.Modules.Plugins;
 using Stationeers.Addons.Modules.Workshop;
@@ -48,6 +49,11 @@ namespace Stationeers.Addons.Core
         public PluginCompilerModule PluginCompiler { get; private set; }
 
         /// <summary>
+        ///     BundleLoaderModule module reference
+        /// </summary>
+        public BundleLoaderModule BundleLoader { get; private set; }
+
+        /// <summary>
         ///     PluginLoader module reference
         /// </summary>
         public PluginLoaderModule PluginLoader { get; private set; }
@@ -67,8 +73,8 @@ namespace Stationeers.Addons.Core
             DontDestroyOnLoad(gameObject);
 
             Workshop = InitializeModule<WorkshopModule>();
-            //BundleLoader = InitializeModule<BundleLoaderModule>(); // TODO: Unity asset bundle loader
             PluginCompiler = InitializeModule<PluginCompilerModule>();
+            BundleLoader = InitializeModule<BundleLoaderModule>();
             PluginLoader = InitializeModule<PluginLoaderModule>();
             Harmony = InitializeModule<HarmonyModule>();
         }

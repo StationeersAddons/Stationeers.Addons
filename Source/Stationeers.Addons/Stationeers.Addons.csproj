@@ -73,6 +73,9 @@
       <HintPath>..\..\Libraries\Stationeers\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>..\..\Libraries\Stationeers\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\Libraries\Stationeers\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
@@ -95,6 +98,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\BundleManager.cs" />
+    <Compile Include="Modules\Bundles\BundleLoaderModule.cs" />
     <Compile Include="Modules\HarmonyLib\HarmonyModule.cs" />
     <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\Plugins\PluginLoaderModule.cs" />
@@ -106,9 +111,7 @@
     <Compile Include="Modules\Plugins\PluginCompilerModule .cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="API\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
