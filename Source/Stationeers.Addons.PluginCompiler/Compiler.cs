@@ -17,6 +17,11 @@ namespace Stationeers.Addons.PluginCompiler
             "System.Core.dll",
             "UnityEngine.dll",
             "UnityEngine.CoreModule.dll",
+            "UnityEngine.AssetBundleModule.dll",
+            "UnityEngine.UI.dll",
+            "UnityEngine.IMGUIModule.dll",
+            "UnityEngine.InputLegacyModule.dll",
+            "UnityEngine.JSONSerializeModule.dll",
         };
 
         private static readonly string[] AdditionalAssemblies = {
@@ -75,6 +80,8 @@ namespace Stationeers.Addons.PluginCompiler
             var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 
             // Compile
+            Console.WriteLine($"Linking addon '{addonName}'...");
+
             var assemblyName = addonName + "-Assembly";
             var compilation = CSharpCompilation.Create(assemblyName, syntaxTrees.ToArray(), references.ToArray(), options);
 
