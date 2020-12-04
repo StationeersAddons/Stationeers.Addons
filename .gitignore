@@ -362,6 +362,7 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Stationeers.Addons additions
+/[Bb]uild/
 Libraries/**/*.dll
 Libraries/**/*.pdb
 Libraries/**/*.xml
