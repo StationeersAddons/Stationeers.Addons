@@ -77,7 +77,7 @@
     <Folder Include="GameData\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Stationeers.Addons.Loader\Stationeers.Addons.csproj">
+    <ProjectReference Include="..\Stationeers.Addons\Stationeers.Addons.csproj">
       <Project>{cc37b64d-6637-4e11-ab99-30a82343cd8c}</Project>
       <Name>Stationeers.Addons</Name>
     </ProjectReference>
