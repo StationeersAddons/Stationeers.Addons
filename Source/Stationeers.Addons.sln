@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleMod", "ExampleMod\Ex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stationeers.Addons.PluginCompiler", "Stationeers.Addons.PluginCompiler\Stationeers.Addons.PluginCompiler.csproj", "{BC68C594-32CF-4EE7-B417-8FCB453AF897}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnityPlayerStub", "Stationeers.Addons.Proxy\UnityPlayerStub\UnityPlayerStub.vcxproj", "{9B743A06-56DC-42C2-99B1-B11DE6C02BBD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rocketstation", "Stationeers.Addons.Proxy\UnityPlayerStub\UnityPlayerStub.vcxproj", "{9B743A06-56DC-42C2-99B1-B11DE6C02BBD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rocketstation", "Stationeers.Addons.Proxy\rocketstation\rocketstation.vcxproj", "{57571793-BF11-47DB-A9BA-049C9AA938C7}"
 EndProject
@@ -48,6 +48,7 @@ Global
 		{CC37B64D-6637-4E11-AB99-30A82343CD8C}.Release|x64.ActiveCfg = Release|Any CPU
 		{CC37B64D-6637-4E11-AB99-30A82343CD8C}.Release|x64.Build.0 = Release|Any CPU
 		{C7C7E2F0-A1EC-42F8-A031-4C857B8E5616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7C7E2F0-A1EC-42F8-A031-4C857B8E5616}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7C7E2F0-A1EC-42F8-A031-4C857B8E5616}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{C7C7E2F0-A1EC-42F8-A031-4C857B8E5616}.Debug|x64.Build.0 = Debug|Any CPU
 		{C7C7E2F0-A1EC-42F8-A031-4C857B8E5616}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -62,7 +63,6 @@ Global
 		{BC68C594-32CF-4EE7-B417-8FCB453AF897}.Release|x64.ActiveCfg = Release|Any CPU
 		{BC68C594-32CF-4EE7-B417-8FCB453AF897}.Release|x64.Build.0 = Release|Any CPU
 		{9B743A06-56DC-42C2-99B1-B11DE6C02BBD}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{9B743A06-56DC-42C2-99B1-B11DE6C02BBD}.Debug|Any CPU.Build.0 = Debug|x64
 		{9B743A06-56DC-42C2-99B1-B11DE6C02BBD}.Debug|x64.ActiveCfg = Debug|x64
 		{9B743A06-56DC-42C2-99B1-B11DE6C02BBD}.Debug|x64.Build.0 = Debug|x64
 		{9B743A06-56DC-42C2-99B1-B11DE6C02BBD}.Release|Any CPU.ActiveCfg = Release|x64
@@ -70,7 +70,6 @@ Global
 		{9B743A06-56DC-42C2-99B1-B11DE6C02BBD}.Release|x64.ActiveCfg = Release|x64
 		{9B743A06-56DC-42C2-99B1-B11DE6C02BBD}.Release|x64.Build.0 = Release|x64
 		{57571793-BF11-47DB-A9BA-049C9AA938C7}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{57571793-BF11-47DB-A9BA-049C9AA938C7}.Debug|Any CPU.Build.0 = Debug|x64
 		{57571793-BF11-47DB-A9BA-049C9AA938C7}.Debug|x64.ActiveCfg = Debug|x64
 		{57571793-BF11-47DB-A9BA-049C9AA938C7}.Debug|x64.Build.0 = Debug|x64
 		{57571793-BF11-47DB-A9BA-049C9AA938C7}.Release|Any CPU.ActiveCfg = Release|x64
