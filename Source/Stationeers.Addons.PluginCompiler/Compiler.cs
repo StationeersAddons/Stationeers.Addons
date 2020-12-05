@@ -19,8 +19,16 @@ namespace Stationeers.Addons.PluginCompiler
             "UnityEngine.CoreModule.dll",
             "UnityEngine.AssetBundleModule.dll",
             "UnityEngine.UI.dll",
+            "UnityEngine.ParticleSystemModule.dll",
+            "UnityEngine.StreamingModule.dll",
+            "UnityEngine.SubstanceModule.dll",
+            "UnityEngine.UmbraModule.dll",
+            "UnityEngine.TextCoreModule.dll",
+            "UnityEngine.TextRenderingModule.dll",
+            "UnityEngine.SharedInternalsModule.dll",
             "UnityEngine.IMGUIModule.dll",
             "UnityEngine.InputLegacyModule.dll",
+            "UnityEngine.VideoModule.dll",
             "UnityEngine.JSONSerializeModule.dll",
         };
 
@@ -61,7 +69,7 @@ namespace Stationeers.Addons.PluginCompiler
 
                 syntaxTrees.Add(syntaxTree);
             }
-
+            
             // Setup reference list
             var references = new List<MetadataReference>();
 
@@ -83,7 +91,10 @@ namespace Stationeers.Addons.PluginCompiler
             Console.WriteLine($"Linking addon '{addonName}'...");
 
             var assemblyName = addonName + "-Assembly";
-            var compilation = CSharpCompilation.Create(assemblyName, syntaxTrees.ToArray(), references.ToArray(), options);
+            var compilation = CSharpCompilation.Create(assemblyName)
+                .WithReferences(references.ToArray())
+                .WithOptions(options)
+                .AddSyntaxTrees(syntaxTrees);
 
             using (var ms = new MemoryStream())
             {
@@ -94,20 +105,30 @@ namespace Stationeers.Addons.PluginCompiler
                 {
                     foreach (var error in output)
                     {
+                        var prefix = "";
                         switch (error.Severity)
                         {
-                            case DiagnosticSeverity.Hidden: continue;
+                            case DiagnosticSeverity.Hidden: 
                             case DiagnosticSeverity.Info: continue;
                             case DiagnosticSeverity.Warning:
                                 Console.ForegroundColor = ConsoleColor.Yellow;
+                                prefix = "[Plugin Compiler - WARNING]";
                                 break;
                             case DiagnosticSeverity.Error:
                                 Console.ForegroundColor = ConsoleColor.Red;
+                                prefix = "[Plugin Compiler - ERROR]";
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
                         }
-                        Console.WriteLine(error.GetMessage());
+
+                        var errorMessage = error.GetMessage();
+
+                        // Ignore mscorlib warnings for now.
+                        // Task: https://trello.com/c/akuaJbdp/25-mscorlib-plugin-build-issues
+                        if (errorMessage.Contains("mscorlib, Version=2.0.0.0,")) continue;
+
+                        Console.WriteLine(prefix + " " + errorMessage);
                     }
                     Console.ResetColor();
                     return string.Empty;
