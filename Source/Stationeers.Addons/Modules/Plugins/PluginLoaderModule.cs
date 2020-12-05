@@ -3,7 +3,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
+using Stationeers.Addons.Core;
 using UnityEngine;
 
 namespace Stationeers.Addons.Modules.Plugins
@@ -33,11 +36,29 @@ namespace Stationeers.Addons.Modules.Plugins
             // Using PluginCompilerModule.CompiledPlugins we have to be sure that it has been created
             // TODO: Better way to reference cross-module or don't reference it at all.
 
+            Debug.Log("Loading plugin assemblies...");
+
             foreach (var compiledPlugin in PluginCompilerModule.CompiledPlugins)
             {
+                // TODO: Prevent from loading local addons
+
                 Debug.Log($"Loading plugin assembly '{compiledPlugin.AssemblyFile}'");
                 LoadPlugin(compiledPlugin.AddonName, compiledPlugin.AssemblyFile);
                 yield return new WaitForEndOfFrame();
+            }
+
+            // Load debug assemblies if debugging is enabled
+            if (LoaderManager.Instance.IsDebuggingEnabled)
+            {
+                var localModAssemblies = LocalMods.GetLocalModDebugAssemblies();
+
+                foreach (var debugAssembly in localModAssemblies)
+                {
+                    Debug.Log($"Loading plugin debug assembly '{debugAssembly}'");
+
+                    var fileName = Path.GetFileNameWithoutExtension(debugAssembly);
+                    LoadPlugin(fileName, debugAssembly);
+                }
             }
         }
 

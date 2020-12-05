@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Assets.Scripts.UI;
 using Stationeers.Addons.Modules;
 using Stationeers.Addons.Modules.Bundles;
@@ -39,6 +40,11 @@ namespace Stationeers.Addons.Core
         private readonly List<IModule> _modules = new List<IModule>();
 
         /// <summary>
+        ///     Gets true when the debugging has been enabled.
+        /// </summary>
+        public bool IsDebuggingEnabled { get; private set; }
+
+        /// <summary>
         ///     Workshop module reference
         /// </summary>
         public WorkshopModule Workshop { get; private set; }
@@ -71,6 +77,16 @@ namespace Stationeers.Addons.Core
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
+
+            // Show stacktrace only when it's exception or assert
+            Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
+            Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
+            Application.SetStackTraceLogType(LogType.Error, StackTraceLogType.None);
+
+            // Check if we can debug addons
+            IsDebuggingEnabled = File.Exists("addons-debugging.enable");
+            if (IsDebuggingEnabled)
+                Debug.Log("[Stationeers.Addons - DEBUG] Stationeers.Addons debugging enabled!");
 
             Workshop = InitializeModule<WorkshopModule>();
             PluginCompiler = InitializeModule<PluginCompilerModule>();

@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnityData", "Stationeers.Ad
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Proxy", "Proxy", "{81789563-316E-42DF-8507-578062A5E2BB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "My Mods", "My Mods", "{EEA1F74E-E0A0-41E5-95EB-153CB438764D}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Stationeers.Addons.Proxy\rocketstation\UnityData.vcxitems*{9b743a06-56dc-42c2-99b1-b11de6c02bbd}*SharedItemsImports = 4

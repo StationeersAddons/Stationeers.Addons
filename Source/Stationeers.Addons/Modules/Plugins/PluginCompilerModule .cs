@@ -50,17 +50,24 @@ namespace Stationeers.Addons.Modules.Plugins
 
                 if (SteamUGC.GetItemInstallInfo(workshopItemID, out _, out var pchFolder, 1024U, out _))
                 {
-                    var addonScripts = Directory.GetFiles(pchFolder, "*.cs", SearchOption.AllDirectories);
-
-                    if (addonScripts.Length == 0) continue;
-
                     // TODO: Detect when plugin doesn't need to be compiled (not changed etc.)
                     // TODO: Add non-compiled (skipped) plugins to the CompiledPlugins list
 
                     var addonDirectory = pchFolder;
+
                     var addonName = "workshop-" + workshopItemID.m_PublishedFileId;
                     var assemblyName = addonName + "-Assembly"; // TODO: Make some shared project for string constants etc.
                     var assemblyFile = "AddonManager/AddonsCache/" + assemblyName + ".dll";
+
+                    if (!Directory.Exists(addonDirectory))
+                    {
+                        Debug.LogWarning($"Could not load addon plugin '{addonName}' because directory '{addonDirectory}' does not exist!");
+                        continue;
+                    }
+
+                    var addonScripts = Directory.GetFiles(pchFolder, "*.cs", SearchOption.AllDirectories);
+
+                    if (addonScripts.Length == 0) continue;
 
                     if (File.Exists(assemblyFile))
                     {

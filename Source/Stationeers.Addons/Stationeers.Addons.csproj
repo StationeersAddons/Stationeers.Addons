@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\BundleManager.cs" />
+    <Compile Include="Core\LocalMods.cs" />
     <Compile Include="Modules\Bundles\BundleLoaderModule.cs" />
     <Compile Include="Modules\HarmonyLib\HarmonyModule.cs" />
     <Compile Include="Modules\IModule.cs" />

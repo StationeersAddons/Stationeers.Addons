@@ -19,6 +19,10 @@ Visual Studio 2019 is required.
 Please read Libraries [README](Libraries/Stationeers/README.md) file.
 Open `Source/Stationeers.Addons.sln` and start playing with it!
 
+## Debugging
+Comming soon.
+Note: boot.config, unity and output paths
+
 ## Dependecies
 * Mono.Cecil
 * Harmony

@@ -4,6 +4,7 @@ using System.Collections;
 using System.IO;
 using Assets.Scripts;
 using Stationeers.Addons.API;
+using Stationeers.Addons.Core;
 using Steamworks;
 using UnityEngine;
 
@@ -31,32 +32,50 @@ namespace Stationeers.Addons.Modules.Bundles
 
                 if (SteamUGC.GetItemInstallInfo(workshopItemID, out _, out var pchFolder, 1024U, out _))
                 {
-                    var addonDirectory = pchFolder;
-                    var contentDirectory = Path.Combine(addonDirectory, "Content");
+                    // TODO: Prevent from loading local addons
 
-                    // Skip if this mod does not have any custom content
-                    if (!Directory.Exists(contentDirectory)) continue;
-
-                    // Get all bundle files
-                    var bundles = Directory.GetFiles(contentDirectory, "*.asset", SearchOption.TopDirectoryOnly);
-
-                    // If no bundles were found, skip.
-                    if(bundles.Length == 0) continue;
-
-                    foreach (var bundleFile in bundles)
-                    {
-                        // Start loading the bundle
-                        var bundle = AssetBundle.LoadFromFileAsync(bundleFile);
-                        
-                        // Wait for bundle to load
-                        yield return bundle;
-
-                        Debug.Log($"Loaded asset bundle '{bundle.assetBundle.name}'");
-
-                        // We're done, just register the bundle and register it.
-                        BundleManager.LoadedAssetBundles.Add(bundle.assetBundle);
-                    }
+                    var modDirectory = pchFolder;
+                    yield return LoadBundleFromModDirectory(modDirectory);
                 }
+            }
+
+            // Load debug assemblies if debugging is enabled
+            if (LoaderManager.Instance.IsDebuggingEnabled)
+            {
+                var localModDirectories = LocalMods.GetLocalModDirectories();
+
+                foreach (var localModDirectory in localModDirectories)
+                {
+                    yield return LoadBundleFromModDirectory(localModDirectory);
+                }
+            }
+        }
+
+        private IEnumerator LoadBundleFromModDirectory(string modDirectory)
+        {
+            var contentDirectory = Path.Combine(modDirectory, "Content");
+
+            // Skip if this mod does not have any custom content
+            if (!Directory.Exists(contentDirectory))  yield break;
+
+            // Get all bundle files
+            var bundles = Directory.GetFiles(contentDirectory, "*.asset", SearchOption.TopDirectoryOnly);
+
+            // If no bundles were found, skip.
+            if (bundles.Length == 0) yield break;
+
+            foreach (var bundleFile in bundles)
+            {
+                // Start loading the bundle
+                var bundle = AssetBundle.LoadFromFileAsync(bundleFile);
+
+                // Wait for bundle to load
+                yield return bundle;
+
+                Debug.Log($"Loaded asset bundle '{bundle.assetBundle.name}'");
+
+                // We're done, just register the bundle and register it.
+                BundleManager.LoadedAssetBundles.Add(bundle.assetBundle);
             }
         }
 
