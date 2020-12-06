@@ -366,3 +366,5 @@ FodyWeavers.xsd
 Libraries/**/*.dll
 Libraries/**/*.pdb
 Libraries/**/*.xml
+/Source/MyMods/**
+!/Source/MyMods/README.md
