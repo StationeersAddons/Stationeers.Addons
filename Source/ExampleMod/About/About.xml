@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ModMetadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<ModMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <Name>StationeersAddonsExample</Name>
   <Author>Erdroy</Author>
   <Version>0.2.2582.12315</Version>
-  <Description>This mod serves to demonstrate the correct format of a custom mod folder for Stationeers with scripting/content support.</Description>
+  <Description>WARNING: This mod will not work, unless you install Stationeers.Addon mod loader.
+Read how to install it here: https://github.com/Erdroy/Stationeers.Addons
+---
+
+This mod serves to demonstrate the correct format of a custom mod folder for Stationeers with scripting/content support.</Description>
+  <WorkshopHandle>2308921579</WorkshopHandle>
+  <Tags />
 </ModMetadata>
