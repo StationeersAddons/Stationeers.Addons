@@ -32,43 +32,43 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Lib.Harmony.2.0.4\lib\net45\0Harmony.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\Lib.Harmony.2.0.4\lib\net45\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\Libraries\Stationeers\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(SolutionDir)\..\Libraries\Stationeers\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\Libraries\Stationeers\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>$(SolutionDir)\..\Libraries\Stationeers\Assembly-CSharp-firstpass.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.dll</HintPath>
+      <HintPath>$(SolutionDir)\..\Libraries\Stationeers\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>$(SolutionDir)\..\Libraries\Stationeers\UnityEngine.AssetBundleModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(SolutionDir)\..\Libraries\Stationeers\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>$(SolutionDir)\..\Libraries\Stationeers\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>$(SolutionDir)\..\Libraries\Stationeers\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.JSONSerializeModule">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.JSONSerializeModule.dll</HintPath>
+      <HintPath>$(SolutionDir)\..\Libraries\Stationeers\UnityEngine.JSONSerializeModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(SolutionDir)\..\Libraries\Stationeers\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
