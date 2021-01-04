@@ -9,7 +9,7 @@ namespace Stationeers.Addons.Modules.Workshop
     /// <summary>
     ///     WorkshopModule module class. This is required,
     ///     because we're compiling plugins only from the workshop,
-    ///     and we need list of subscribed items for that.
+    ///     and we need a list of subscribed items for that.
     /// </summary>
     internal class WorkshopModule : IModule
     {

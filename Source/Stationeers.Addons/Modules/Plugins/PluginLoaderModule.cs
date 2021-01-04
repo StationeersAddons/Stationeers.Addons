@@ -59,6 +59,8 @@ namespace Stationeers.Addons.Modules.Plugins
                     LoadPlugin(fileName, debugAssembly);
                 }
             }
+
+            Debug.Log($"Loaded {_plugins.Count} plugins");
         }
 
         /// <inheritdoc />
