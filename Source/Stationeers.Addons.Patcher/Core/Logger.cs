@@ -1,4 +1,4 @@
-﻿// Stationeers.Addons (c) 2018-2020 Damian 'Erdroy' Korczowski & Contributors
+﻿// Stationeers.Addons (c) 2018-2021 Damian 'Erdroy' Korczowski & Contributors
 
 using Stationeers.Addons.Patcher.Core.Loggers;
 

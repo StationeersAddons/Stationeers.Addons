@@ -1,10 +1,9 @@
-﻿// Stationeers.Addons (c) 2018-2020 Damian 'Erdroy' Korczowski & Contributors
+﻿// Stationeers.Addons (c) 2018-2021 Damian 'Erdroy' Korczowski & Contributors
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Stationeers.Addons.Core;
 using UnityEngine;
