@@ -1,4 +1,6 @@
 # Stationeers.Addons
+<a href="https://discord.gg/b6kFrUATdm"><img src="https://discordapp.com/api/guilds/795601381956124693/widget.png"/></a></br>
+
 **Stationeers.Addons** is a fully-fledged modding framework for [Stationeers](https://store.steampowered.com/app/544550/Stationeers/).
 It is responsible for scripting support (compilation and loading) and custom content loading (via asset boundles).
 
