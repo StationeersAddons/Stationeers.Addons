@@ -19,6 +19,7 @@ namespace Stationeers.Addons.PluginCompiler
             "UnityEngine.CoreModule.dll",
             "UnityEngine.AssetBundleModule.dll",
             "UnityEngine.UI.dll",
+            "UnityEngine.UNETModule.dll",
             "UnityEngine.ParticleSystemModule.dll",
             "UnityEngine.StreamingModule.dll",
             "UnityEngine.SubstanceModule.dll",

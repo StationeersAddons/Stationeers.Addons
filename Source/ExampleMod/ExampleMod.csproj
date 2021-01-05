@@ -71,6 +71,10 @@
       <HintPath>$(SolutionDir)\..\Libraries\Stationeers\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.UNETModule">
+      <HintPath>$(SolutionDir)\..\Libraries\Stationeers\UnityEngine.UNETModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Scripts\ExampleMod.cs" />

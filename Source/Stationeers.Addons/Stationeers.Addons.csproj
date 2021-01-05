@@ -96,6 +96,10 @@
       <HintPath>..\..\Libraries\Stationeers\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.UNETModule">
+      <HintPath>..\..\Libraries\Stationeers\UnityEngine.UNETModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\BundleManager.cs" />
