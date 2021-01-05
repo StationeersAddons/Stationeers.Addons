@@ -75,6 +75,10 @@
       <HintPath>$(SolutionDir)\..\Libraries\Stationeers\UnityEngine.UNETModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="com.unity.multiplayer-hlapi.Runtime.dll">
+      <HintPath>$(SolutionDir)\..\Libraries\Stationeers\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Scripts\ExampleMod.cs" />

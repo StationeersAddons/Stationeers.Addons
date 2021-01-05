@@ -20,6 +20,7 @@ namespace Stationeers.Addons.PluginCompiler
             "UnityEngine.AssetBundleModule.dll",
             "UnityEngine.UI.dll",
             "UnityEngine.UNETModule.dll",
+            "com.unity.multiplayer-hlapi.Runtime.dll",
             "UnityEngine.ParticleSystemModule.dll",
             "UnityEngine.StreamingModule.dll",
             "UnityEngine.SubstanceModule.dll",
