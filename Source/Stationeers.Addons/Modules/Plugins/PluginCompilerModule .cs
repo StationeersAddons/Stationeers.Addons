@@ -1,11 +1,17 @@
 ﻿// Stationeers.Addons (c) 2018-2021 Damian 'Erdroy' Korczowski & Contributors
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts;
+using Stationeers.Addons.Core;
 using Steamworks;
 using UnityEngine;
+
+// TODO: Read XML file and get the real addon name to show
+// TODO: Detect when plugin doesn't need to be compiled (not changed etc.)
+// TODO: Add non-compiled (skipped) plugins to the CompiledPlugins list
 
 namespace Stationeers.Addons.Modules.Plugins
 {
@@ -44,28 +50,41 @@ namespace Stationeers.Addons.Modules.Plugins
             if (!Directory.Exists("AddonManager/AddonsCache"))
                 Directory.CreateDirectory("AddonManager/AddonsCache");
 
-            foreach (var workshopItemID in WorkshopManager.Instance.SubscribedItems)
+            // TODO: Cleanup duplicated code
+            
+            // Load local plugins (but ignore if there is Debug version of it)
+            yield return LoadLocalPlugins(pluginCompiler);
+            
+            // Load workshop plugins
+            yield return LoadWorkshopPlugins(pluginCompiler);
+
+            // Dispose the compiler
+            pluginCompiler.Dispose();
+        }
+
+        private IEnumerator LoadLocalPlugins(PluginCompiler pluginCompiler)
+        {
+            var localPluginDirectories = LocalMods.GetLocalModDirectories(false, true);
+            
+            foreach (var localPluginDirectory in localPluginDirectories)
             {
-                // TODO: Read XML file and get the real addon name to show
-
-                if (SteamUGC.GetItemInstallInfo(workshopItemID, out _, out var pchFolder, 1024U, out _))
+                try
                 {
-                    // TODO: Detect when plugin doesn't need to be compiled (not changed etc.)
-                    // TODO: Add non-compiled (skipped) plugins to the CompiledPlugins list
+                    var addonDirectory = localPluginDirectory;
 
-                    var addonDirectory = pchFolder;
-
-                    var addonName = "workshop-" + workshopItemID.m_PublishedFileId;
-                    var assemblyName = addonName + "-Assembly"; // TODO: Make some shared project for string constants etc.
+                    var addonName = "local-" + new DirectoryInfo(localPluginDirectory).Name;
+                    var assemblyName =
+                        addonName + "-Assembly"; // TODO: Make some shared project for string constants etc.
                     var assemblyFile = "AddonManager/AddonsCache/" + assemblyName + ".dll";
 
                     if (!Directory.Exists(addonDirectory))
                     {
-                        Debug.LogWarning($"Could not load addon plugin '{addonName}' because directory '{addonDirectory}' does not exist!");
+                        Debug.LogWarning(
+                            $"Could not load addon plugin '{addonName}' because directory '{addonDirectory}' does not exist!");
                         continue;
                     }
 
-                    var addonScripts = Directory.GetFiles(pchFolder, "*.cs", SearchOption.AllDirectories);
+                    var addonScripts = Directory.GetFiles(addonDirectory, "*.cs", SearchOption.AllDirectories);
 
                     if (addonScripts.Length == 0) continue;
 
@@ -79,11 +98,56 @@ namespace Stationeers.Addons.Modules.Plugins
 
                     CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
                 }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Failed to compile plugin from '{localPluginDirectory}'. Exception:\n{ex}");
+                }
+                
                 yield return new WaitForEndOfFrame();
             }
+        }
 
-            // Dispose the compiler
-            pluginCompiler.Dispose();
+        private IEnumerator LoadWorkshopPlugins(PluginCompiler pluginCompiler)
+        {
+            foreach (var workshopItemID in WorkshopManager.Instance.SubscribedItems)
+            {
+                if (SteamUGC.GetItemInstallInfo(workshopItemID, out _, out var pchFolder, 1024U, out _))
+                {
+                    try
+                    {
+                        var addonDirectory = pchFolder;
+
+                        var addonName = "workshop-" + workshopItemID.m_PublishedFileId;
+                        var assemblyName = addonName + "-Assembly"; // TODO: Make some shared project for string constants etc.
+                        var assemblyFile = "AddonManager/AddonsCache/" + assemblyName + ".dll";
+
+                        if (!Directory.Exists(addonDirectory))
+                        {
+                            Debug.LogWarning($"Could not load addon plugin '{addonName}' because directory '{addonDirectory}' does not exist!");
+                            continue;
+                        }
+
+                        var addonScripts = Directory.GetFiles(pchFolder, "*.cs", SearchOption.AllDirectories);
+
+                        if (addonScripts.Length == 0) continue;
+
+                        if (File.Exists(assemblyFile))
+                        {
+                            Debug.Log($"Removing old plugin assembly file '{assemblyFile}'");
+                            File.Delete(assemblyFile);
+                        }
+
+                        pluginCompiler.CompileScripts(addonName, addonDirectory, addonScripts);
+
+                        CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.LogError($"Failed to compile plugin from '{pchFolder}'. Exception:\n{ex}");
+                    }
+                }
+                yield return new WaitForEndOfFrame();
+            }
         }
 
         /// <inheritdoc />
