@@ -14,6 +14,7 @@ Go to [Releases](https://github.com/Erdroy/Stationeers.Addons/releases) and sele
 ***Note:** After you've subscribed to an addon on the workshop, you have to restart the game. This will be improved in the future.*
 
 ## Links
+* [Discord](https://discord.gg/b6kFrUATdm)
 * [Trello](https://trello.com/b/zSHKh2XO/stationeersaddons)
 * [Official Github](https://github.com/Erdroy/Stationeers.Addons)
 
