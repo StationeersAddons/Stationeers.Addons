@@ -1,6 +1,4 @@
-﻿// Stationeers.Addons (c) 2018-2021 Damian 'Erdroy' Korczowski & Contributors
-
-using Assets.Scripts.UI;
+﻿using Assets.Scripts.UI;
 using HarmonyLib;
 using JetBrains.Annotations;
 using UnityEngine;
