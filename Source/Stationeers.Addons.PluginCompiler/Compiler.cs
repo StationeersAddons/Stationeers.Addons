@@ -12,6 +12,7 @@ namespace Stationeers.Addons.PluginCompiler
     {
         private static readonly string[] GameAssemblies = {
             "mscorlib.dll",
+            "netstandard.dll",
             "Assembly-CSharp.dll",
             "System.dll",
             "System.Core.dll",
