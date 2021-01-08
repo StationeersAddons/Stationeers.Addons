@@ -1,8 +1,7 @@
 # Stationeers.Addons
 <a href="https://discord.gg/b6kFrUATdm"><img src="https://discordapp.com/api/guilds/795601381956124693/widget.png"/></a></br>
 
-**Stationeers.Addons** is a fully-fledged modding framework for [Stationeers](https://store.steampowered.com/app/544550/Stationeers/).
-It is responsible for scripting support (compilation and loading) and custom content loading (via asset boundles).
+**Stationeers.Addons** is a fully-fledged modding framework for [Stationeers](https://store.steampowered.com/app/544550/Stationeers/). Working just like the standard mods (XML) but with scripting and custom-content support!
 
 **Current status:** Available for testing.<br>
 *Full version ETA: **Q1 2021***
@@ -18,27 +17,26 @@ Go to [Releases](https://github.com/Erdroy/Stationeers.Addons/releases) and sele
 * [Trello](https://trello.com/b/zSHKh2XO/stationeersaddons)
 * [Official Github](https://github.com/Erdroy/Stationeers.Addons)
 
-## Making a mod
-Comming soon.
-
 ## Building
-Visual Studio 2019 is required.
+`Visual Studio 2019` is required and `Visual Studio Tools for Unity` installation is recommended.
 Please read Libraries [README](Libraries/Stationeers/README.md) file.
 Open `Source/Stationeers.Addons.sln` and start playing with it!
 
-## Debugging
-Comming soon.
-Note: boot.config, unity and output paths
+## Creating addons
+If you want to create your own addon, read here: [CREATING-ADDONS](Docs/CREATING-ADDONS.md).
 
-## Dependecies
-* Mono.Cecil
-* Harmony
+## Debugging addons
+If you want to debug your own addon, read here: [DEBUGGING-ADDONS](Docs/DEBUGGING-ADDONS.md).
 
-## Mods
+## Addons
 * [Example Mod](https://steamcommunity.com/sharedfiles/filedetails/?id=2308921579) by Erdroy
 * [SEGI - Sonic Ether Global Illumination](https://steamcommunity.com/sharedfiles/filedetails/?id=2308956244) by Erdroy
 
 *DM **Erdroy#0001** on Discord, if you would like to get your mod featured here.*
+
+## Dependecies
+* Mono.Cecil
+* Harmony
 
 ## Contributions
 We're accepting pull requests, look at our Trello board to find tasks that have not been completed, yet.

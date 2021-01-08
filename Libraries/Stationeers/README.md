@@ -23,4 +23,5 @@ The libraries that are listed above, can be found inside your game's installatio
 `C:/Program Files (x86)/Steam/steamapps/common/Stationeers/rocketstation_Data/Managed`
 
 ___
-Stationeers.Addons (c) 2018-2020 Damian 'Erdroy' Korczowski & Contributors
+***Stationeers.Addons** is not affiliated with RocketWerkz. All trademarks and registered trademarks are the property of their respective owners.*<br>
+***Stationeers.Addons** (c) 2018-2020 Damian 'Erdroy' Korczowski & Contributors*
