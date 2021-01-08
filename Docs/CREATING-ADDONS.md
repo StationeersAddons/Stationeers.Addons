@@ -28,6 +28,21 @@ To get basic addon with simple plugin, follow these steps:
     * [Harmony documentation](https://harmony.pardeike.net/articles/intro.html) - Use it for patching the game's code at runtime.
     * [dnSpy](https://github.com/dnSpy/dnSpy) - for browsing the game's source code.
 
+## Publishing your addon.
+We are supporting workshop! Yes! It's as simple as publishing your mod (created in step **11** above) to the workshop!
+
+But please, make sure that people know that it's an addon and not a standard mod by following these steps:
+1. If you have custom thumbnail - include the addon [overlay](../Source/AddonOverlay.png).
+2. Add this text to the workshop description at the beginning:
+```
+WARNING: This mod will not work, unless you install Stationeers.Addon mod loader.
+Read how to install it here: https://github.com/Erdroy/Stationeers.Addons
+---
+```
+And that is it :) 
+
+**Note:** After publishing your addon for the first time, you have to copy `mods/MODNAME/About/About.xml` file back to your Visual Studio project (replace the file), as it now has `WorkshopHandle` tag and it is needed to update the adddon later!
+
 ___
 ***Stationeers.Addons** is not affiliated with RocketWerkz. All trademarks and registered trademarks are the property of their respective owners.*<br>
 ***Stationeers.Addons** (c) 2018-2020 Damian 'Erdroy' Korczowski & Contributors*
