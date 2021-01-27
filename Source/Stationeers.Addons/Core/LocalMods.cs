@@ -17,6 +17,8 @@ namespace Stationeers.Addons.Core
 
         public static string[] GetLocalModDirectories(bool includeDebugPlugins = true, bool skipIfDebugPluginExists = false)
         {
+            if (!Directory.Exists(LocalModsDirectory)) return new string[] { };
+
             var directories = Directory.GetDirectories(LocalModsDirectory);
             var modDirectory = new List<string>();
 
@@ -37,6 +39,8 @@ namespace Stationeers.Addons.Core
 
         public static string[] GetLocalModDebugAssemblies()
         {
+            if (!Directory.Exists(LocalModsDirectory)) return new string[] { };
+            
             var directories = GetLocalModDirectories();
             var modAssemblies = new List<string>();
 
