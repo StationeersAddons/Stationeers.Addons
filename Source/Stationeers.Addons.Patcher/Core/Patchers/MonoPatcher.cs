@@ -20,8 +20,8 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
         public const string AssemblyDir = "Managed";
         public const string AssemblyName = "Assembly-CSharp.dll";
 
-        private const string TargetType = "Assets.Scripts.MenuCutscene"; // BUG: Not called on server builds, we have to find better place for this - some bootstrap class or something.
-        private const string TargetFunction = "Awake";
+        private const string TargetType = "Assets.Scripts.GameManager"; // BUG: Not called on server builds, we have to find better place for this - some bootstrap class or something.
+        private const string TargetFunction = "OnEnable";
 
         private const string Signature = "StationeersModLoader";
 
