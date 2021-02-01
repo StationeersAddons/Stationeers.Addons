@@ -13,20 +13,18 @@ namespace Stationeers.Addons.Core
     {
         public const string DebugPluginPostfix = "-Debug";
         
-        // Should be looking at the server 'default.ini' for mod locations serverside
+        // Select mods directory based on install instance
         public static readonly string LocalModsDirectory = !LoaderManager.IsDedicatedServer ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/My Games/Stationeers/mods/" : GetDedicatedServerModsDirectory();
 
         public static string[] GetLocalModDirectories(bool includeDebugPlugins = true, bool skipIfDebugPluginExists = false)
         {
-            UnityEngine.Debug.Log(LocalModsDirectory);
-            UnityEngine.Debug.Log(Directory.Exists(LocalModsDirectory));
             if ((LocalModsDirectory == null) || !Directory.Exists(LocalModsDirectory))
             {
                 UnityEngine.Debug.Log("ModLoader ERROR: Could not locate mods directory, no mods getting initialized.");
                 return new string[] { };
             }
 
-            UnityEngine.Debug.Log($"Trying to load mods from {LocalModsDirectory}");
+            UnityEngine.Debug.Log($"Trying to load mod from {LocalModsDirectory}");
 
             var directories = Directory.GetDirectories(LocalModsDirectory);
             var modDirectory = new List<string>();
@@ -48,7 +46,9 @@ namespace Stationeers.Addons.Core
 
         private static string GetDedicatedServerModsDirectory()
         {
-            if(File.Exists("default.ini"))
+            // Find serverside default.ini
+            // Currently needs to be in the root of the dedicated server directory (next to rocketstation_DedicatedServer.exe)
+            if (File.Exists("default.ini"))
             {
                 UnityEngine.Debug.Log("default.ini found!");
             }
