@@ -45,6 +45,11 @@ namespace Stationeers.Addons.Core
         public bool IsDebuggingEnabled { get; private set; }
 
         /// <summary>
+        ///     Gets true when running on a dedicated server
+        /// </summary>
+        public bool IsDedicatedServer { get; private set; }
+
+        /// <summary>
         ///     Workshop module reference
         /// </summary>
         public WorkshopModule Workshop { get; private set; }
@@ -82,6 +87,11 @@ namespace Stationeers.Addons.Core
             Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
             Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
             Application.SetStackTraceLogType(LogType.Error, StackTraceLogType.None);
+
+            // Check if we are running on a dedicated server instance
+            IsDedicatedServer = File.Exists("rocketstation_DedicatedServer.exe");
+            if (IsDedicatedServer)
+                Debug.Log("[Stationeers.Addons - DEDICATED SERVER] Stationeers.Addons is running on a dedicated server!");
 
             // Check if we can debug addons
             IsDebuggingEnabled = File.Exists("addons-debugging.enable");
