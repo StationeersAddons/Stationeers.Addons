@@ -13,11 +13,20 @@ namespace Stationeers.Addons.Core
     {
         public const string DebugPluginPostfix = "-Debug";
         
-        public static readonly string LocalModsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/My Games/Stationeers/mods/";
+        // Should be looking at the server 'default.ini' for mod locations serverside
+        public static readonly string LocalModsDirectory = !LoaderManager.IsDedicatedServer ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/My Games/Stationeers/mods/" : GetDedicatedServerModsDirectory();
 
         public static string[] GetLocalModDirectories(bool includeDebugPlugins = true, bool skipIfDebugPluginExists = false)
         {
-            if (!Directory.Exists(LocalModsDirectory)) return new string[] { };
+            UnityEngine.Debug.Log(LocalModsDirectory);
+            UnityEngine.Debug.Log(Directory.Exists(LocalModsDirectory));
+            if ((LocalModsDirectory == null) || !Directory.Exists(LocalModsDirectory))
+            {
+                UnityEngine.Debug.Log("ModLoader ERROR: Could not locate mods directory, no mods getting initialized.");
+                return new string[] { };
+            }
+
+            UnityEngine.Debug.Log($"Trying to load mods from {LocalModsDirectory}");
 
             var directories = Directory.GetDirectories(LocalModsDirectory);
             var modDirectory = new List<string>();
@@ -35,6 +44,23 @@ namespace Stationeers.Addons.Core
             }
 
             return modDirectory.ToArray();
+        }
+
+        private static string GetDedicatedServerModsDirectory()
+        {
+            if(File.Exists("default.ini"))
+            {
+                UnityEngine.Debug.Log("default.ini found!");
+            }
+            foreach(string line in File.ReadLines("default.ini"))
+            {
+                if (line.Contains("MODPATH="))
+                {
+                    UnityEngine.Debug.Log($"Found modpath: {line.Substring(8)}");
+                    return line.Substring(8);
+                }
+            }
+            return null;
         }
 
         public static string[] GetLocalModDebugAssemblies()
