@@ -32,6 +32,7 @@ namespace Stationeers.Addons.Modules.HarmonyLib
                 _harmony.PatchAll(plugin.Assembly);
                 yield return new WaitForEndOfFrame();
             }
+            Debug.Log($"Finished {LoaderManager.Instance.PluginLoader.LoadedPlugins.Count} patches to game assembly");
         }
 
         /// <inheritdoc />

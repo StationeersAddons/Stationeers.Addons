@@ -12,9 +12,25 @@ namespace Stationeers.Addons.Patcher.Core
         {
             Logger.Current.Log("Startup");
 
-            // Check if we are in the correct directory
-            if (!File.Exists(Constants.GameExe))
-                Logger.Current.LogFatal($"Could not find game executable file '{Constants.GameExe}'!");
+            string installInstance;
+
+            // Check install type and current directory
+            if(File.Exists(Constants.GameExe))
+            {
+                // Found game install
+                installInstance = Constants.GameExe;
+            }
+            else if (File.Exists(Constants.ServerExe))
+            {
+                // Found server install
+                installInstance = Constants.ServerExe;
+            }
+            else
+            {
+                // No install found
+                installInstance = null;
+                Logger.Current.LogFatal($"Could not find executable file '{Constants.GameExe}' or {Constants.ServerResourcesDir}!");
+            }
 
             // Create patcher
             var patcher = new MonoPatcher();
@@ -22,7 +38,7 @@ namespace Stationeers.Addons.Patcher.Core
             try
             {
                 // Load and check game assembly
-                patcher.Load(Constants.GameExe);
+                patcher.Load(installInstance);
 
                 // Check if game is patched
                 // If not, patch the game.

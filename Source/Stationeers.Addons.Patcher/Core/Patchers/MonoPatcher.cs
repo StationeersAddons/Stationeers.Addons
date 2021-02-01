@@ -20,8 +20,8 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
         public const string AssemblyDir = "Managed";
         public const string AssemblyName = "Assembly-CSharp.dll";
 
-        private const string TargetType = "Assets.Scripts.MenuCutscene"; // BUG: Not called on server builds, we have to find better place for this - some bootstrap class or something.
-        private const string TargetFunction = "Awake";
+        private const string TargetType = "Assets.Scripts.GameManager"; // BUG: Not called on server builds, we have to find better place for this - some bootstrap class or something.
+        private const string TargetFunction = "OnEnable";
 
         private const string Signature = "StationeersModLoader";
 
@@ -29,28 +29,28 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
         private ModuleDefinition _module;
         private TypeDefinition _type;
 
-        public string AssemblyFileName => 
-            Path.Combine(Environment.CurrentDirectory, Constants.ResourcesDir, AssemblyDir, AssemblyName);
-        public string TemporaryAssemblyFileName => 
-            Path.Combine(Environment.CurrentDirectory, Constants.ResourcesDir, AssemblyDir, AssemblyName + ".temp.dll");
+        public string AssemblyFileName;
+        public string TemporaryAssemblyFileName;
 
         /// <inheritdoc />
-        public void Load(string gameExe)
+        public void Load(string instanceExe)
         {
+            GetInstanceAssemblies(instanceExe);
+
             if (!File.Exists(AssemblyFileName))
-                Logger.Current.LogFatal($"Could not find game assembly '{AssemblyFileName}'.");
+                Logger.Current.LogFatal($"Could not find game/server assembly '{AssemblyFileName}'.");
             
             // Copy the assembly into temporary file
             File.Copy(AssemblyFileName, TemporaryAssemblyFileName, true);
 
-            Logger.Current.Log($"Coped game assembly into temporary file '{TemporaryAssemblyFileName}'");
+            Logger.Current.Log($"Copied game/server assembly into temporary file '{TemporaryAssemblyFileName}'");
 
             // Read the original, temporary assembly
             _assembly = AssemblyDefinition.ReadAssembly(TemporaryAssemblyFileName);
 
             if (_assembly == null)
             {
-                Logger.Current.LogFatal($"Could not read game assembly '{TemporaryAssemblyFileName}'.");
+                Logger.Current.LogFatal($"Could not read game/server assembly '{TemporaryAssemblyFileName}'.");
                 return;
             }
 
@@ -115,6 +115,25 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
                 return true; // Patched
 
             return false; // Not patched
+        }
+
+        /// <inheritdoc />
+        private void GetInstanceAssemblies(string installInstance)
+        {
+            // This is kind of verbose, might need to be rewritten in a more concise manner
+            string installResourcesDir = null;
+            if(installInstance == Constants.GameExe)
+            {
+                installResourcesDir = Constants.GameResourcesDir;
+            }
+            else if(installInstance == Constants.ServerExe)
+            {
+                installResourcesDir = Constants.ServerResourcesDir;
+            }
+            System.Diagnostics.Debug.Assert(!string.IsNullOrEmpty(installResourcesDir), "Invalid install dir!");
+
+            AssemblyFileName = Path.Combine(Environment.CurrentDirectory, installResourcesDir, AssemblyDir, AssemblyName);
+            TemporaryAssemblyFileName = Path.Combine(Environment.CurrentDirectory, installResourcesDir, AssemblyDir, AssemblyName + ".temp.dll");
         }
 
         private void Backup()
