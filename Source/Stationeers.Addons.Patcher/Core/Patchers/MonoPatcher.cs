@@ -118,21 +118,21 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
         }
 
         /// <inheritdoc />
-        private void GetInstanceAssemblies(String installInstance)
+        private void GetInstanceAssemblies(string installInstance)
         {
             // This is kind of verbose, might need to be rewritten in a more concise manner
-            String InstallResourcesDir = null;
+            string installResourcesDir = null;
             if(installInstance == Constants.GameExe)
             {
-                InstallResourcesDir = Constants.GameResourcesDir;
+                installResourcesDir = Constants.GameResourcesDir;
             }
             else if(installInstance == Constants.ServerExe)
             {
-                InstallResourcesDir = Constants.ServerResourcesDir;
+                installResourcesDir = Constants.ServerResourcesDir;
             }
 
-            AssemblyFileName = Path.Combine(Environment.CurrentDirectory, InstallResourcesDir, AssemblyDir, AssemblyName);
-            TemporaryAssemblyFileName = Path.Combine(Environment.CurrentDirectory, InstallResourcesDir, AssemblyDir, AssemblyName + ".temp.dll");
+            AssemblyFileName = Path.Combine(Environment.CurrentDirectory, installResourcesDir, AssemblyDir, AssemblyName);
+            TemporaryAssemblyFileName = Path.Combine(Environment.CurrentDirectory, installResourcesDir, AssemblyDir, AssemblyName + ".temp.dll");
         }
 
         private void Backup()
