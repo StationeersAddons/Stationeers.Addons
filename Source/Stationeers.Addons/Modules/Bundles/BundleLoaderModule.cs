@@ -26,16 +26,19 @@ namespace Stationeers.Addons.Modules.Bundles
         {
             Debug.Log("Loading custom content bundles...");
 
-            foreach (var workshopItemID in WorkshopManager.Instance.SubscribedItems)
+            if (!LoaderManager.IsDedicatedServer) // Load from workshop (if not dedicated server)
             {
-                // TODO: Read XML file and get the real addon name to show
-
-                if (SteamUGC.GetItemInstallInfo(workshopItemID, out _, out var pchFolder, 1024U, out _))
+                foreach (var workshopItemID in WorkshopManager.Instance.SubscribedItems)
                 {
-                    // TODO: Prevent from loading local addons
+                    // TODO: Read XML file and get the real addon name to show
 
-                    var modDirectory = pchFolder;
-                    yield return LoadBundleFromModDirectory(modDirectory);
+                    if (SteamUGC.GetItemInstallInfo(workshopItemID, out _, out var pchFolder, 1024U, out _))
+                    {
+                        // TODO: Prevent from loading local addons
+
+                        var modDirectory = pchFolder;
+                        yield return LoadBundleFromModDirectory(modDirectory);
+                    }
                 }
             }
 

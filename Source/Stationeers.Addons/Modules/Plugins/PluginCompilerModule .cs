@@ -55,9 +55,12 @@ namespace Stationeers.Addons.Modules.Plugins
             // Load local plugins (but ignore if there is Debug version of it)
             yield return LoadLocalPlugins(pluginCompiler);
             
-            // Load workshop plugins
-            yield return LoadWorkshopPlugins(pluginCompiler);
-
+            // Load workshop plugins (if client)
+            if(!LoaderManager.IsDedicatedServer)
+            {
+                yield return LoadWorkshopPlugins(pluginCompiler);
+            }
+            
             // Dispose the compiler
             pluginCompiler.Dispose();
         }
@@ -109,6 +112,11 @@ namespace Stationeers.Addons.Modules.Plugins
 
         private IEnumerator LoadWorkshopPlugins(PluginCompiler pluginCompiler)
         {
+            while(WorkshopManager.Instance == null) // Wait until WorkshopManager has started
+            {
+                yield return null;
+            }
+
             foreach (var workshopItemID in WorkshopManager.Instance.SubscribedItems)
             {
                 if (SteamUGC.GetItemInstallInfo(workshopItemID, out _, out var pchFolder, 1024U, out _))

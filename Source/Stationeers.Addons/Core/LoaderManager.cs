@@ -47,7 +47,7 @@ namespace Stationeers.Addons.Core
         /// <summary>
         ///     Gets true when running on a dedicated server
         /// </summary>
-        public bool IsDedicatedServer { get; private set; }
+        public static bool IsDedicatedServer { get; private set; }
 
         /// <summary>
         ///     Workshop module reference
@@ -98,7 +98,10 @@ namespace Stationeers.Addons.Core
             if (IsDebuggingEnabled)
                 Debug.Log("[Stationeers.Addons - DEBUG] Stationeers.Addons debugging enabled!");
 
-            Workshop = InitializeModule<WorkshopModule>();
+            if(!IsDedicatedServer) // Only look for workshop if on client
+            {
+                Workshop = InitializeModule<WorkshopModule>();
+            }
             PluginCompiler = InitializeModule<PluginCompilerModule>();
             BundleLoader = InitializeModule<BundleLoaderModule>();
             PluginLoader = InitializeModule<PluginLoaderModule>();
@@ -109,26 +112,41 @@ namespace Stationeers.Addons.Core
         {
             // TODO: Start loading only when the initial main menu loading is finished
 
-            ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
-            ProgressPanel.Instance.UpdateProgressBarCaption("Loading modules...");
-            ProgressPanel.Instance.UpdateProgressBar(0.1f);
-
-            var numModules = _modules.Count;
-            var moduleIdx = 0;
-            foreach (var module in _modules)
+            if(!IsDedicatedServer)
             {
-                // Calculate modules loading progress
-                var progress = Mathf.Clamp01(numModules / (float)moduleIdx);
+                ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
+                ProgressPanel.Instance.UpdateProgressBarCaption("Loading modules...");
+                ProgressPanel.Instance.UpdateProgressBar(0.1f);
 
-                // Update caption
-                ProgressPanel.Instance.UpdateProgressBarCaption(module.LoadingCaption);
-                ProgressPanel.Instance.UpdateProgressBar(Mathf.Lerp(0.35f, 1.0f, progress));
+                var numModules = _modules.Count;
+                var moduleIdx = 0;
+                foreach (var module in _modules)
+                {
+                    // Calculate modules loading progress
+                    var progress = Mathf.Clamp01(numModules / (float)moduleIdx);
 
-                yield return module.Load();
-                moduleIdx++;
+                    // Update caption
+
+                    ProgressPanel.Instance.UpdateProgressBarCaption(module.LoadingCaption);
+                    ProgressPanel.Instance.UpdateProgressBar(Mathf.Lerp(0.35f, 1.0f, progress));
+
+                    yield return module.Load();
+                    moduleIdx++;
+                }
+
+                ProgressPanel.Instance.HideProgressBar();
             }
-
-            ProgressPanel.Instance.HideProgressBar();
+            else // Remove UI elements for dedicated server loading
+            {
+                var numModules = _modules.Count;
+                var moduleIdx = 0;
+                foreach (var module in _modules)
+                {
+                    yield return module.Load();
+                    moduleIdx++;
+                }
+            }
+            
         }
 
         private void OnDestroy()
