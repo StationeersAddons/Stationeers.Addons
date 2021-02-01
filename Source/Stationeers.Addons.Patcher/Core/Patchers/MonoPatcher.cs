@@ -126,7 +126,7 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
             {
                 InstallResourcesDir = Constants.GameResourcesDir;
             }
-            if(installInstance == Constants.ServerExe)
+            else if(installInstance == Constants.ServerExe)
             {
                 InstallResourcesDir = Constants.ServerResourcesDir;
             }
