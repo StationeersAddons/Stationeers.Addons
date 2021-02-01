@@ -74,7 +74,7 @@ namespace Stationeers.Addons.PluginCompiler
             }
 
             // Check server/game instance (might make this more thorough or include it as part of signature)
-            String installDirectory = Directory.Exists("../rocketstation_Data/Managed/") ? "../rocketstation_Data/Managed/" : "../rocketstation_DedicatedServer_Data/Managed/";
+            string installDirectory = Directory.Exists("../rocketstation_Data/Managed/") ? "../rocketstation_Data/Managed/" : "../rocketstation_DedicatedServer_Data/Managed/";
 
             // Setup reference list
             var references = new List<MetadataReference>();
