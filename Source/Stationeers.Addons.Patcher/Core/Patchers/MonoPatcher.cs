@@ -29,19 +29,13 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
         private ModuleDefinition _module;
         private TypeDefinition _type;
 
-        //public string AssemblyFileName => 
-        //    Path.Combine(Environment.CurrentDirectory, Constants.GameResourcesDir, AssemblyDir, AssemblyName);
-        //public string TemporaryAssemblyFileName => 
-        //    Path.Combine(Environment.CurrentDirectory, Constants.GameResourcesDir, AssemblyDir, AssemblyName + ".temp.dll");
-
         public string AssemblyFileName;
         public string TemporaryAssemblyFileName;
 
         /// <inheritdoc />
-        public void Load(string gameExe)
+        public void Load(string instanceExe)
         {
-            // Determine if server or client install
-            DiscoverInstallInstance();
+            GetInstanceAssemblies(instanceExe);
 
             if (!File.Exists(AssemblyFileName))
                 Logger.Current.LogFatal($"Could not find game/server assembly '{AssemblyFileName}'.");
@@ -49,14 +43,14 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
             // Copy the assembly into temporary file
             File.Copy(AssemblyFileName, TemporaryAssemblyFileName, true);
 
-            Logger.Current.Log($"Coped game assembly into temporary file '{TemporaryAssemblyFileName}'");
+            Logger.Current.Log($"Copied game/server assembly into temporary file '{TemporaryAssemblyFileName}'");
 
             // Read the original, temporary assembly
             _assembly = AssemblyDefinition.ReadAssembly(TemporaryAssemblyFileName);
 
             if (_assembly == null)
             {
-                Logger.Current.LogFatal($"Could not read game assembly '{TemporaryAssemblyFileName}'.");
+                Logger.Current.LogFatal($"Could not read game/server assembly '{TemporaryAssemblyFileName}'.");
                 return;
             }
 
@@ -123,23 +117,22 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
             return false; // Not patched
         }
 
-        private void DiscoverInstallInstance()
+        /// <inheritdoc />
+        private void GetInstanceAssemblies(String installInstance)
         {
             // This is kind of verbose, might need to be rewritten in a more concise manner
-            if (File.Exists(Path.Combine(Environment.CurrentDirectory, Constants.GameResourcesDir, AssemblyDir, AssemblyName)))
+            String InstallResourcesDir = null;
+            if(installInstance == Constants.GameExe)
             {
-                AssemblyFileName = Path.Combine(Environment.CurrentDirectory, Constants.GameResourcesDir, AssemblyDir, AssemblyName);
-                TemporaryAssemblyFileName = Path.Combine(Environment.CurrentDirectory, Constants.GameResourcesDir, AssemblyDir, AssemblyName + ".temp.dll");
-                Logger.Current.Log($"Discovered game instance via assembly file '{AssemblyFileName}'");
-                return;
+                InstallResourcesDir = Constants.GameResourcesDir;
             }
-            if (File.Exists(Path.Combine(Environment.CurrentDirectory, Constants.ServerResourcesDir, AssemblyDir, AssemblyName)))
+            if(installInstance == Constants.ServerExe)
             {
-                AssemblyFileName = Path.Combine(Environment.CurrentDirectory, Constants.ServerResourcesDir, AssemblyDir, AssemblyName);
-                TemporaryAssemblyFileName = Path.Combine(Environment.CurrentDirectory, Constants.ServerResourcesDir, AssemblyDir, AssemblyName + ".temp.dll");
-                Logger.Current.Log($"Discovered game instance via assembly file '{AssemblyFileName}'");
-                return;
+                InstallResourcesDir = Constants.ServerResourcesDir;
             }
+
+            AssemblyFileName = Path.Combine(Environment.CurrentDirectory, InstallResourcesDir, AssemblyDir, AssemblyName);
+            TemporaryAssemblyFileName = Path.Combine(Environment.CurrentDirectory, InstallResourcesDir, AssemblyDir, AssemblyName + ".temp.dll");
         }
 
         private void Backup()
