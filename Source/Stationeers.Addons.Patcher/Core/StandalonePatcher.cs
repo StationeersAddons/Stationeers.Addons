@@ -25,6 +25,11 @@ namespace Stationeers.Addons.Patcher.Core
                 // Found server install
                 installInstance = Constants.ServerExe;
             }
+            else if (File.Exists(Constants.LinuxServerInstall))
+            {
+                // Found linux server install
+                installInstance = Constants.LinuxServerInstall;
+            }
             else
             {
                 // No install found

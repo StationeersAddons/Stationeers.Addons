@@ -89,7 +89,7 @@ namespace Stationeers.Addons.Core
             Application.SetStackTraceLogType(LogType.Error, StackTraceLogType.None);
 
             // Check if we are running on a dedicated server instance
-            IsDedicatedServer = File.Exists("rocketstation_DedicatedServer.exe");
+            IsDedicatedServer = File.Exists("rocketstation_DedicatedServer.exe") || File.Exists("rocketstation_DedicatedServer.x86_64");
             if (IsDedicatedServer)
                 Debug.Log("[Stationeers.Addons - DEDICATED SERVER] Stationeers.Addons is running on a dedicated server!");
 
