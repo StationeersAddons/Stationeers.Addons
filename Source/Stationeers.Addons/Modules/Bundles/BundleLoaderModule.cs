@@ -41,16 +41,10 @@ namespace Stationeers.Addons.Modules.Bundles
                     }
                 }
             }
-
-            // Load debug assemblies if debugging is enabled
-            if (LoaderManager.Instance.IsDebuggingEnabled)
+            
+            foreach (var localModDirectory in LocalMods.GetLocalModDirectories())
             {
-                var localModDirectories = LocalMods.GetLocalModDirectories();
-
-                foreach (var localModDirectory in localModDirectories)
-                {
-                    yield return LoadBundleFromModDirectory(localModDirectory);
-                }
+                yield return LoadBundleFromModDirectory(localModDirectory);
             }
         }
 
