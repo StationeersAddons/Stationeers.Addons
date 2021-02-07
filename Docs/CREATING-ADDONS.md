@@ -6,22 +6,23 @@ Our addons work this standard mods. Besides the `About` and `GameData` folders, 
 To get basic addon with simple plugin, follow these steps:
 1. Make sure that you have Visual Studio 2019 installed with C# support. You can also install `Visual Studio Tools for Unity`, this will come in handy later, when you will want to debug your addon. Additionally it will be helpful, if you know how to make standard mods - [read this](https://stationeers-wiki.com/Guide_(Modding)).
 2. Clone [Stationeers.Addons](https://github.com/Erdroy/Stationeers.Addons) repository using git or download it using Download button, open the resulting folder.
-3. Copy ExampleMod from `Source/ExampleMods` into `Source/MyMods/` directory.
-4. Rename copied directory to whatever name you want, let's keep it simple, and call it MyFirstAddon.
-5. Rename `ExampleMod.csproj` to `MyFirstAddon.csproj` and  `ExampleMod.csproj.user` to `MyFirstAddon.csproj.user`.
-6. Open `MyFirstAddon.csproj` file in your favorite text editor (not IDE!).
-7. Change these two lines:
+3. Copy dll files from your game installation directory into Libraries/Stationeers, [read this](https://github.com/Erdroy/Stationeers.Addons/blob/master/Libraries/Stationeers/README.md).
+4. Copy ExampleMod from `Source/ExampleMods` into `Source/MyMods/` directory.
+5. Rename copied directory to whatever name you want, let's keep it simple, and call it MyFirstAddon.
+6. Rename `ExampleMod.csproj` to `MyFirstAddon.csproj` and  `ExampleMod.csproj.user` to `MyFirstAddon.csproj.user`.
+7. Open `MyFirstAddon.csproj` file in your favorite text editor (not IDE!).
+8. Change these two lines:
     * <RootNamespace>ExampleMod</RootNamespace>
     * <AssemblyName>ExampleMod-Debug</AssemblyName> <br>
     to
     * <RootNamespace>MyFirstAddon</RootNamespace>
     * <AssemblyName>MyFirstAddon-Debug</AssemblyName>
-8. Go back to the Source folder and open `Stationeers.Addons.sln` solution file.
-9. Click *RMB* on *"My Mods"* folder in solution, select `Add > Existing Project...`, locate your addon C# project (*MyFirstAddon.csproj*).
-10. Rename `ExampleMod.cs` to `MyFirstAddon.cs`, as this will be your entry point. You should also change the namespace to.
-11. To check if your addon is working, go to `C:\Users\%username%\Documents\My Games\Stationeers\` and open `mods` folder (you can safely create it, if it's missing). Create folder named like your Addon and copy `About`, `Content`, `GameData` and `Scripts`. And that's it.
-12. At this point, you have the ability to start writing the code. Check MyFirstAddon.cs for ideas. Have fun.
-13. Useful links:
+9. Go back to the Source folder and open `Stationeers.Addons.sln` solution file.
+10. Click *RMB* on *"My Mods"* folder in solution, select `Add > Existing Project...`, locate your addon C# project (*MyFirstAddon.csproj*).
+11. Rename `ExampleMod.cs` to `MyFirstAddon.cs`, as this will be your entry point. You should also change the namespace to.
+12. To check if your addon is working, go to `C:\Users\%username%\Documents\My Games\Stationeers\` and open `mods` folder (you can safely create it, if it's missing). Create folder named like your Addon and copy `About`, `Content`, `GameData` and `Scripts`. And that's it.
+13. At this point, you have the ability to start writing the code. Check MyFirstAddon.cs for ideas. Have fun.
+14. Useful links:
     * [Debugging addons](DEBUGGING-ADDONS.md)
     * [Creating custom content](CUSTOM-CONTENT.md) (Comming soon)
     * [Overloading methods](OVERLOADING-METHODS.md) (Comming soon)
