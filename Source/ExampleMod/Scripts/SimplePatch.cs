@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ExampleMod.Scripts
 {
     [HarmonyPatch(typeof(TutorialMenu))]
-    [HarmonyPatch("GetMissionList")]
+    [HarmonyPatch("StartScenario")]
     public class SimplePatch
     {
         [UsedImplicitly]
