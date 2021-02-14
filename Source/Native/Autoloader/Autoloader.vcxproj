@@ -84,11 +84,15 @@
     <LinkIncremental>true</LinkIncremental>
     <TargetName>version</TargetName>
     <OutDir>../../../Build/Autoloader/</OutDir>
+    <LibraryPath>..\..\..\Thirdparty\Detours\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\Thirdparty\Detours\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>version</TargetName>
     <OutDir>../../../Build/Autoloader/</OutDir>
+    <LibraryPath>..\..\..\Thirdparty\Detours\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\Thirdparty\Detours\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -134,6 +138,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
+      <AdditionalDependencies>detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,6 +157,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
       <ModuleDefinitionFile>Source.def</ModuleDefinitionFile>
+      <AdditionalDependencies>detours.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
