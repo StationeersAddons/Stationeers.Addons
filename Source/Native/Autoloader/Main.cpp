@@ -3,45 +3,79 @@
 #include "Proxy.h"
 #include "Config.h"
 #include <Windows.h>
-
 #include <thread>
+#include <detours.h>
 
-#define MAKE_FUNCTION_DECL(name, returnType, ...)\
-    typedef returnType (*name##_t)(__VA_ARGS__);\
-    name##_t name
+#include "HelperMarcros.h"
+#include "Utilities.h"
 
-std::thread g_mono_awaiter_thread;
+struct MonoDomain;
+struct MonoImage;
+struct MonoClass;
+struct MonoAssembly;
+struct MonoMethod;
+struct MonoObject;
 
-MAKE_FUNCTION_DECL(mono_get_domain, void*,);
-MAKE_FUNCTION_DECL(mono_get_root_domain, void*,);
+// Declare needed Mono calls
+MAKE_FUNCTION_DECL(mono_get_domain, MonoDomain*,);
+MAKE_FUNCTION_DECL(mono_jit_init_version, void*, const char*, const char*);
+MAKE_FUNCTION_DECL(mono_get_root_domain, MonoDomain*,);
+MAKE_FUNCTION_DECL(mono_domain_assembly_open, MonoAssembly*, MonoDomain*, const char*);
+MAKE_FUNCTION_DECL(mono_runtime_invoke, MonoObject*, MonoMethod*, void*, void**, MonoObject**);
+MAKE_FUNCTION_DECL(mono_method_get_name, const char*, const void*);
 
-void monoAwaiterWorker()
+MAKE_FUNCTION_DECL(mono_assembly_get_image, MonoImage*, MonoAssembly*);
+MAKE_FUNCTION_DECL(mono_class_from_name, MonoClass*, MonoImage*, const char*, const char*);
+MAKE_FUNCTION_DECL(mono_class_get_method_from_name, MonoMethod*, MonoClass*, const char*, int);
+
+DETOUR_FUNC(mono_runtime_invoke, MonoObject*, MonoMethod* method, void* obj, void** params, MonoObject** exc)
 {
-#define BIND_FUNCTION(name) \
-    name = reinterpret_cast<name##_t>(GetProcAddress(mono_handle, _STRINGIZE(name)))
+    const char* methodName = mono_method_get_name(method);
 
-    HMODULE mono_handle;
+    if (string_ends_with(methodName, "Start")) {
+        MonoDomain* domain = mono_get_root_domain();
+        MonoAssembly* assembly = mono_domain_assembly_open(domain, "AddonManager/Stationeers.Addons.dll"); // TODO: Clean this up
+        MonoImage* image = mono_assembly_get_image(assembly);
+        MonoClass* getClass = mono_class_from_name(image, "Stationeers.Addons", "Loader");
+        MonoMethod* loaderMethod = mono_class_get_method_from_name(getClass, "Load", 0);
+        p_mono_runtime_invoke(loaderMethod, obj, params, exc); // If I set 'obj' to NULL, it fails. WTF?
 
-    // Wait for mono to be loaded
-    do
-    {
-        mono_handle = GetModuleHandle(MONO_ASSEMBLY);
-        Sleep(250);
-    } while (mono_handle == nullptr);
+        // Call the original method and unhook this detour
+        MonoObject* result = p_mono_runtime_invoke(method, obj, params, exc);
+        UNHOOK_FUNC(mono_runtime_invoke);
+        return result;
+    }
 
-    // Grab mono_domain_get function
-    BIND_FUNCTION(mono_get_root_domain);
-
-    // Wait for mono to be initialized
-    void* root_domain = nullptr;
-    do
-    {
-        root_domain = mono_get_root_domain();
-        Sleep(250);
-    } while (root_domain == nullptr);
-
-    // TODO: Signal the main thread
+    // Call the original function
+    return p_mono_runtime_invoke(method, obj, params, exc);
 }
+
+DETOUR_STDFUNC(LoadLibraryW, HMODULE, LPCWSTR lpLibFileName)
+{
+    HMODULE library = p_LoadLibraryW(lpLibFileName);
+
+    if(wcsstr(lpLibFileName, MONO_ASSEMBLY))
+    {
+        // Bind required mono calls
+        BIND_FUNCTION(library, mono_runtime_invoke);
+        BIND_FUNCTION(library, mono_method_get_name);
+        BIND_FUNCTION(library, mono_domain_assembly_open);
+        BIND_FUNCTION(library, mono_get_root_domain);
+        BIND_FUNCTION(library, mono_jit_init_version);
+        BIND_FUNCTION(library, mono_get_domain);
+        BIND_FUNCTION(library, mono_assembly_get_image);
+        BIND_FUNCTION(library, mono_class_from_name);
+        BIND_FUNCTION(library, mono_class_get_method_from_name);
+
+        // Hook mono_runtime_invoke and check if it is Awake or Start or OnEnable call and finally load our addons assembly and execute!
+        // Unhook everything when not needed anymore
+        HOOK_FUNC(mono_runtime_invoke);
+        UNHOOK_FUNC(LoadLibraryW);
+    }
+
+    return library;
+}
+
 
 BOOL WINAPI DllMain(
     HINSTANCE /*hInstance*/,
@@ -59,20 +93,10 @@ BOOL WINAPI DllMain(
         if (!Proxy::IsGameProcess())
             return TRUE;
 
-        g_mono_awaiter_thread = std::thread(monoAwaiterWorker);
+        DetourRestoreAfterWith(); // ?
 
-        // TODO: Hook some method that will give us some access to main thread and run, when signaled by the awaiter:
-
-        /*  
-        assembly = mono_domain_assembly_open(domain, "Stationeers.Addons.dll");
-        MonoImage* image = mono_assembly_get_image(assembly);
-        MonoClass* getClass = mono_class_from_name(image, "Stationeers.Addons", "Loader");
-        MonoMethod* method = mono_class_get_method_from_name(getClass, "Load", 0);
-        void* params[1] = { NULL };
-        MonoObject* returnVal = mono_runtime_invoke(method, NULL, params, NULL);
-         */
-        // Thread has exited, now, we can try to run mono calls
-        // TODO: Load assembly and execute
+        // Hook LoadLibraryW
+        HOOK_FUNC(LoadLibraryW);
     }
 
     return TRUE;

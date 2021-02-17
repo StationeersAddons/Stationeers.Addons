@@ -169,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="HelperMarcros.h" />
     <ClInclude Include="Proxy.h" />
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
