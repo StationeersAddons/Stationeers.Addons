@@ -13,16 +13,21 @@ namespace Stationeers.Addons.PluginCompiler
         private static readonly string[] GameAssemblies = {
             "mscorlib.dll",
             "netstandard.dll",
-            "Assembly-CSharp.dll",
             "System.dll",
             "System.Core.dll",
+            "System.Data.dll",
+            "System.Xml.dll",
+
+            "Assembly-CSharp.dll",
+            "Assembly-CSharp-firstpass.dll",
+
             "UnityEngine.dll",
             "UnityEngine.CoreModule.dll",
             "UnityEngine.AssetBundleModule.dll",
             "UnityEngine.UI.dll",
             "UnityEngine.UNETModule.dll",
-            "com.unity.multiplayer-hlapi.Runtime.dll",
             "UnityEngine.ParticleSystemModule.dll",
+            "UnityEngine.PhysicsModule.dll",
             "UnityEngine.StreamingModule.dll",
             "UnityEngine.SubstanceModule.dll",
             "UnityEngine.UmbraModule.dll",
@@ -33,6 +38,10 @@ namespace Stationeers.Addons.PluginCompiler
             "UnityEngine.InputLegacyModule.dll",
             "UnityEngine.VideoModule.dll",
             "UnityEngine.JSONSerializeModule.dll",
+
+            "com.unity.multiplayer-hlapi.Runtime.dll",
+
+            "Unity.TextMeshPro.dll",
         };
 
         private static readonly string[] AdditionalAssemblies = {

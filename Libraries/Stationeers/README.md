@@ -9,8 +9,9 @@ Please copy these .DLL files into this directory:
 * System.Core.dll
 * System.Data.dll
 * System.Xml.dll
-* UnityEngine.CoreModule.dll
 * UnityEngine.dll
+* UnityEngine.CoreModule.dll
+* UnityEngine.PhysicsModule.dll
 * UnityEngine.AssetBundleModule.dll
 * UnityEngine.IMGUIModule.dll
 * UnityEngine.InputLegacyModule.dll
@@ -18,6 +19,7 @@ Please copy these .DLL files into this directory:
 * UnityEngine.UI.dll
 * UnityEngine.UNETModule.dll
 * com.unity.multiplayer-hlapi.Runtime.dll
+* Unity.TextMeshPro.dll
 
 The libraries that are listed above, can be found inside your game's installation directory, that is located usually there:
 `C:/Program Files (x86)/Steam/steamapps/common/Stationeers/rocketstation_Data/Managed`
