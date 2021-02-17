@@ -13,10 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stationeers.Addons.PluginCo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "My Mods", "My Mods", "{EEA1F74E-E0A0-41E5-95EB-153CB438764D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Native", "Native", "{2E0ECC5B-2F3C-402A-9B43-7D5068B1A7F5}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Autoloader", "Native\Autoloader\Autoloader.vcxproj", "{EA918ECF-85C6-488B-9500-4DCFFBE2EF3C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,27 +52,9 @@ Global
 		{BC68C594-32CF-4EE7-B417-8FCB453AF897}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC68C594-32CF-4EE7-B417-8FCB453AF897}.Release|x64.ActiveCfg = Release|Any CPU
 		{BC68C594-32CF-4EE7-B417-8FCB453AF897}.Release|x64.Build.0 = Release|Any CPU
-		{D7C7E2F0-A1EC-42F8-A031-4C857B8E5616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7C7E2F0-A1EC-42F8-A031-4C857B8E5616}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7C7E2F0-A1EC-42F8-A031-4C857B8E5616}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D7C7E2F0-A1EC-42F8-A031-4C857B8E5616}.Debug|x64.Build.0 = Debug|Any CPU
-		{D7C7E2F0-A1EC-42F8-A031-4C857B8E5616}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7C7E2F0-A1EC-42F8-A031-4C857B8E5616}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7C7E2F0-A1EC-42F8-A031-4C857B8E5616}.Release|x64.ActiveCfg = Release|Any CPU
-		{D7C7E2F0-A1EC-42F8-A031-4C857B8E5616}.Release|x64.Build.0 = Release|Any CPU
-		{EA918ECF-85C6-488B-9500-4DCFFBE2EF3C}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{EA918ECF-85C6-488B-9500-4DCFFBE2EF3C}.Debug|x64.ActiveCfg = Debug|x64
-		{EA918ECF-85C6-488B-9500-4DCFFBE2EF3C}.Debug|x64.Build.0 = Debug|x64
-		{EA918ECF-85C6-488B-9500-4DCFFBE2EF3C}.Release|Any CPU.ActiveCfg = Release|Win32
-		{EA918ECF-85C6-488B-9500-4DCFFBE2EF3C}.Release|x64.ActiveCfg = Release|x64
-		{EA918ECF-85C6-488B-9500-4DCFFBE2EF3C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{D7C7E2F0-A1EC-42F8-A031-4C857B8E5616} = {EEA1F74E-E0A0-41E5-95EB-153CB438764D}
-		{EA918ECF-85C6-488B-9500-4DCFFBE2EF3C} = {2E0ECC5B-2F3C-402A-9B43-7D5068B1A7F5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1EB29F89-15AD-4607-B276-14AB5AC28D48}
