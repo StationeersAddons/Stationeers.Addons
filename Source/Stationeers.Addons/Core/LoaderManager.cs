@@ -158,7 +158,7 @@ namespace Stationeers.Addons.Core
         private void OnGUI()
         {
             GUI.color = new Color(1.0f, 1.0f, 1.0f, 0.15f);
-            GUI.Label(new Rect(5.0f, 5.0f, Screen.width, 25.0f), $"Stationeers.Addons - v0.1.0 - Loaded {PluginLoader.NumLoadedPlugins} plugins");
+            GUI.Label(new Rect(5.0f, 5.0f, Screen.width, 25.0f), $"Stationeers.Addons - {Loader.Version} - Loaded {PluginLoader.NumLoadedPlugins} plugins");
         }
 
         private TModuleType InitializeModule<TModuleType>() where TModuleType : IModule, new()
