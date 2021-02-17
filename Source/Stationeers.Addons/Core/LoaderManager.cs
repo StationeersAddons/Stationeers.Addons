@@ -110,8 +110,6 @@ namespace Stationeers.Addons.Core
 
         private IEnumerator Start()
         {
-            // TODO: Start loading only when the initial main menu loading is finished
-
             if(!IsDedicatedServer)
             {
                 ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
@@ -138,15 +136,11 @@ namespace Stationeers.Addons.Core
             }
             else // Remove UI elements for dedicated server loading
             {
-                var numModules = _modules.Count;
-                var moduleIdx = 0;
                 foreach (var module in _modules)
                 {
                     yield return module.Load();
-                    moduleIdx++;
                 }
             }
-            
         }
 
         private void OnDestroy()
