@@ -55,6 +55,10 @@
       <HintPath>$(SolutionDir)\..\Libraries\Stationeers\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>$(SolutionDir)\..\Libraries\Stationeers\UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
       <HintPath>$(SolutionDir)\..\Libraries\Stationeers\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
