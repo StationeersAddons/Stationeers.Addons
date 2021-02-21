@@ -9,7 +9,7 @@
 ## Download & Installation
 If you have already installed the Addons, make sure to run file verification through Steam before installing a new version (go to Steam, click RMB on the game, open **Properties**, go to **Local Files** and click on **Verify integrity of game files...**)!
  
-Go to [Releases](https://github.com/Erdroy/Stationeers.Addons/releases) and select latest release and download zip file named 'Stationeers.Addons-vX.X-X.zip'. Now go to Steam, click RMB on the game, open **Properties**, go to **Local Files** and click on **BROWSE LOCAL FILES**. It should open new window for you. Next, you have to open the downloaded zip and drag all of its contents into the game folder (`AddonManager` folder and `version.dll`). And that's it! Enjoy your mods!
+Go to [Releases](https://github.com/Erdroy/Stationeers.Addons/releases), select latest release and download zip file named 'Stationeers.Addons-vX.X-X.zip'. Now go to Steam, click RMB on the game, open **Properties**, go to **Local Files** and click on **BROWSE LOCAL FILES**. It should open new window for you. Next, you have to open the downloaded zip and drag all of its contents into the game folder (`AddonManager` folder and `version.dll`). And that's it! Enjoy your mods!
 
 ***Note:** After you've subscribed to an addon on the workshop, you have to restart the game. This will be improved in the future.*
 
