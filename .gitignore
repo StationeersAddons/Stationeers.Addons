@@ -361,6 +361,9 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
+# Rider
+.idea/
+
 # Stationeers.Addons additions
 /[Bb]uild/
 Libraries/**/*.dll
