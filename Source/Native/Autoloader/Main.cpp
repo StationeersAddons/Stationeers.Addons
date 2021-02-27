@@ -67,7 +67,7 @@ DETOUR_STDFUNC(LoadLibraryW, HMODULE, LPCWSTR lpLibFileName)
         BIND_FUNCTION(library, mono_class_from_name);
         BIND_FUNCTION(library, mono_class_get_method_from_name);
 
-        // Hook mono_runtime_invoke and check if it is Awake or Start or OnEnable call and finally load our addons assembly and execute!
+        // Hook mono_runtime_invoke and check if it is Awake or Start or OnEnable call and finally load our Addons assembly and execute!
         // Unhook everything when not needed anymore
         HOOK_FUNC(mono_runtime_invoke);
         UNHOOK_FUNC(LoadLibraryW);
@@ -89,8 +89,9 @@ BOOL WINAPI DllMain(
         // otherwise we will crash the host process if we skip this.
         Proxy::Initialize();
 
-        // Skip if we're not running inside game's process (i.e. crash handler is also using our proxy DLL)
-        if (!Proxy::IsGameProcess())
+        // Skip if we're not running inside the game's or server's process
+        // (crash handler is also trying to use our proxy DLL, so we have to say NO to it).
+        if (!Proxy::IsGameProcess() || !Proxy::IsServerProcess())
             return TRUE;
 
         DetourRestoreAfterWith(); // ?

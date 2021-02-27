@@ -128,6 +128,17 @@ bool Proxy::IsGameProcess()
     return false;
 }
 
+bool Proxy::IsServerProcess()
+{
+    TCHAR szFileName[MAX_PATH];
+    GetModuleFileName(nullptr, szFileName, MAX_PATH);
+
+    if (string_ends_with(szFileName, TARGET_SERVER_NAME))
+        return true;
+
+    return false;
+}
+
 void Proxy::Initialize()
 {
     auto* module = LoadLibrary(L"C:/Windows/system32/version.dll");

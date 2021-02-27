@@ -11,5 +11,6 @@ class Proxy
 {
 public:
     static bool IsGameProcess();
+    static bool IsServerProcess();
     static void Initialize();
 };
