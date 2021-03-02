@@ -91,7 +91,7 @@ BOOL WINAPI DllMain(
 
         // Skip if we're not running inside the game's or server's process
         // (crash handler is also trying to use our proxy DLL, so we have to say NO to it).
-        if (!Proxy::IsGameProcess() || !Proxy::IsServerProcess())
+        if (!(Proxy::IsGameProcess() || Proxy::IsServerProcess()))
             return TRUE;
 
         DetourRestoreAfterWith(); // ?
