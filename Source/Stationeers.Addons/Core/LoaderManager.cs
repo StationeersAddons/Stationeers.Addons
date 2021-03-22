@@ -143,6 +143,25 @@ namespace Stationeers.Addons.Core
             }
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.R) && Input.GetKey(KeyCode.LeftControl))
+            {
+                Debug.Log("REC update");
+                PluginLoader.UnloadAllPlugins();
+                StartCoroutine(Reload());
+            }
+        }
+
+        private IEnumerator Reload()
+        {
+            Debug.Log("REC recompiling");
+            yield return PluginCompiler.Load();
+            Debug.Log("REC reloading");
+            yield return PluginLoader.Load();
+            Debug.Log("REC done");
+        }
+
         private void OnDestroy()
         {
             foreach (var module in _modules)

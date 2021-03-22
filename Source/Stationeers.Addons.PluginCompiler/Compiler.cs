@@ -106,7 +106,7 @@ namespace Stationeers.Addons.PluginCompiler
             Console.WriteLine($"Linking addon '{addonName}'...");
 
             var assemblyName = addonName + "-Assembly";
-            var compilation = CSharpCompilation.Create(assemblyName)
+            var compilation = CSharpCompilation.Create($"{assemblyName}-{DateTime.UtcNow.Ticks}")
                 .WithReferences(references.ToArray())
                 .WithOptions(options)
                 .AddSyntaxTrees(syntaxTrees);
