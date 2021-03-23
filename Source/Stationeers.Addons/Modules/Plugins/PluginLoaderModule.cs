@@ -82,9 +82,15 @@ namespace Stationeers.Addons.Modules.Plugins
                 Debug.LogError("Plugin '" + addonName + "' already loaded!");
                 foreach (var prevPluginPlugin in prevPlugin.Plugins)
                 {
-                    prevPluginPlugin.OnUnload();
+                    try
+                    {
+                        prevPluginPlugin.OnUnload();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
                 }
-                prevPlugin.Assembly = null;
                 _plugins.Remove(addonName);
             }
 
@@ -102,11 +108,18 @@ namespace Stationeers.Addons.Modules.Plugins
             {
                 if (typeof(IPlugin).IsAssignableFrom(type))
                 {
-                    var instance = (IPlugin)Activator.CreateInstance(type);
-                    instance.OnLoad();
-                    plugins.Add(instance);
+                    try
+                    {
+                        var instance = (IPlugin)Activator.CreateInstance(type);
+                        instance.OnLoad();
+                        plugins.Add(instance);
 
-                    Debug.Log("Activated plugin " + type);
+                        Debug.Log("Activated plugin " + type);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
                 }
             }
 

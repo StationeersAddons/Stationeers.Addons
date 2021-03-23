@@ -1,5 +1,6 @@
 ﻿// Stationeers.Addons (c) 2018-2021 Damian 'Erdroy' Korczowski & Contributors
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -74,6 +75,8 @@ namespace Stationeers.Addons.Core
         /// </summary>
         public HarmonyModule Harmony { get; private set; }
 
+        private bool _isRecompiling;
+
         public void Activate()
         {
             Debug.Log("ModLoader activated!");
@@ -145,21 +148,23 @@ namespace Stationeers.Addons.Core
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.R) && Input.GetKey(KeyCode.LeftControl))
+            if (!_isRecompiling && Input.GetKeyDown(KeyCode.R) && Input.GetKey(KeyCode.LeftControl))
             {
-                Debug.Log("REC update");
-                PluginLoader.UnloadAllPlugins();
+                _isRecompiling = true;
                 StartCoroutine(Reload());
             }
         }
 
         private IEnumerator Reload()
         {
-            Debug.Log("REC recompiling");
+            Debug.Log("Unloading plugins");
+            PluginLoader.UnloadAllPlugins();
+            Debug.Log("Recompiling plugins");
             yield return PluginCompiler.Load();
-            Debug.Log("REC reloading");
+            Debug.Log("Reloading plugins");
             yield return PluginLoader.Load();
-            Debug.Log("REC done");
+            Debug.Log("Recompilation done");
+            _isRecompiling = false;
         }
 
         private void OnDestroy()
@@ -171,7 +176,10 @@ namespace Stationeers.Addons.Core
         private void OnGUI()
         {
             GUI.color = new Color(1.0f, 1.0f, 1.0f, 0.15f);
-            GUI.Label(new Rect(5.0f, 5.0f, Screen.width, 25.0f), $"Stationeers.Addons - {Loader.Version} - Loaded {PluginLoader.NumLoadedPlugins} plugins");
+            GUI.Label(new Rect(5.0f, 5.0f, Screen.width, 25.0f),
+                _isRecompiling
+                    ? $"Stationeers.Addons - {Loader.Version} - Recompiling plugins"
+                    : $"Stationeers.Addons - {Loader.Version} - Loaded {PluginLoader.NumLoadedPlugins} plugins");
         }
 
         private TModuleType InitializeModule<TModuleType>() where TModuleType : IModule, new()
