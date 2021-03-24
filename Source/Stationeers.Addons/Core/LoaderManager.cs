@@ -76,6 +76,8 @@ namespace Stationeers.Addons.Core
         public HarmonyModule Harmony { get; private set; }
 
         private bool _isRecompiling;
+        private bool _liveReloadEnabled;
+
 
         public void Activate()
         {
@@ -113,6 +115,8 @@ namespace Stationeers.Addons.Core
 
         private IEnumerator Start()
         {
+            _liveReloadEnabled =  System.Environment.GetCommandLineArgs().Any(a => a == "--live-reload");
+            Debug.Log("Live reload: " + _liveReloadEnabled);
             if(!IsDedicatedServer)
             {
                 ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
@@ -148,7 +152,7 @@ namespace Stationeers.Addons.Core
 
         private void Update()
         {
-            if (!_isRecompiling && Input.GetKeyDown(KeyCode.R) && Input.GetKey(KeyCode.LeftControl))
+            if (_liveReloadEnabled && !_isRecompiling && Input.GetKeyDown(KeyCode.R) && Input.GetKey(KeyCode.LeftControl))
             {
                 _isRecompiling = true;
                 StartCoroutine(Reload());

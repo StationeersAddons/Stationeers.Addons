@@ -29,6 +29,12 @@ To get basic addon with simple plugin, follow these steps:
     * [Harmony documentation](https://harmony.pardeike.net/articles/intro.html) - Use it for patching the game's code at runtime.
     * [dnSpy](https://github.com/dnSpy/dnSpy) - for browsing the game's source code.
 
+## Addon Development
+
+By default, addons are only compiled once at start up. Starting the game with the `--live-reload` option will enable a new shortcut, `Ctrl+R`, to recompile and reload addons. You can add the option in the game's properties in Steam.
+
+With live reload enabled, be mindful of the plugin lifecycle - not disposing a resource created by an addon in its `Unload` method might lead to unexpected behaviours.
+
 ## Publishing your addon.
 We are supporting workshop! Yes! It's as simple as publishing your mod (created in step **11** above) to the workshop!
 
