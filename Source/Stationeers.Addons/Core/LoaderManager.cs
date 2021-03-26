@@ -12,6 +12,7 @@ using Stationeers.Addons.Modules.HarmonyLib;
 using Stationeers.Addons.Modules.Plugins;
 using Stationeers.Addons.Modules.Workshop;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Stationeers.Addons.Core
 {
@@ -20,6 +21,8 @@ namespace Stationeers.Addons.Core
     /// </summary>
     internal class LoaderManager : MonoBehaviour
     {
+        private const string VersionFile = "https://raw.githubusercontent.com/Erdroy/Stationeers.Addons/master/VERSION";
+        
         private static LoaderManager _instance;
 
         /// <summary>
@@ -120,6 +123,9 @@ namespace Stationeers.Addons.Core
             Debug.Log("Live reload: " + _liveReloadEnabled);
             if(!IsDedicatedServer)
             {
+                // Check version
+                yield return CheckVersion();
+                
                 ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
                 ProgressPanel.Instance.UpdateProgressBarCaption("Loading modules...");
                 ProgressPanel.Instance.UpdateProgressBar(0.1f);
@@ -170,6 +176,35 @@ namespace Stationeers.Addons.Core
             yield return PluginLoader.Load();
             Debug.Log("Recompilation done");
             _isRecompiling = false;
+        }
+        
+        private IEnumerator CheckVersion()
+        {
+            // Perform simple web request to get the latest version from github
+            using (var webRequest = UnityWebRequest.Get(VersionFile))
+            {
+                yield return webRequest.SendWebRequest();
+
+                if (!webRequest.isHttpError && !webRequest.isNetworkError)
+                {
+                    var data = webRequest.downloadHandler.text.Trim();
+                    
+                    Debug.Log($"Latest Stationeers.Addons version is {data}. Installed {Loader.Version}");
+                    
+                    if (Loader.Version != data)
+                    {
+                        while (LoadingPanel.Instance.IsVisible)
+                            yield return null;
+                        
+                        AlertPanel.Instance.ShowAlert($"New version of Stationeers.Addons ({data}) is available!\n", 
+                            AlertState.Alert);
+                        
+                        // Wait for the alert window to close
+                        while (AlertPanel.Instance.AlertWindow.activeInHierarchy)
+                            yield return null;
+                    }
+                }
+            }
         }
 
         private void OnDestroy()

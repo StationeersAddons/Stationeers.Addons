@@ -18,6 +18,7 @@ Please copy these .DLL files into this directory:
 * UnityEngine.JSONSerializeModule.dll
 * UnityEngine.UI.dll
 * UnityEngine.UNETModule.dll
+* UnityEngine.UnityWebRequestModule.dll
 * com.unity.multiplayer-hlapi.Runtime.dll
 * Unity.TextMeshPro.dll
 
