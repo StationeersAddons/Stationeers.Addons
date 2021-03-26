@@ -1,5 +1,7 @@
 ﻿// Stationeers.Addons (c) 2018-2021 Damian 'Erdroy' Korczowski & Contributors
 
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -74,6 +76,10 @@ namespace Stationeers.Addons.Core
         /// </summary>
         public HarmonyModule Harmony { get; private set; }
 
+        private bool _isRecompiling;
+        private bool _liveReloadEnabled;
+
+
         public void Activate()
         {
             Debug.Log("ModLoader activated!");
@@ -110,6 +116,8 @@ namespace Stationeers.Addons.Core
 
         private IEnumerator Start()
         {
+            _liveReloadEnabled =  System.Environment.GetCommandLineArgs().Any(a => a == "--live-reload");
+            Debug.Log("Live reload: " + _liveReloadEnabled);
             if(!IsDedicatedServer)
             {
                 ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
@@ -143,6 +151,27 @@ namespace Stationeers.Addons.Core
             }
         }
 
+        private void Update()
+        {
+            if (_liveReloadEnabled && !_isRecompiling && Input.GetKeyDown(KeyCode.R) && Input.GetKey(KeyCode.LeftControl))
+            {
+                _isRecompiling = true;
+                StartCoroutine(Reload());
+            }
+        }
+
+        private IEnumerator Reload()
+        {
+            Debug.Log("Unloading plugins");
+            PluginLoader.UnloadAllPlugins();
+            Debug.Log("Recompiling plugins");
+            yield return PluginCompiler.Load();
+            Debug.Log("Reloading plugins");
+            yield return PluginLoader.Load();
+            Debug.Log("Recompilation done");
+            _isRecompiling = false;
+        }
+
         private void OnDestroy()
         {
             foreach (var module in _modules)
@@ -152,7 +181,10 @@ namespace Stationeers.Addons.Core
         private void OnGUI()
         {
             GUI.color = new Color(1.0f, 1.0f, 1.0f, 0.15f);
-            GUI.Label(new Rect(5.0f, 5.0f, Screen.width, 25.0f), $"Stationeers.Addons - {Loader.Version} - Loaded {PluginLoader.NumLoadedPlugins} plugins");
+            GUI.Label(new Rect(5.0f, 5.0f, Screen.width, 25.0f),
+                _isRecompiling
+                    ? $"Stationeers.Addons - {Loader.Version} - Recompiling plugins"
+                    : $"Stationeers.Addons - {Loader.Version} - Loaded {PluginLoader.NumLoadedPlugins} plugins");
         }
 
         private TModuleType InitializeModule<TModuleType>() where TModuleType : IModule, new()

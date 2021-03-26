@@ -77,13 +77,28 @@ namespace Stationeers.Addons.Modules.Plugins
         /// <param name="pluginAssembly">The addon plugin assembly file</param>
         public void LoadPlugin(string addonName, string pluginAssembly)
         {
-            if (_plugins.ContainsKey(addonName))
+            if (_plugins.TryGetValue(addonName, out var prevPlugin))
             {
                 Debug.LogError("Plugin '" + addonName + "' already loaded!");
-                return;
+                foreach (var prevPluginPlugin in prevPlugin.Plugins)
+                {
+                    try
+                    {
+                        prevPluginPlugin.OnUnload();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
+                }
+                _plugins.Remove(addonName);
             }
 
-            var assembly = Assembly.LoadFile(pluginAssembly);
+            // the compiler could output a .pdb file, but AFAIK we'd need to convert it to .mdb using unity's pdb2mdb.exe
+            // load the raw bytes directly to avoid locking the dll
+            // note that the assembly name (not the file name) needs to be different every time, otherwise
+            // Assembly.Load will reuse the last loaded version
+            var assembly = Assembly.Load(File.ReadAllBytes(pluginAssembly));
 
             Debug.Log("Plugin assembly " + pluginAssembly + " loaded ");
 
@@ -93,11 +108,18 @@ namespace Stationeers.Addons.Modules.Plugins
             {
                 if (typeof(IPlugin).IsAssignableFrom(type))
                 {
-                    var instance = (IPlugin)Activator.CreateInstance(type);
-                    instance.OnLoad();
-                    plugins.Add(instance);
+                    try
+                    {
+                        var instance = (IPlugin)Activator.CreateInstance(type);
+                        instance.OnLoad();
+                        plugins.Add(instance);
 
-                    Debug.Log("Activated plugin " + type);
+                        Debug.Log("Activated plugin " + type);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                    }
                 }
             }
 
