@@ -3,8 +3,7 @@
 
 **Stationeers.Addons** is a fully-fledged modding framework for [Stationeers](https://store.steampowered.com/app/544550/Stationeers/). Working just like the standard mods (XML) but with scripting and custom-content support!
 
-**Current status:** Available for testing.<br>
-*Full version ETA: **Q1 2021***
+**Current status:** Available for early testing.<br>
 
 ## Download & Installation
 If you have already installed the Addons, make sure to run file verification through Steam before installing a new version (go to Steam, click RMB on the game, open **Properties**, go to **Local Files** and click on **Verify integrity of game files...**)!
