@@ -12,7 +12,7 @@ namespace Stationeers.Addons.API
     /// </summary>
     public static class BundleManager
     {
-        internal static List<AssetBundle> LoadedAssetBundles = new List<AssetBundle>();
+        internal static readonly List<AssetBundle> LoadedAssetBundles = new List<AssetBundle>();
 
         /// <summary>
         ///     Looks for asset bundle that has the given <see cref="name"/>.

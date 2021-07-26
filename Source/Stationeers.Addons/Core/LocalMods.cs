@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnityEngine;
 
 // TODO: We probably should refactor all of that.
 
@@ -11,20 +12,22 @@ namespace Stationeers.Addons.Core
 {
     internal static class LocalMods
     {
-        public const string DebugPluginPostfix = "-Debug";
+        private const string DebugPluginPostfix = "-Debug";
         
         // Select mods directory based on install instance
-        public static readonly string LocalModsDirectory = !LoaderManager.IsDedicatedServer ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/My Games/Stationeers/mods/" : GetDedicatedServerModsDirectory();
+        private static readonly string LocalModsDirectory = LoaderManager.IsDedicatedServer
+            ? GetDedicatedServerModsDirectory()
+            : Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/My Games/Stationeers/mods/";
 
-        public static string[] GetLocalModDirectories(bool includeDebugPlugins = true, bool skipIfDebugPluginExists = false)
+        public static IEnumerable<string> GetLocalModDirectories(bool includeDebugPlugins = true, bool skipIfDebugPluginExists = false)
         {
             if ((LocalModsDirectory == null) || !Directory.Exists(LocalModsDirectory))
             {
-                UnityEngine.Debug.Log("ModLoader ERROR: Could not locate mods directory, no mods getting initialized.");
+                Debug.Log("ModLoader ERROR: Could not locate mods directory, no mods getting initialized.");
                 return new string[] { };
             }
 
-            UnityEngine.Debug.Log($"Trying to load mod from {LocalModsDirectory}");
+            Debug.Log($"Trying to load mod from {LocalModsDirectory}");
 
             var directories = Directory.GetDirectories(LocalModsDirectory);
             var modDirectory = new List<string>();
@@ -48,22 +51,21 @@ namespace Stationeers.Addons.Core
         {
             // Find serverside default.ini
             // Currently needs to be in the root of the dedicated server directory (next to rocketstation_DedicatedServer.exe)
-            if (File.Exists("default.ini"))
+            if (!File.Exists("default.ini"))
+                Debug.LogWarning("default.ini file not found!");
+            
+            foreach(var line in File.ReadLines("default.ini"))
             {
-                UnityEngine.Debug.Log("default.ini found!");
+                if (!line.Contains("MODPATH=")) continue;
+                
+                Debug.Log($"Found mod path: {line.Substring(8)}");
+                return line.Substring(8);
             }
-            foreach(string line in File.ReadLines("default.ini"))
-            {
-                if (line.Contains("MODPATH="))
-                {
-                    UnityEngine.Debug.Log($"Found modpath: {line.Substring(8)}");
-                    return line.Substring(8);
-                }
-            }
+            
             return null;
         }
 
-        public static string[] GetLocalModDebugAssemblies()
+        public static IEnumerable<string> GetLocalModDebugAssemblies()
         {
             if (!Directory.Exists(LocalModsDirectory)) return new string[] { };
             
@@ -73,7 +75,7 @@ namespace Stationeers.Addons.Core
             foreach (var directory in directories)
             {
                 if (!directory.EndsWith(DebugPluginPostfix)) continue;
-                var pluginName = Directory.GetParent(directory + "\\").Name + ".dll";
+                var pluginName = Directory.GetParent(directory + "\\")?.Name + ".dll";
                 var pluginDebugAssembly = Path.Combine(directory, pluginName);
 
                 if (File.Exists(pluginDebugAssembly))

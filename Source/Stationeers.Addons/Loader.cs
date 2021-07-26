@@ -13,8 +13,6 @@ namespace Stationeers.Addons
 {
     public class Loader
     {
-        public const string Version = "v0.3.0";
-        
         // ReSharper disable once UnusedMember.Local
         public void Load()
         {

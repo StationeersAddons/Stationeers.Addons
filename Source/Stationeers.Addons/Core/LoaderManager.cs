@@ -1,6 +1,5 @@
 ﻿// Stationeers.Addons (c) 2018-2021 Damian 'Erdroy' Korczowski & Contributors
 
-using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,7 +20,6 @@ namespace Stationeers.Addons.Core
     /// </summary>
     internal class LoaderManager : MonoBehaviour
     {
-        private const string VersionFile = "https://raw.githubusercontent.com/Erdroy/Stationeers.Addons/master/VERSION";
         
         private static LoaderManager _instance;
 
@@ -98,7 +96,7 @@ namespace Stationeers.Addons.Core
             Application.SetStackTraceLogType(LogType.Error, StackTraceLogType.None);
 
             // Check if we are running on a dedicated server instance
-            IsDedicatedServer = File.Exists("rocketstation_DedicatedServer.exe");
+            IsDedicatedServer = File.Exists("rocketstation_DedicatedServer.exe"); // TODO: Executable file name for Linux dedicated server
             if (IsDedicatedServer)
                 Debug.Log("[Stationeers.Addons - DEDICATED SERVER] Stationeers.Addons is running on a dedicated server!");
 
@@ -108,9 +106,8 @@ namespace Stationeers.Addons.Core
                 Debug.Log("[Stationeers.Addons - DEBUG] Stationeers.Addons debugging enabled!");
 
             if(!IsDedicatedServer) // Only look for workshop if on client
-            {
                 Workshop = InitializeModule<WorkshopModule>();
-            }
+            
             PluginCompiler = InitializeModule<PluginCompilerModule>();
             BundleLoader = InitializeModule<BundleLoaderModule>();
             PluginLoader = InitializeModule<PluginLoaderModule>();
@@ -119,8 +116,10 @@ namespace Stationeers.Addons.Core
 
         private IEnumerator Start()
         {
-            _liveReloadEnabled =  System.Environment.GetCommandLineArgs().Any(a => a == "--live-reload");
-            Debug.Log("Live reload: " + _liveReloadEnabled);
+            _liveReloadEnabled = System.Environment.GetCommandLineArgs().Any(a => a == "--live-reload");
+            if(_liveReloadEnabled)
+                Debug.Log("[Stationeers.Addons] Live reload enabled! Press CTRL+R to reload all plugins.");
+            
             if(!IsDedicatedServer)
             {
                 // Check version
@@ -170,18 +169,24 @@ namespace Stationeers.Addons.Core
         {
             Debug.Log("Unloading plugins");
             PluginLoader.UnloadAllPlugins();
+            
             Debug.Log("Recompiling plugins");
             yield return PluginCompiler.Load();
+            
             Debug.Log("Reloading plugins");
             yield return PluginLoader.Load();
+            
             Debug.Log("Recompilation done");
+            
             _isRecompiling = false;
         }
         
         private IEnumerator CheckVersion()
         {
+            Debug.Log("Checking for Stationeers.Addons version...");
+            
             // Perform simple web request to get the latest version from github
-            using (var webRequest = UnityWebRequest.Get(VersionFile))
+            using (var webRequest = UnityWebRequest.Get(Globals.VersionFile))
             {
                 yield return webRequest.SendWebRequest();
 
@@ -189,20 +194,23 @@ namespace Stationeers.Addons.Core
                 {
                     var data = webRequest.downloadHandler.text.Trim();
                     
-                    Debug.Log($"Latest Stationeers.Addons version is {data}. Installed {Loader.Version}");
+                    Debug.Log($"Latest Stationeers.Addons version is {data}. Installed {Globals.Version}");
                     
-                    if (Loader.Version != data)
-                    {
-                        while (LoadingPanel.Instance.IsVisible)
-                            yield return null;
+                    // If the current version is the same as the latest one, just exit the coroutine.
+                    if (Globals.Version == data)
+                        yield break;
+                    
+                    Debug.Log("New version of Stationeers.Addons is available!");
+                    
+                    while (LoadingPanel.Instance.IsVisible)
+                        yield return null;
                         
-                        AlertPanel.Instance.ShowAlert($"New version of Stationeers.Addons ({data}) is available!\n", 
-                            AlertState.Alert);
+                    AlertPanel.Instance.ShowAlert($"New version of Stationeers.Addons ({data}) is available!\n", 
+                        AlertState.Alert);
                         
-                        // Wait for the alert window to close
-                        while (AlertPanel.Instance.AlertWindow.activeInHierarchy)
-                            yield return null;
-                    }
+                    // Wait for the alert window to close
+                    while (AlertPanel.Instance.AlertWindow.activeInHierarchy)
+                        yield return null;
                 }
             }
         }
@@ -218,8 +226,8 @@ namespace Stationeers.Addons.Core
             GUI.color = new Color(1.0f, 1.0f, 1.0f, 0.15f);
             GUI.Label(new Rect(5.0f, 5.0f, Screen.width, 25.0f),
                 _isRecompiling
-                    ? $"Stationeers.Addons - {Loader.Version} - Recompiling plugins"
-                    : $"Stationeers.Addons - {Loader.Version} - Loaded {PluginLoader.NumLoadedPlugins} plugins");
+                    ? $"Stationeers.Addons - {Globals.Version} - Recompiling plugins"
+                    : $"Stationeers.Addons - {Globals.Version} - Loaded {PluginLoader.NumLoadedPlugins} plugins");
         }
 
         private TModuleType InitializeModule<TModuleType>() where TModuleType : IModule, new()

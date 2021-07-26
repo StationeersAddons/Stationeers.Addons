@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions;
 using Debug = UnityEngine.Debug;
 
 namespace Stationeers.Addons.Modules.Plugins
@@ -15,6 +16,8 @@ namespace Stationeers.Addons.Modules.Plugins
 
         public PluginCompiler()
         {
+            // TODO: Host plugin compiler process using mono-runtime on Linux
+            
             _compilerStartInfo = new ProcessStartInfo()
             {
                 FileName = Path.Combine(Environment.CurrentDirectory, "AddonManager", "Stationeers.Addons.PluginCompiler.exe"),
@@ -54,12 +57,12 @@ namespace Stationeers.Addons.Modules.Plugins
             process.Dispose();
         }
 
-        private void OnCompilerLog(object sender, DataReceivedEventArgs e)
+        private static void OnCompilerLog(object sender, DataReceivedEventArgs e)
         {
             Debug.unityLogger.logHandler.LogFormat(LogType.Log, null, e.Data);
         }
 
-        private void OnCompilerError(object sender, DataReceivedEventArgs e)
+        private static void OnCompilerError(object sender, DataReceivedEventArgs e)
         {
             Debug.unityLogger.logHandler.LogFormat(LogType.Error, null, e.Data);
         }

@@ -43,7 +43,7 @@ namespace Stationeers.Addons.Modules.Plugins
         {
             CompiledPlugins.Clear();
 
-            Debug.Log("Starting to compile the plugins...");
+            Debug.Log("Starting plugins compilation...");
 
             var pluginCompiler = new PluginCompiler();
 
@@ -76,8 +76,7 @@ namespace Stationeers.Addons.Modules.Plugins
                     var addonDirectory = localPluginDirectory;
 
                     var addonName = "local-" + new DirectoryInfo(localPluginDirectory).Name;
-                    var assemblyName =
-                        addonName + "-Assembly"; // TODO: Make some shared project for string constants etc.
+                    var assemblyName = addonName + "-Assembly"; // TODO: Make some shared project for string constants etc.
                     var assemblyFile = "AddonManager/AddonsCache/" + assemblyName + ".dll";
 
                     if (!Directory.Exists(addonDirectory))
