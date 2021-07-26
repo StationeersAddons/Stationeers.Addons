@@ -1,5 +1,6 @@
 ﻿// Stationeers.Addons (c) 2018-2021 Damian 'Erdroy' Korczowski & Contributors
 
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using Assets.Scripts.UI;
 using Stationeers.Addons.Modules;
 using Stationeers.Addons.Modules.Bundles;
 using Stationeers.Addons.Modules.HarmonyLib;
+using Stationeers.Addons.Modules.LiveReload;
 using Stationeers.Addons.Modules.Plugins;
 using Stationeers.Addons.Modules.Workshop;
 using UnityEngine;
@@ -20,7 +22,6 @@ namespace Stationeers.Addons.Core
     /// </summary>
     internal class LoaderManager : MonoBehaviour
     {
-        
         private static LoaderManager _instance;
 
         /// <summary>
@@ -77,9 +78,12 @@ namespace Stationeers.Addons.Core
         /// </summary>
         public HarmonyModule Harmony { get; private set; }
 
-        private bool _isRecompiling;
-        private bool _liveReloadEnabled;
+        /// <summary>
+        ///     LiveReload module reference
+        /// </summary>
+        public LiveReloadModule LiveReload { get; private set; }
 
+        private bool _isRecompiling;
 
         public void Activate()
         {
@@ -112,14 +116,11 @@ namespace Stationeers.Addons.Core
             BundleLoader = InitializeModule<BundleLoaderModule>();
             PluginLoader = InitializeModule<PluginLoaderModule>();
             Harmony = InitializeModule<HarmonyModule>();
+            LiveReload = InitializeModule<LiveReloadModule>();
         }
 
         private IEnumerator Start()
         {
-            _liveReloadEnabled = System.Environment.GetCommandLineArgs().Any(a => a == "--live-reload");
-            if(_liveReloadEnabled)
-                Debug.Log("[Stationeers.Addons] Live reload enabled! Press CTRL+R to reload all plugins.");
-            
             if(!IsDedicatedServer)
             {
                 // Check version
@@ -158,15 +159,19 @@ namespace Stationeers.Addons.Core
 
         private void Update()
         {
-            if (_liveReloadEnabled && !_isRecompiling && Input.GetKeyDown(KeyCode.R) && Input.GetKey(KeyCode.LeftControl))
-            {
-                _isRecompiling = true;
-                StartCoroutine(Reload());
-            }
+            LiveReload?.Update();
         }
 
-        private IEnumerator Reload()
+        internal IEnumerator Reload()
         {
+            if (_isRecompiling)
+            {
+                Debug.LogWarning("Already recompiling!");
+                yield break;
+            }
+            
+            _isRecompiling = true;
+            
             Debug.Log("Unloading plugins");
             PluginLoader.UnloadAllPlugins();
             

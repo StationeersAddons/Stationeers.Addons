@@ -111,9 +111,11 @@
   <ItemGroup>
     <Compile Include="API\BundleManager.cs" />
     <Compile Include="Core\LocalMods.cs" />
+    <Compile Include="Globals.cs" />
     <Compile Include="Modules\Bundles\BundleLoaderModule.cs" />
     <Compile Include="Modules\HarmonyLib\HarmonyModule.cs" />
     <Compile Include="Modules\IModule.cs" />
+    <Compile Include="Modules\LiveReload\LiveReloadModule.cs" />
     <Compile Include="Modules\Plugins\PluginLoaderModule.cs" />
     <Compile Include="Modules\Workshop\WorkshopModule.cs" />
     <Compile Include="IPlugin.cs" />
@@ -123,7 +125,6 @@
     <Compile Include="Modules\Plugins\PluginCompilerModule .cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
