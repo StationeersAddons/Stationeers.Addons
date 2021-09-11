@@ -2,11 +2,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Stationeers.Addons.PluginCompiler
 {
-    internal class Program
+    internal static class Program
     {
         private static void Main(string[] args)
         {
@@ -20,8 +19,6 @@ namespace Stationeers.Addons.PluginCompiler
 
             foreach (var addonScript in addonScripts)
             {
-                //var addonScriptFile  = Path.Combine(addonDirectory + addonScript); // TODO: Fix this shit, not working for some reason, because of an leading slash?
-
                 var addonScriptFile = addonDirectory + addonScript;
                 scriptFiles.Add(addonScriptFile);
             }
