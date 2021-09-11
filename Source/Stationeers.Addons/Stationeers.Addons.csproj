@@ -122,7 +122,7 @@
     <Compile Include="Core\LoaderManager.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="Modules\Plugins\PluginCompiler.cs" />
-    <Compile Include="Modules\Plugins\PluginCompilerModule .cs" />
+    <Compile Include="Modules\Plugins\PluginCompilerModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
