@@ -57,14 +57,19 @@ namespace Stationeers.Addons.PluginCompiler.Analyzers
             // When this symbol is created locally (by the plugin's author), then always allow it.
             if (IsLocalSymbol(info.Symbol))
                 return;
+
+            // When this symbol is whitelisted, we're allowing it.
+            if (PluginWhitelist.IsWhitelisted(info.Symbol))
+                return;
             
-            var report = Diagnostic.Create(DiagnosticError, node.GetLocation(), info.Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
+            // We have failed all the diagnostics' tests. So it means that this symbol is prohibited.
+            var report = Diagnostic.Create(DiagnosticError, node.GetLocation(), info.Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
             context.ReportDiagnostic(report);
         }
 
         private static bool IsLocalSymbol(ISymbol symbol)
         {
-            return Enumerable.All(symbol.Locations, symbolLocation => symbolLocation.IsInSource);
+            return symbol.Locations.All(symbolLocation => symbolLocation.IsInSource);
         }
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }
