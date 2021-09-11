@@ -2,9 +2,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Diagnostics;
+using Stationeers.Addons.PluginCompiler.Analyzers;
 
 namespace Stationeers.Addons.PluginCompiler
 {
@@ -65,20 +70,7 @@ namespace Stationeers.Addons.PluginCompiler
                     return string.Empty;
                 }
 
-                var syntaxTree = CSharpSyntaxTree.ParseText(File.ReadAllText(sourceFile));
-
-                if (!trustedCode)
-                {
-                    if (!ValidateSyntaxTree(syntaxTree, out var failMessage))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"Source file '{sourceFile}' did not pass security check! Fail Message: '{failMessage}'.");
-                        Console.ResetColor();
-                        return string.Empty;
-                    }
-                }
-
-                syntaxTrees.Add(syntaxTree);
+                syntaxTrees.Add(CSharpSyntaxTree.ParseText(File.ReadAllText(sourceFile)));
             }
 
             // Check server/game instance (might make this more thorough or include it as part of signature)
@@ -103,23 +95,51 @@ namespace Stationeers.Addons.PluginCompiler
 
             // Compile
             Console.WriteLine($"Linking addon '{addonName}'...");
-
+            
             var assemblyName = addonName + "-Assembly";
             var compilation = CSharpCompilation.Create($"{assemblyName}-{DateTime.UtcNow.Ticks}")
+                .AddSyntaxTrees(syntaxTrees)
                 .WithReferences(references.ToArray())
-                .WithOptions(options)
-                .AddSyntaxTrees(syntaxTrees);
+                .WithOptions(options);
+
+            CompilationWithAnalyzers compilationWithAnalyzers = null;
+            
+            // Create compilation with additional analyzers for non-trusted code
+            if (!trustedCode)
+                compilationWithAnalyzers = compilation.WithAnalyzers(ImmutableArray.Create<DiagnosticAnalyzer>(new PluginAnalyzer()));
 
             using (var ms = new MemoryStream())
             {
                 var result = compilation.Emit(ms);
                 var output = result.Diagnostics;
 
+                // Run diagnostics only on non-trusted code
+                if (!trustedCode)
+                {
+                    // Run diagnostics
+                    var task = compilationWithAnalyzers.GetAllDiagnosticsAsync();
+                    task.Wait();
+                    var diagnostics = task.Result;
+                    
+                    // Fail, if we have any errors
+                    var isSuccess = diagnostics.All(d => d.Severity != DiagnosticSeverity.Error);
+                    
+                    // Check diagnostics result for errors
+                    CheckDiagnostics(diagnostics);
+
+                    // If diagnostics result contains errors, we cannot compile this plugin
+                    if (!isSuccess)
+                    {
+                        Console.ResetColor();
+                        return string.Empty;
+                    }
+                }
+                
                 if (!result.Success)
                 {
                     foreach (var error in output)
                     {
-                        var prefix = "";
+                        string prefix;
                         switch (error.Severity)
                         {
                             case DiagnosticSeverity.Hidden: 
@@ -159,12 +179,23 @@ namespace Stationeers.Addons.PluginCompiler
             }
         }
 
-        private static bool ValidateSyntaxTree(SyntaxTree syntaxTree, out string failMessage)
+        private static void CheckDiagnostics(ImmutableArray<Diagnostic> diagnostics)
         {
-            // TODO: validate check for blacklisted types etc.
-
-            failMessage = string.Empty;
-            return true;
+            // Print-out all diagnostics
+            foreach (var diagnostic in diagnostics)
+            {
+                var message = diagnostic.GetMessage();
+                
+                // Ignore warnings about mscorlib
+                if (message.Contains("mscorlib, Version=2.0.0.0,")) continue;
+                
+                var location = diagnostic.Location.GetMappedLineSpan();
+                var file = string.IsNullOrEmpty(location.Path) ? "unknown.cs" : location.Path; // TODO: Fix missing file names
+                var line = location.StartLinePosition.Line;
+                var character = location.StartLinePosition.Character;
+                var severity = diagnostic.Severity.ToString().ToUpper();
+                Console.WriteLine($"[Plugin Compiler - {severity}] {file}({line}, {character}): {message}");
+            }
         }
     }
 }

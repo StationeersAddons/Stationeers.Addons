@@ -25,8 +25,7 @@ namespace Stationeers.Addons.PluginCompiler
 
             Console.WriteLine($"Compiling addon '{addonName}'...");
 
-            // TODO: Disable trusted code
-            var output = Compiler.Compile(addonName, scriptFiles.ToArray(), true);
+            var output = Compiler.Compile(addonName, scriptFiles.ToArray());
 
             if (string.IsNullOrEmpty(output))
             {
