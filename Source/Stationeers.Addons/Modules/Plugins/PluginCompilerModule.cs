@@ -96,9 +96,17 @@ namespace Stationeers.Addons.Modules.Plugins
                         File.Delete(assemblyFile);
                     }
 
-                    pluginCompiler.CompileScripts(addonName, addonDirectory, addonScripts);
+                    pluginCompiler.CompileScripts(addonName, addonDirectory, addonScripts, out var isSuccess);
 
-                    CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
+                    if (isSuccess)
+                    {
+                        CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
+                    }
+                    else
+                    {
+                        throw new Exception(
+                            $"Addon's plugin ('{addonName}') failed to compile. Checks game logs for more info.");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -144,9 +152,17 @@ namespace Stationeers.Addons.Modules.Plugins
                             File.Delete(assemblyFile);
                         }
 
-                        pluginCompiler.CompileScripts(addonName, addonDirectory, addonScripts);
+                        pluginCompiler.CompileScripts(addonName, addonDirectory, addonScripts, out var isSuccess);
 
-                        CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
+                        if (isSuccess)
+                        {
+                            CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
+                        }
+                        else
+                        {
+                            throw new Exception(
+                                $"Addon's plugin ('{addonName}') failed to compile. Checks game logs for more info.");
+                        }
                     }
                     catch (Exception ex)
                     {

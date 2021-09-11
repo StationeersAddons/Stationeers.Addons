@@ -12,6 +12,7 @@ namespace Stationeers.Addons.Modules.Plugins
 {
     internal class PluginCompiler : IDisposable
     {
+        private static bool _hasErrors;
         private ProcessStartInfo _compilerStartInfo;
 
         public PluginCompiler()
@@ -35,7 +36,7 @@ namespace Stationeers.Addons.Modules.Plugins
             _compilerStartInfo = null;
         }
 
-        public void CompileScripts(string addonName, string addonDirectory, string[] addonScripts)
+        public void CompileScripts(string addonName, string addonDirectory, string[] addonScripts, out bool isSuccess)
         {
             var scriptFiles = addonScripts.Select(addonScript => addonScript.Replace(addonDirectory, "")).ToList();
 
@@ -43,6 +44,8 @@ namespace Stationeers.Addons.Modules.Plugins
             _compilerStartInfo.Environment.Add("AddonDirectory", addonDirectory);
             _compilerStartInfo.Environment.Add("AddonScripts", string.Join(";", scriptFiles));
 
+            _hasErrors = false;
+            
             // Start compiler
             var process = Process.Start(_compilerStartInfo);
             process.ErrorDataReceived += OnCompilerError;
@@ -55,6 +58,9 @@ namespace Stationeers.Addons.Modules.Plugins
             process.CancelOutputRead();
             process.CancelErrorRead();
             process.Dispose();
+
+            isSuccess = !_hasErrors;
+            _hasErrors = false;
         }
 
         private static void OnCompilerLog(object sender, DataReceivedEventArgs e)
@@ -64,6 +70,7 @@ namespace Stationeers.Addons.Modules.Plugins
 
         private static void OnCompilerError(object sender, DataReceivedEventArgs e)
         {
+            _hasErrors = true;
             Debug.unityLogger.logHandler.LogFormat(LogType.Error, null, e.Data);
         }
     }
