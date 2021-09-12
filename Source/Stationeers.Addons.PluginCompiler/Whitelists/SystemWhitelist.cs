@@ -22,6 +22,8 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(float),
                 typeof(double),
                 typeof(decimal)
+                
+                // TODO: Add more
             );
             whitelist.BlacklistTypes();
 

@@ -23,6 +23,7 @@ namespace Stationeers.Addons.PluginCompiler
             new AddonsWhitelist(),
             new GameWhitelist(),
             new HarmonyWhitelist(),
+            new JetbrainsWhitelist(),
         };
         
         public void Initialize(Compilation compilation)
