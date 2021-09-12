@@ -4,9 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.CodeAnalysis;
-using Stationeers.Addons.API;
 using Stationeers.Addons.PluginCompiler.Whitelists;
-using UnityEngine.Networking;
 
 namespace Stationeers.Addons.PluginCompiler
 {
@@ -51,13 +49,21 @@ namespace Stationeers.Addons.PluginCompiler
             {
                 // If this is just a namespace, pass it. Namespaces do not hurt us.
                 case INamespaceSymbol _: return true;
+                
+                // Check types
                 case INamedTypeSymbol namedTypeSymbol:
                     return IsWhitelisted(namedTypeSymbol);
                 
+                // Check members
                 case IFieldSymbol _:
                 case IMethodSymbol _:
                 case IPropertySymbol _:
                 case IEventSymbol _:
+                    if (IsWhitelisted(symbol.ContainingNamespace))
+                        return true;
+                    
+                    // TODO: Allow to register member types separately
+                    
                     // Most likely only for blacklist...?
                     return false;
             }
@@ -74,10 +80,15 @@ namespace Stationeers.Addons.PluginCompiler
                 return false;
             
             // Allow the type when its whole namespace is whitelisted
-            if (_whitelist.Contains(symbol.ContainingNamespace)) 
+            if (IsWhitelisted(symbol.ContainingNamespace)) 
                 return true;
             
             // Check for whitelist
+            return _whitelist.Contains(symbol);
+        }
+
+        private bool IsWhitelisted(INamespaceSymbol symbol)
+        {
             return _whitelist.Contains(symbol);
         }
 
