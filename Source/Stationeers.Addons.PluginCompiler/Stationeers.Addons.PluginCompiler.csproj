@@ -91,13 +91,22 @@
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\Libraries\Stationeers\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Libraries\Stationeers\UnityEngine.UnityWebRequestModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analyzers\PluginAnalyzer.cs" />
     <Compile Include="Compiler.cs" />
+    <Compile Include="IWhitelistRegistry.cs" />
     <Compile Include="PluginWhitelist.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Whitelists\AddonsWhitelist.cs" />
+    <Compile Include="Whitelists\GameWhitelist.cs" />
+    <Compile Include="Whitelists\HarmonyWhitelist.cs" />
+    <Compile Include="Whitelists\SystemWhitelist.cs" />
+    <Compile Include="Whitelists\UnityWhitelist.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

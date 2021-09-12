@@ -103,7 +103,8 @@ namespace Stationeers.Addons.PluginCompiler
                 .WithOptions(options);
 
             // Warmup whitelist
-            PluginWhitelist.Initialize(compilation);
+            var whitelist = new PluginWhitelist();
+            whitelist.Initialize(compilation);
             
             CompilationWithAnalyzers compilationWithAnalyzers = null;
             
@@ -177,7 +178,8 @@ namespace Stationeers.Addons.PluginCompiler
                 {
                     fs.Write(ms.GetBuffer(), 0, (int)ms.Length);
                 }
-                
+
+                whitelist.Dispose();
                 return assemblyFile;
             }
         }
