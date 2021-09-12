@@ -12,11 +12,15 @@ To get basic addon with simple plugin, follow these steps:
 6. Rename `ExampleMod.csproj` to `MyFirstAddon.csproj` and  `ExampleMod.csproj.user` to `MyFirstAddon.csproj.user`.
 7. Open `MyFirstAddon.csproj` file in your favorite text editor (not IDE!).
 8. Change these two lines:
-    * <RootNamespace>ExampleMod</RootNamespace>
-    * <AssemblyName>ExampleMod-Debug</AssemblyName> <br>
-    to
-    * <RootNamespace>MyFirstAddon</RootNamespace>
-    * <AssemblyName>MyFirstAddon-Debug</AssemblyName>
+   ```xml
+   <RootNamespace>ExampleMod</RootNamespace>
+   <AssemblyName>ExampleMod-Debug</AssemblyName>
+   ```
+   to
+   ```xml
+   <RootNamespace>MyFirstAddon</RootNamespace>
+   <AssemblyName>MyFirstAddon-Debug</AssemblyName>
+   ```
 9. Go back to the Source folder and open `Stationeers.Addons.sln` solution file.
 10. Click *RMB* on *"My Mods"* folder in solution, select `Add > Existing Project...`, locate your addon C# project (*MyFirstAddon.csproj*).
 11. Rename `ExampleMod.cs` to `MyFirstAddon.cs`, as this will be your entry point. You should also change the namespace to.
@@ -24,8 +28,8 @@ To get basic addon with simple plugin, follow these steps:
 13. At this point, you have the ability to start writing the code. Check MyFirstAddon.cs for ideas. Have fun.
 14. Useful links:
     * [Debugging addons](DEBUGGING-ADDONS.md)
-    * [Creating custom content](CUSTOM-CONTENT.md) (Comming soon)
-    * [Overloading methods](OVERLOADING-METHODS.md) (Comming soon)
+    * [Creating custom content](CUSTOM-CONTENT.md) (Coming soon)
+    * [Overloading methods](OVERLOADING-METHODS.md) (Coming soon)
     * [Harmony documentation](https://harmony.pardeike.net/articles/intro.html) - Use it for patching the game's code at runtime.
     * [dnSpy](https://github.com/dnSpy/dnSpy) - for browsing the game's source code.
 
