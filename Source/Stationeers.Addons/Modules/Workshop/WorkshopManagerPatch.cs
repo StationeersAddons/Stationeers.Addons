@@ -23,7 +23,7 @@ namespace Stationeers.Addons.Modules.Workshop
                 Directory.CreateDirectory(strDestination);
             }
 
-            DirectoryInfo dirInfo = new DirectoryInfo(strSource);
+            var dirInfo = new DirectoryInfo(strSource);
             FileInfo[] files = dirInfo.GetFiles();
             foreach (FileInfo tempfile in files)
             {
@@ -44,7 +44,10 @@ namespace Stationeers.Addons.Modules.Workshop
             string tempItemContentPath = origItemContentPath + "_temp";
             __state = "";
 
-            DirectoryInfo tempItemContentDir = Directory.CreateDirectory(tempItemContentPath);
+            if (!Directory.Exists(tempItemContentPath))
+            {
+                Directory.CreateDirectory(tempItemContentPath);
+            }
 
             // Copy files to upload to temp directory, if they satisfy upload whitelist.
             foreach (string itemFilePath in Directory.GetFiles(origItemContentPath))
