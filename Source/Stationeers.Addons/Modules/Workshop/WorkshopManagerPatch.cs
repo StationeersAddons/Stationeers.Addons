@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts;
 using Assets.Scripts.Steam;
 using HarmonyLib;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -76,17 +77,21 @@ namespace Stationeers.Addons.Modules.Workshop
             Debug.Log("Created temporary workshop item directory " + tempItemContentPath);
         }
 
-        public static void OnCreateItemPostfix(WorkshopManager __instance, SteamAsyncCreateItem Parent, bool WasSuccessful, WorkShopItemDetail ItemDetail, bool UserNeedsToAcceptWorkshopLegalAgreement)
+        public static void SubmitItemUpdatePostfix(WorkshopManager __instance, UGCUpdateHandle_t UGCUpdateHandle, WorkShopItemDetail ItemDetail)
         {
-            string origItemContentPath = ItemDetail.Path;
-            string tempItemContentPath = origItemContentPath + "_temp";
+            string tempItemContentPath = ItemDetail.Path;
+            string origItemContentPath = tempItemContentPath.Replace("_temp", "");
 
-            if (Directory.Exists(tempItemContentPath))
+            Debug.Log("Checking for temporary workshop item directory " + tempItemContentPath);
+            if (Directory.Exists(tempItemContentPath) && tempItemContentPath.Contains("_temp"))
             {
                 // Recursively remove the temp dir after steam is done with it.
                 Debug.Log("Cleared temporary workshop item directory " + tempItemContentPath);
                 Directory.Delete(tempItemContentPath, true);
             }
+
+            // Put things back how we found them
+            ItemDetail.Path = origItemContentPath;
         }
 
         private static readonly Regex[] ValidFileNames =
@@ -101,7 +106,7 @@ namespace Stationeers.Addons.Modules.Workshop
         private static readonly Regex[] ValidDirectoryNames =
         {
             new Regex(@"^About$"),
-            new Regex(@"^Content"),
+            new Regex(@"^Content$"),
             new Regex(@"^GameData$"),
             new Regex(@"^Scripts$")
         };
