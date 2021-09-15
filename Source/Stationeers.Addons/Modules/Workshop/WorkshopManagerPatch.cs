@@ -16,7 +16,7 @@ namespace Stationeers.Addons.Modules.Workshop
     {
         // Why does System.IO not have a directory copy method?
         // Stolen from here: https://stackoverflow.com/questions/1974019/folder-copy-in-c-sharp
-        private static void copyDirectory(string strSource, string strDestination)
+        private static void CopyDirectory(string strSource, string strDestination)
         {
             if (!Directory.Exists(strDestination))
             {
@@ -33,7 +33,7 @@ namespace Stationeers.Addons.Modules.Workshop
             DirectoryInfo[] directories = dirInfo.GetDirectories();
             foreach (DirectoryInfo tempdir in directories)
             {
-                copyDirectory(Path.Combine(strSource, tempdir.Name), Path.Combine(strDestination, tempdir.Name));
+                CopyDirectory(Path.Combine(strSource, tempdir.Name), Path.Combine(strDestination, tempdir.Name));
             }
 
         }
@@ -92,7 +92,7 @@ namespace Stationeers.Addons.Modules.Workshop
                     validDir = true;
 
                 if (validDir)
-                    copyDirectory(itemFolderPath, tempItemContentPath + Path.DirectorySeparatorChar + dirName);
+                    CopyDirectory(itemFolderPath, tempItemContentPath + Path.DirectorySeparatorChar + dirName);
             }
 
             // Set workshop item info to use temporary path before ISteamUCG gets its hands on it.
