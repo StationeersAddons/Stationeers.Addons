@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace Stationeers.Addons.Modules.Workshop
 {
-    public class WorkshopManagerPatch
+    public static class WorkshopManagerPatch
     {
         // Why does System.IO not have a directory copy method?
         // Stolen from here: https://stackoverflow.com/questions/1974019/folder-copy-in-c-sharp
