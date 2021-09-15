@@ -1,44 +1,39 @@
-﻿using Assets.Scripts;
+﻿// Stationeers.Addons (c) 2018-2021 Damian 'Erdroy' Korczowski & Contributors
+
+using Assets.Scripts;
 using Assets.Scripts.Steam;
-using HarmonyLib;
-using Steamworks;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Stationeers.Addons.Utilities;
 using UnityEngine;
 
 namespace Stationeers.Addons.Modules.Workshop
 {
+    /// <summary>
+    ///     Class containing methods for workshop upload patches (PublishWorkshopPrefix, OnSubmitItemUpdatePostfix).
+    /// </summary>
     public static class WorkshopManagerPatch
     {
-        // Why does System.IO not have a directory copy method?
-        // Stolen from here: https://stackoverflow.com/questions/1974019/folder-copy-in-c-sharp
-        private static void CopyDirectory(string strSource, string strDestination)
+        private static readonly Regex[] ValidFileNames =
         {
-            if (!Directory.Exists(strDestination))
-            {
-                Directory.CreateDirectory(strDestination);
-            }
+            new Regex(@".*\.cs$"),
+            new Regex(@".*\.xml$"),
+            new Regex(@".*\.png$"),
+            new Regex(@".*\.asset$"),
+            new Regex(@"^LICENSE$")
+        };
 
-            var dirInfo = new DirectoryInfo(strSource);
-            var files = dirInfo.GetFiles();
-            foreach (var tempfile in files)
-            {
-                tempfile.CopyTo(Path.Combine(strDestination, tempfile.Name));
-            }
+        private static readonly Regex[] ValidDirectoryNames =
+        {
+            new Regex(@"^About$"),
+            new Regex(@"^Content$"),
+            new Regex(@"^GameData$"),
+            new Regex(@"^Scripts$")
+        };
 
-            var directories = dirInfo.GetDirectories();
-            foreach (var tempdir in directories)
-            {
-                CopyDirectory(Path.Combine(strSource, tempdir.Name), Path.Combine(strDestination, tempdir.Name));
-            }
-
-        }
-
+        [UsedImplicitly]
         public static void PublishWorkshopPrefix(WorkshopManager __instance, ref WorkShopItemDetail ItemDetail, ref string changeNote)
         {
             var origItemContentPath = ItemDetail.Path;
@@ -61,14 +56,14 @@ namespace Stationeers.Addons.Modules.Workshop
             }
 
             // Copy directories to upload to temp directory, if they satisfy upload whitelist.
-            foreach (string itemFolderPath in Directory.GetDirectories(origItemContentPath))
+            foreach (var itemFolderPath in Directory.GetDirectories(origItemContentPath))
             {
                 var dirName = new FileInfo(itemFolderPath).Name;
 
                 var validDir = ValidDirectoryNames.Any(regex => regex.IsMatch(dirName));
 
                 if (validDir)
-                    CopyDirectory(itemFolderPath, tempItemContentPath + Path.DirectorySeparatorChar + dirName);
+                    DirectoryEx.Copy(itemFolderPath, tempItemContentPath + Path.DirectorySeparatorChar + dirName);
             }
 
             // Set workshop item info to use temporary path before ISteamUCG gets its hands on it.
@@ -77,10 +72,11 @@ namespace Stationeers.Addons.Modules.Workshop
             Debug.Log("Created temporary workshop item directory " + tempItemContentPath);
         }
 
+        [UsedImplicitly]
         public static void OnSubmitItemUpdatePostfix(WorkshopManager __instance, SteamAsyncSubmitItemUpdate Parent, bool WasSuccessful, WorkShopItemDetail ItemDetail, bool UserNeedsToAcceptWorkshopLegalAgreement)
         {
-            string tempItemContentPath = ItemDetail.Path;
-            string origItemContentPath = tempItemContentPath.Replace("_temp", "");
+            var tempItemContentPath = ItemDetail.Path;
+            var origItemContentPath = tempItemContentPath.Replace("_temp", "");
 
             Debug.Log("Checking for temporary workshop item directory " + tempItemContentPath);
             if (Directory.Exists(tempItemContentPath) && tempItemContentPath.Contains("_temp"))
@@ -93,22 +89,5 @@ namespace Stationeers.Addons.Modules.Workshop
             // Put things back how we found them
             ItemDetail.Path = origItemContentPath;
         }
-
-        private static readonly Regex[] ValidFileNames =
-        {
-            new Regex(@".*\.cs$"),
-            new Regex(@".*\.xml$"),
-            new Regex(@".*\.png$"),
-            new Regex(@".*\.asset$"),
-            new Regex(@"^LICENSE$")
-        };
-
-        private static readonly Regex[] ValidDirectoryNames =
-        {
-            new Regex(@"^About$"),
-            new Regex(@"^Content$"),
-            new Regex(@"^GameData$"),
-            new Regex(@"^Scripts$")
-        };
     }
 }

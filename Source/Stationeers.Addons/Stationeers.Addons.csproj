@@ -125,6 +125,7 @@
     <Compile Include="Modules\Plugins\PluginCompiler.cs" />
     <Compile Include="Modules\Plugins\PluginCompilerModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\DirectoryEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
