@@ -33,7 +33,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="0Harmony">
       <HintPath>..\packages\Lib.Harmony.2.0.4\lib\net45\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
@@ -117,6 +117,7 @@
     <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\LiveReload\LiveReloadModule.cs" />
     <Compile Include="Modules\Plugins\PluginLoaderModule.cs" />
+    <Compile Include="Modules\Workshop\WorkshopManagerPatch.cs" />
     <Compile Include="Modules\Workshop\WorkshopModule.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="Core\LoaderManager.cs" />
@@ -131,6 +132,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir)packages\Mono.Unofficial.pdb2mdb.4.2.3.4\tools\pdb2mdb.exe "$(TargetPath)"</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)packages\Mono.Unofficial.pdb2mdb.4.2.3.4\tools\pdb2mdb.exe" "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

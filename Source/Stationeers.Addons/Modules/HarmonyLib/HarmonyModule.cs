@@ -1,8 +1,11 @@
 ﻿// Stationeers.Addons (c) 2018-2021 Damian 'Erdroy' Korczowski & Contributors
 
 using System.Collections;
+using System.Reflection;
+using Assets.Scripts;
 using HarmonyLib;
 using Stationeers.Addons.Core;
+using Stationeers.Addons.Modules.Workshop;
 using UnityEngine;
 
 namespace Stationeers.Addons.Modules.HarmonyLib
@@ -25,6 +28,14 @@ namespace Stationeers.Addons.Modules.HarmonyLib
         /// <inheritdoc />
         public IEnumerator Load()
         {
+            Debug.Log("Patching WorkshopManager.PublishWorkshop using Harmony...");
+            MethodInfo publishWorkshopMethod = typeof(WorkshopManager).GetMethod("PublishWorkshop", BindingFlags.Public | BindingFlags.Instance);
+            MethodInfo onCreateItemMethod = typeof(WorkshopManager).GetMethod("OnCreateItem", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo publishWorkshopPrefixMethod = typeof(WorkshopManagerPatch).GetMethod("PublishWorkshopPrefix");
+            MethodInfo onCreateItemPostfixMethod = typeof(WorkshopManagerPatch).GetMethod("OnCreateItemPostfix");
+            _harmony.Patch(publishWorkshopMethod, new HarmonyMethod(publishWorkshopPrefixMethod));
+            _harmony.Patch(onCreateItemMethod, null, new HarmonyMethod(onCreateItemPostfixMethod));
+
             Debug.Log("Patching game assembly using Harmony...");
             foreach (var plugin in LoaderManager.Instance.PluginLoader.LoadedPlugins)
             {

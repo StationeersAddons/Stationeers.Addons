@@ -31,9 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\Lib.Harmony.2.0.4\lib\net45\0Harmony.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="0Harmony">
+      <HintPath>..\packages\Lib.Harmony.2.0.4\lib\net45\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(SolutionDir)\..\Libraries\Stationeers\Assembly-CSharp.dll</HintPath>
@@ -114,6 +113,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir)packages\Mono.Unofficial.pdb2mdb.4.2.3.4\tools\pdb2mdb.exe "$(TargetPath)"</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)packages\Mono.Unofficial.pdb2mdb.4.2.3.4\tools\pdb2mdb.exe" "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
