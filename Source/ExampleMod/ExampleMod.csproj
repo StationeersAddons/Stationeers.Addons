@@ -114,6 +114,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>$(SolutionDir)packages\Mono.Unofficial.pdb2mdb.4.2.3.4\tools\pdb2mdb.exe "$(TargetPath)"</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)packages\Mono.Unofficial.pdb2mdb.4.2.3.4\tools\pdb2mdb.exe" "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -88,6 +88,18 @@ namespace Stationeers.Addons.Modules.Plugins
 
                     var addonScripts = Directory.GetFiles(addonDirectory, "*.cs", SearchOption.AllDirectories);
 
+                    // Prevent mods that include the following files from defining duplicate attributes and screwing up compile.
+                    // */Properties/*
+                    // */bin/*
+                    // */obj/*
+                    List<string> sourceFilesList = new List<string>(addonScripts);
+
+                    sourceFilesList.RemoveAll(x => x.Contains(Path.DirectorySeparatorChar + "Properties" + Path.DirectorySeparatorChar));
+                    sourceFilesList.RemoveAll(x => x.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar));
+                    sourceFilesList.RemoveAll(x => x.Contains(Path.DirectorySeparatorChar + "obj" + Path.DirectorySeparatorChar));
+
+                    addonScripts = sourceFilesList.ToArray();
+
                     if (addonScripts.Length == 0) continue;
 
                     if (File.Exists(assemblyFile))
