@@ -52,24 +52,9 @@ namespace Stationeers.Addons.Modules.Workshop
             // Copy files to upload to temp directory, if they satisfy upload whitelist.
             foreach (string itemFilePath in Directory.GetFiles(origItemContentPath))
             {
-                bool validFile = false;
                 string fileName = new FileInfo(itemFilePath).Name;
 
-                // Ugly fall-through regex party.
-                if (new Regex(@".*\.cs$").IsMatch(fileName))
-                    validFile = true;
-
-                if (new Regex(@".*\.xml$").IsMatch(fileName))
-                    validFile = true;
-
-                if (new Regex(@".*\.png$").IsMatch(fileName))
-                    validFile = true;
-
-                if (new Regex(@".*\.asset$").IsMatch(fileName))
-                    validFile = true;
-
-                if (new Regex(@"^LICENSE$").IsMatch(fileName))
-                    validFile = true;
+                var validFile = ValidFileNames.Any(regex => regex.IsMatch(fileName));
 
                 if (validFile)
                     File.Copy(itemFilePath, tempItemContentPath + Path.GetFileName(itemFilePath));
@@ -78,21 +63,9 @@ namespace Stationeers.Addons.Modules.Workshop
             // Copy directories to upload to temp directory, if they satisfy upload whitelist.
             foreach (string itemFolderPath in Directory.GetDirectories(origItemContentPath))
             {
-                bool validDir = false;
-                string dirName = new DirectoryInfo(itemFolderPath).Name;
+                string dirName = new FileInfo(itemFolderPath).Name;
 
-                // Ugly fall-through regex party.
-                if (new Regex(@"^About$").IsMatch(dirName))
-                    validDir = true;
-
-                if (new Regex(@"^Content$").IsMatch(dirName))
-                    validDir = true;
-
-                if (new Regex(@"^GameData$").IsMatch(dirName))
-                    validDir = true;
-
-                if (new Regex(@"^Scripts$").IsMatch(dirName))
-                    validDir = true;
+                var validDir = ValidDirectoryNames.Any(regex => regex.IsMatch(dirName));
 
                 if (validDir)
                     CopyDirectory(itemFolderPath, tempItemContentPath + Path.DirectorySeparatorChar + dirName);
@@ -118,5 +91,22 @@ namespace Stationeers.Addons.Modules.Workshop
                 Directory.Delete(tempItemContentPath, true);
             }
         }
+
+        private static readonly Regex[] ValidFileNames =
+        {
+            new Regex(@".*\.cs$"),
+            new Regex(@".*\.xml$"),
+            new Regex(@".*\.png$"),
+            new Regex(@".*\.asset$"),
+            new Regex(@"^LICENSE$")
+        };
+
+        private static readonly Regex[] ValidDirectoryNames =
+        {
+            new Regex(@"^About$"),
+            new Regex(@"^Content"),
+            new Regex(@"^GameData$"),
+            new Regex(@"^Scripts$")
+        };
     }
 }
