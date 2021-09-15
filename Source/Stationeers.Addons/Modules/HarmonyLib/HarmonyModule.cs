@@ -1,8 +1,10 @@
 ﻿// Stationeers.Addons (c) 2018-2021 Damian 'Erdroy' Korczowski & Contributors
 
+using System;
 using System.Collections;
 using System.Reflection;
 using Assets.Scripts;
+using Assets.Scripts.UI;
 using HarmonyLib;
 using Stationeers.Addons.Core;
 using Stationeers.Addons.Modules.Workshop;
@@ -28,13 +30,22 @@ namespace Stationeers.Addons.Modules.HarmonyLib
         /// <inheritdoc />
         public IEnumerator Load()
         {
-            Debug.Log("Patching WorkshopManager.PublishWorkshop using Harmony...");
-            MethodInfo publishWorkshopMethod = typeof(WorkshopManager).GetMethod("PublishWorkshop", BindingFlags.Public | BindingFlags.Instance);
-            MethodInfo onCreateItemMethod = typeof(WorkshopManager).GetMethod("OnCreateItem", BindingFlags.NonPublic | BindingFlags.Instance);
-            MethodInfo publishWorkshopPrefixMethod = typeof(WorkshopManagerPatch).GetMethod("PublishWorkshopPrefix");
-            MethodInfo onCreateItemPostfixMethod = typeof(WorkshopManagerPatch).GetMethod("OnCreateItemPostfix");
-            _harmony.Patch(publishWorkshopMethod, new HarmonyMethod(publishWorkshopPrefixMethod));
-            _harmony.Patch(onCreateItemMethod, null, new HarmonyMethod(onCreateItemPostfixMethod));
+            Debug.Log("Patching WorkshopManager using Harmony...");
+            try
+            {
+                MethodInfo publishWorkshopMethod = typeof(WorkshopManager).GetMethod("PublishWorkshop", BindingFlags.Public | BindingFlags.Instance);
+                MethodInfo onCreateItemMethod = typeof(WorkshopManager).GetMethod("OnCreateItem", BindingFlags.NonPublic | BindingFlags.Instance);
+                MethodInfo publishWorkshopPrefixMethod = typeof(WorkshopManagerPatch).GetMethod("PublishWorkshopPrefix");
+                MethodInfo onCreateItemPostfixMethod = typeof(WorkshopManagerPatch).GetMethod("OnCreateItemPostfix");
+
+                _harmony.Patch(publishWorkshopMethod, new HarmonyMethod(publishWorkshopPrefixMethod));
+                _harmony.Patch(onCreateItemMethod, null, new HarmonyMethod(onCreateItemPostfixMethod));
+            } 
+            catch (Exception ex)
+            {
+                AlertPanel.Instance.ShowAlert($"Failed to initialize workshop publish patch!\n", AlertState.Alert);
+                Debug.LogError($"Failed to initialize workshop publish patch. Exception:\n{ex}");
+            }
 
             Debug.Log("Patching game assembly using Harmony...");
             foreach (var plugin in LoaderManager.Instance.PluginLoader.LoadedPlugins)
