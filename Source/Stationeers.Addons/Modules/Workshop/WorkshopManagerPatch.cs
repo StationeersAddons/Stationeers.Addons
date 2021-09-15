@@ -38,11 +38,10 @@ namespace Stationeers.Addons.Modules.Workshop
 
         }
 
-        public static void PublishWorkshopPrefix(WorkshopManager __instance, ref WorkShopItemDetail ItemDetail, ref string changeNote, out string __state)
+        public static void PublishWorkshopPrefix(WorkshopManager __instance, ref WorkShopItemDetail ItemDetail, ref string changeNote)
         {
             string origItemContentPath = ItemDetail.Path;
             string tempItemContentPath = origItemContentPath + "_temp";
-            __state = "";
 
             if (!Directory.Exists(tempItemContentPath))
             {
@@ -74,9 +73,7 @@ namespace Stationeers.Addons.Modules.Workshop
             // Set workshop item info to use temporary path before ISteamUCG gets its hands on it.
             ItemDetail.Path = tempItemContentPath;
 
-            // Save state for later nuking.
-            Debug.Log("Created temporary workshop item directory " + __state);
-            __state = tempItemContentPath;
+            Debug.Log("Created temporary workshop item directory " + tempItemContentPath);
         }
 
         public static void OnCreateItemPostfix(WorkshopManager __instance, SteamAsyncCreateItem Parent, bool WasSuccessful, WorkShopItemDetail ItemDetail, bool UserNeedsToAcceptWorkshopLegalAgreement)
