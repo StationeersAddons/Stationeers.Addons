@@ -34,12 +34,12 @@ namespace Stationeers.Addons.Modules.HarmonyLib
             try
             {
                 MethodInfo publishWorkshopMethod = typeof(WorkshopManager).GetMethod("PublishWorkshop", BindingFlags.Public | BindingFlags.Instance);
-                MethodInfo submitItemUpdateMethod = typeof(WorkshopManager).GetMethod("SubmitItemUpdate", BindingFlags.NonPublic | BindingFlags.Instance);
+                MethodInfo onSubmitItemUpdateMethod = typeof(WorkshopManager).GetMethod("OnSubmitItemUpdate", BindingFlags.NonPublic | BindingFlags.Instance);
                 MethodInfo publishWorkshopPrefixMethod = typeof(WorkshopManagerPatch).GetMethod("PublishWorkshopPrefix");
-                MethodInfo submitItemUpdatePostfixMethod = typeof(WorkshopManagerPatch).GetMethod("SubmitItemUpdatePostfix");
+                MethodInfo onSubmitItemUpdatePostfixMethod = typeof(WorkshopManagerPatch).GetMethod("OnSubmitItemUpdatePostfix");
 
                 _harmony.Patch(publishWorkshopMethod, new HarmonyMethod(publishWorkshopPrefixMethod));
-                _harmony.Patch(submitItemUpdateMethod, null, new HarmonyMethod(submitItemUpdatePostfixMethod));
+                _harmony.Patch(onSubmitItemUpdateMethod, null, new HarmonyMethod(onSubmitItemUpdatePostfixMethod));
             } 
             catch (Exception ex)
             {

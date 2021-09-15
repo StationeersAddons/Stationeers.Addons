@@ -77,7 +77,7 @@ namespace Stationeers.Addons.Modules.Workshop
             Debug.Log("Created temporary workshop item directory " + tempItemContentPath);
         }
 
-        public static void SubmitItemUpdatePostfix(WorkshopManager __instance, UGCUpdateHandle_t UGCUpdateHandle, WorkShopItemDetail ItemDetail)
+        public static void OnSubmitItemUpdatePostfix(WorkshopManager __instance, SteamAsyncSubmitItemUpdate Parent, bool WasSuccessful, WorkShopItemDetail ItemDetail, bool UserNeedsToAcceptWorkshopLegalAgreement)
         {
             string tempItemContentPath = ItemDetail.Path;
             string origItemContentPath = tempItemContentPath.Replace("_temp", "");
