@@ -25,14 +25,14 @@ namespace Stationeers.Addons.Modules.Workshop
             }
 
             var dirInfo = new DirectoryInfo(strSource);
-            FileInfo[] files = dirInfo.GetFiles();
-            foreach (FileInfo tempfile in files)
+            var files = dirInfo.GetFiles();
+            foreach (var tempfile in files)
             {
                 tempfile.CopyTo(Path.Combine(strDestination, tempfile.Name));
             }
 
-            DirectoryInfo[] directories = dirInfo.GetDirectories();
-            foreach (DirectoryInfo tempdir in directories)
+            var directories = dirInfo.GetDirectories();
+            foreach (var tempdir in directories)
             {
                 CopyDirectory(Path.Combine(strSource, tempdir.Name), Path.Combine(strDestination, tempdir.Name));
             }
@@ -41,8 +41,8 @@ namespace Stationeers.Addons.Modules.Workshop
 
         public static void PublishWorkshopPrefix(WorkshopManager __instance, ref WorkShopItemDetail ItemDetail, ref string changeNote)
         {
-            string origItemContentPath = ItemDetail.Path;
-            string tempItemContentPath = origItemContentPath + "_temp";
+            var origItemContentPath = ItemDetail.Path;
+            var tempItemContentPath = origItemContentPath + "_temp";
 
             if (!Directory.Exists(tempItemContentPath))
             {
@@ -50,9 +50,9 @@ namespace Stationeers.Addons.Modules.Workshop
             }
 
             // Copy files to upload to temp directory, if they satisfy upload whitelist.
-            foreach (string itemFilePath in Directory.GetFiles(origItemContentPath))
+            foreach (var itemFilePath in Directory.GetFiles(origItemContentPath))
             {
-                string fileName = new FileInfo(itemFilePath).Name;
+                var fileName = new FileInfo(itemFilePath).Name;
 
                 var validFile = ValidFileNames.Any(regex => regex.IsMatch(fileName));
 
@@ -63,7 +63,7 @@ namespace Stationeers.Addons.Modules.Workshop
             // Copy directories to upload to temp directory, if they satisfy upload whitelist.
             foreach (string itemFolderPath in Directory.GetDirectories(origItemContentPath))
             {
-                string dirName = new FileInfo(itemFolderPath).Name;
+                var dirName = new FileInfo(itemFolderPath).Name;
 
                 var validDir = ValidDirectoryNames.Any(regex => regex.IsMatch(dirName));
 
