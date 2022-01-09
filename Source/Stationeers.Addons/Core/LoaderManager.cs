@@ -59,6 +59,11 @@ namespace Stationeers.Addons.Core
         public WorkshopModule Workshop { get; private set; }
 
         /// <summary>
+        ///     VersionCheck module reference
+        /// </summary>
+        public VersionCheckModule VersionCheck { get; private set; }
+
+        /// <summary>
         ///     PluginCompiler module reference
         /// </summary>
         public PluginCompilerModule PluginCompiler { get; private set; }
@@ -109,7 +114,8 @@ namespace Stationeers.Addons.Core
 
             if(!IsDedicatedServer) // Only look for workshop if on client
                 Workshop = InitializeModule<WorkshopModule>();
-            
+
+            VersionCheck = InitializeModule<VersionCheckModule>();
             PluginCompiler = InitializeModule<PluginCompilerModule>();
             BundleLoader = InitializeModule<BundleLoaderModule>();
             PluginLoader = InitializeModule<PluginLoaderModule>();
@@ -121,9 +127,6 @@ namespace Stationeers.Addons.Core
         {
             if(!IsDedicatedServer)
             {
-                // Check version
-                yield return CheckVersion();
-                
                 ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
                 ProgressPanel.Instance.UpdateProgressBarCaption("Loading modules...");
                 ProgressPanel.Instance.UpdateProgressBar(0.1f);
@@ -160,40 +163,6 @@ namespace Stationeers.Addons.Core
             LiveReload?.Update();
         }
         
-        private IEnumerator CheckVersion()
-        {
-            Debug.Log("Checking for Stationeers.Addons version...");
-            
-            // Perform simple web request to get the latest version from github
-            using (var webRequest = UnityWebRequest.Get(Globals.VersionFile))
-            {
-                yield return webRequest.SendWebRequest();
-
-                if (!webRequest.isHttpError && !webRequest.isNetworkError)
-                {
-                    var data = webRequest.downloadHandler.text.Trim();
-                    
-                    Debug.Log($"Latest Stationeers.Addons version is {data}. Installed {Globals.Version}");
-                    
-                    // If the current version is the same as the latest one, just exit the coroutine.
-                    if (Globals.Version == data)
-                        yield break;
-                    
-                    Debug.Log("New version of Stationeers.Addons is available!");
-                    
-                    while (LoadingPanel.Instance.IsVisible)
-                        yield return null;
-                        
-                    AlertPanel.Instance.ShowAlert($"New version of Stationeers.Addons ({data}) is available!\n", 
-                        AlertState.Alert);
-                        
-                    // Wait for the alert window to close
-                    while (AlertPanel.Instance.AlertWindow.activeInHierarchy)
-                        yield return null;
-                }
-            }
-        }
-
         private void OnDestroy()
         {
             foreach (var module in _modules)
