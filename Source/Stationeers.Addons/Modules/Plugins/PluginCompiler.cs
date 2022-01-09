@@ -70,6 +70,10 @@ namespace Stationeers.Addons.Modules.Plugins
 
         private static void OnCompilerError(object sender, DataReceivedEventArgs e)
         {
+            // Not sure what is going on, but we're receiving an error from the process, but it is... empty!?
+            // Checked it and the plugins compile normally. So just make sure that this fluke does not fail our compilation.
+            if(string.IsNullOrEmpty(e.Data)) return;
+            
             _hasErrors = true;
             Debug.unityLogger.logHandler.LogFormat(LogType.Error, null, e.Data);
         }
