@@ -140,6 +140,9 @@ namespace Stationeers.Addons.Modules.Plugins
             {
                 UnloadPlugin(plugin.Value);
             }
+
+            // Clear the plugin dictionary
+            _plugins.Clear();
         }
 
         private void UnloadPlugin(PluginInfo pluginInfo)
