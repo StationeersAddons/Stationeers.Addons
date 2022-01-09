@@ -16,6 +16,7 @@ namespace Stationeers.Addons.Modules.LiveReload
         public string LoadingCaption => "Initializing live reload module...";
         
         private bool _liveReloadEnabled;
+        private bool _isRecompiling;
 
         /// <inheritdoc />
         public void Initialize()
@@ -46,8 +47,32 @@ namespace Stationeers.Addons.Modules.LiveReload
             
             if (Input.GetKeyDown(KeyCode.R) && Input.GetKey(KeyCode.LeftControl))
             {
-                LoaderManager.Instance.StartCoroutine(LoaderManager.Instance.Reload());
+                LoaderManager.Instance.StartCoroutine(Reload());
             }
+        }
+
+        internal IEnumerator Reload()
+        {
+            if (_isRecompiling)
+            {
+                Debug.LogWarning("Already recompiling!");
+                yield break;
+            }
+            
+            _isRecompiling = true;
+            
+            Debug.Log("Unloading plugins");
+            LoaderManager.Instance.PluginLoader.UnloadAllPlugins();
+            
+            Debug.Log("Recompiling plugins");
+            yield return LoaderManager.Instance.PluginCompiler.Load();
+            
+            Debug.Log("Reloading plugins");
+            yield return LoaderManager.Instance.PluginLoader.Load();
+            
+            Debug.Log("Recompilation done");
+            
+            _isRecompiling = false;
         }
     }
 }

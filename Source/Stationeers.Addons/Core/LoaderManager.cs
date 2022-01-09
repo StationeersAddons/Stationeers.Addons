@@ -83,8 +83,6 @@ namespace Stationeers.Addons.Core
         /// </summary>
         public LiveReloadModule LiveReload { get; private set; }
 
-        private bool _isRecompiling;
-
         public void Activate()
         {
             Debug.Log($"Stationeers.Addons {Globals.Version}");
@@ -160,30 +158,6 @@ namespace Stationeers.Addons.Core
         private void Update()
         {
             LiveReload?.Update();
-        }
-
-        internal IEnumerator Reload()
-        {
-            if (_isRecompiling)
-            {
-                Debug.LogWarning("Already recompiling!");
-                yield break;
-            }
-            
-            _isRecompiling = true;
-            
-            Debug.Log("Unloading plugins");
-            PluginLoader.UnloadAllPlugins();
-            
-            Debug.Log("Recompiling plugins");
-            yield return PluginCompiler.Load();
-            
-            Debug.Log("Reloading plugins");
-            yield return PluginLoader.Load();
-            
-            Debug.Log("Recompilation done");
-            
-            _isRecompiling = false;
         }
         
         private IEnumerator CheckVersion()
