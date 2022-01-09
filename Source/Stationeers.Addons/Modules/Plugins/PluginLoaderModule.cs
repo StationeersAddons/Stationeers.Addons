@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Assets.Scripts.Networking;
 using Stationeers.Addons.Core;
 using UnityEngine;
 
@@ -27,6 +28,10 @@ namespace Stationeers.Addons.Modules.Plugins
         /// <inheritdoc />
         public void Initialize()
         {
+            if (Directory.Exists("AddonManager/AddonsCacheTemp/"))
+                Directory.Delete("AddonManager/AddonsCacheTemp/", true);
+            
+            Directory.CreateDirectory("AddonManager/AddonsCacheTemp/");
         }
 
         /// <inheritdoc />
@@ -98,9 +103,16 @@ namespace Stationeers.Addons.Modules.Plugins
             // load the raw bytes directly to avoid locking the dll
             // note that the assembly name (not the file name) needs to be different every time, otherwise
             // Assembly.Load will reuse the last loaded version
-            var assembly = Assembly.Load(File.ReadAllBytes(pluginAssembly));
+            
+            // Copy assembly to temporary directory, as we need to use Assembly.LoadFile to always load a new assembly,
+            // in case, the assembly name states the same.
+            
+            var randomPluginName = addonName.Substring(0, pluginAssembly.Length - 4) + Guid.NewGuid() + ".dll";
+            File.Copy(pluginAssembly, "AddonManager/AddonsCacheTemp/" + randomPluginName);
 
-            Debug.Log("Plugin assembly " + pluginAssembly + " loaded ");
+            var assembly = Assembly.LoadFile(randomPluginName);
+
+            Debug.Log($"Plugin assembly {pluginAssembly} loaded from {randomPluginName}");
 
             var plugins = new List<IPlugin>();
             // TODO: Maybe we do not want to allow multiple plugins per addon...?
