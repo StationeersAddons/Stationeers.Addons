@@ -87,7 +87,7 @@ namespace Stationeers.Addons.Core
 
         public void Activate()
         {
-            Debug.Log("ModLoader activated!");
+            Debug.Log($"Stationeers.Addons {Globals.Version}");
         }
 
         private void Awake()

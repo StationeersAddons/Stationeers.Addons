@@ -16,7 +16,7 @@ namespace Stationeers.Addons
         // ReSharper disable once UnusedMember.Local
         public void Load()
         {
-            Debug.Log("Hello, World!");
+            Debug.Log("[Stationeers.Addons] Hello, World!");
 
             // Create instance of ModLoader
             LoaderManager.Instance.Activate();
