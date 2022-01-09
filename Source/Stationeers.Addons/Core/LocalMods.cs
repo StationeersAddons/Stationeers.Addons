@@ -1,4 +1,4 @@
-﻿// Stationeers.Addons (c) 2018-2021 Damian 'Erdroy' Korczowski & Contributors
+﻿// Stationeers.Addons (c) 2018-2022 Damian 'Erdroy' Korczowski & Contributors
 
 using System;
 using System.Collections.Generic;
