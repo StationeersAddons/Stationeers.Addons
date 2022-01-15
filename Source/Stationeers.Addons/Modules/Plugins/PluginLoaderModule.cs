@@ -99,20 +99,16 @@ namespace Stationeers.Addons.Modules.Plugins
                 _plugins.Remove(addonName);
             }
 
-            // the compiler could output a .pdb file, but AFAIK we'd need to convert it to .mdb using unity's pdb2mdb.exe
-            // load the raw bytes directly to avoid locking the dll
-            // note that the assembly name (not the file name) needs to be different every time, otherwise
-            // Assembly.Load will reuse the last loaded version
+            // Copy assembly to a temporary directory, as we need to use Assembly.LoadFile to always load a new assembly,
+            // in case, the assembly name is the same - all other loading methods would reuse the assembly that is
+            // already loaded in the memory.
             
-            // Copy assembly to temporary directory, as we need to use Assembly.LoadFile to always load a new assembly,
-            // in case, the assembly name states the same.
-            
-            var randomPluginName = addonName.Substring(0, pluginAssembly.Length - 4) + Guid.NewGuid() + ".dll";
-            File.Copy(pluginAssembly, "AddonManager/AddonsCacheTemp/" + randomPluginName);
+            var tempPluginFile = Path.GetFileNameWithoutExtension(pluginAssembly) + Guid.NewGuid() + ".dll";
+            var tempPluginPath = "AddonManager/AddonsCacheTemp/" + tempPluginFile;
+            File.Copy(pluginAssembly, tempPluginPath);
 
-            var assembly = Assembly.LoadFile(randomPluginName);
-
-            Debug.Log($"Plugin assembly {pluginAssembly} loaded from {randomPluginName}");
+            var assembly = Assembly.LoadFile(tempPluginPath);
+            Debug.Log($"Plugin assembly {pluginAssembly} loaded from {tempPluginPath}");
 
             var plugins = new List<IPlugin>();
             // TODO: Maybe we do not want to allow multiple plugins per addon...?
