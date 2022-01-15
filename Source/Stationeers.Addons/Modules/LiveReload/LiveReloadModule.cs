@@ -70,6 +70,10 @@ namespace Stationeers.Addons.Modules.LiveReload
             yield return new WaitForSeconds(0.1f);
             
             Debug.Log("Unloading plugins");
+            
+            // Reinitialize Harmony, so we can call Load method again later to patch the game again
+            LoaderManager.Instance.Harmony.Shutdown();
+            LoaderManager.Instance.Harmony.Initialize();
             LoaderManager.Instance.PluginLoader.UnloadAllPlugins();
 
             ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Recompiling plugins...");
@@ -80,11 +84,18 @@ namespace Stationeers.Addons.Modules.LiveReload
             yield return LoaderManager.Instance.PluginCompiler.Load();
 
             ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Reloading plugins...");
-            ProgressPanel.Instance.UpdateProgressBar(0.75f);
+            ProgressPanel.Instance.UpdateProgressBar(0.50f);
             
             Debug.Log("Reloading plugins");
             yield return new WaitForSeconds(0.1f);
             yield return LoaderManager.Instance.PluginLoader.Load();
+
+            ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Patching plugins...");
+            ProgressPanel.Instance.UpdateProgressBar(0.75f);
+
+            Debug.Log("Re-patching game using harmony");
+            yield return new WaitForSeconds(0.1f);
+            yield return LoaderManager.Instance.Harmony.Load();
             
             Debug.Log("Recompilation done");
 
