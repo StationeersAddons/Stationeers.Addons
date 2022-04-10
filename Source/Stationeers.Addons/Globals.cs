@@ -1,3 +1,5 @@
+// Stationeers.Addons (c) 2018-2022 Damian 'Erdroy' Korczowski & Contributors
+
 namespace Stationeers.Addons
 {
     public static class Globals
