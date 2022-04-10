@@ -2,7 +2,6 @@
 
 using System.Collections;
 using Assets.Scripts.UI;
-using Stationeers.Addons.Core;
 using UnityEngine;
 using UnityEngine.Networking;
 

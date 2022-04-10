@@ -2,12 +2,9 @@
 
 using System;
 using System.Collections;
-using System.Reflection;
-using Assets.Scripts;
 using Assets.Scripts.UI;
 using HarmonyLib;
 using Stationeers.Addons.Core;
-using Stationeers.Addons.Modules.Workshop;
 using UnityEngine;
 
 namespace Stationeers.Addons.Modules.HarmonyLib
