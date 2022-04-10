@@ -88,6 +88,11 @@ namespace Stationeers.Addons.Core
         ///     LiveReload module reference
         /// </summary>
         public LiveReloadModule LiveReload { get; private set; }
+        
+        /// <summary>
+        ///     Gets true when the loader is fully loaded.
+        /// </summary>
+        public bool IsLoaded { get; set; }
 
         public void Activate()
         {
@@ -178,6 +183,8 @@ namespace Stationeers.Addons.Core
                     yield return module.Load();
                 }
             }
+
+            IsLoaded = true;
         }
 
         private void Update()

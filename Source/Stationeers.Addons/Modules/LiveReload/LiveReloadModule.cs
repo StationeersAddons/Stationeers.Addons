@@ -44,7 +44,7 @@ namespace Stationeers.Addons.Modules.LiveReload
         /// </summary>
         public void Update()
         {
-            if (!_liveReloadEnabled) return;
+            if (!_liveReloadEnabled || !LoaderManager.Instance.IsLoaded) return;
             
             if (Input.GetKeyDown(KeyCode.R) && Input.GetKey(KeyCode.LeftControl))
             {
