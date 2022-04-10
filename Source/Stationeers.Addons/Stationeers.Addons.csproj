@@ -44,6 +44,9 @@
       <HintPath>..\..\Libraries\Stationeers\Assembly-CSharp-firstpass.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Facepunch.Steamworks.Win64">
+      <HintPath>..\..\Libraries\Stationeers\Facepunch.Steamworks.Win64.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib">
       <HintPath>..\..\Libraries\Stationeers\mscorlib.dll</HintPath>
       <Private>False</Private>
@@ -52,6 +55,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Libraries\Stationeers\netstandard.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="RG.ImGui">
+      <HintPath>..\..\Libraries\Stationeers\RG.ImGui.dll</HintPath>
+    </Reference>
+    <Reference Include="RG.ImGui.Unity">
+      <HintPath>..\..\Libraries\Stationeers\RG.ImGui.Unity.dll</HintPath>
     </Reference>
     <Reference Include="System.Core">
       <HintPath>..\..\Libraries\Stationeers\System.Core.dll</HintPath>
@@ -68,6 +77,21 @@
     <Reference Include="System">
       <HintPath>..\..\Libraries\Stationeers\System.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="UniTask">
+      <HintPath>..\..\Libraries\Stationeers\UniTask.dll</HintPath>
+    </Reference>
+    <Reference Include="UniTask.Addressables">
+      <HintPath>..\..\Libraries\Stationeers\UniTask.Addressables.dll</HintPath>
+    </Reference>
+    <Reference Include="UniTask.DOTween">
+      <HintPath>..\..\Libraries\Stationeers\UniTask.DOTween.dll</HintPath>
+    </Reference>
+    <Reference Include="UniTask.Linq">
+      <HintPath>..\..\Libraries\Stationeers\UniTask.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="UniTask.TextMeshPro">
+      <HintPath>..\..\Libraries\Stationeers\UniTask.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\..\Libraries\Stationeers\UnityEngine.dll</HintPath>
@@ -94,10 +118,6 @@
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\..\Libraries\Stationeers\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UNETModule">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.UNETModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="com.unity.multiplayer-hlapi.Runtime.dll">
@@ -127,6 +147,7 @@
     <Compile Include="Modules\Plugins\PluginCompilerModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\DirectoryEx.cs" />
+    <Compile Include="Utilities\ReflectionHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

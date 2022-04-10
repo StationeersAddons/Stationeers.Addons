@@ -26,7 +26,6 @@ namespace Stationeers.Addons.PluginCompiler
             "UnityEngine.AssetBundleModule.dll",
             "UnityEngine.UI.dll",
             "UnityEngine.UIModule.dll",
-            "UnityEngine.UNETModule.dll",
             "UnityEngine.ParticleSystemModule.dll",
             "UnityEngine.PhysicsModule.dll",
             "UnityEngine.StreamingModule.dll",
@@ -39,8 +38,6 @@ namespace Stationeers.Addons.PluginCompiler
             "UnityEngine.InputLegacyModule.dll",
             "UnityEngine.VideoModule.dll",
             "UnityEngine.JSONSerializeModule.dll",
-
-            "com.unity.multiplayer-hlapi.Runtime.dll",
 
             "Unity.TextMeshPro.dll",
         };

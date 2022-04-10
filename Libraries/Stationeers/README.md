@@ -3,6 +3,14 @@
 Please copy these .DLL files into this directory:
 * Assembly-CSharp.dll
 * Assembly-CSharp-firstpass.dll
+* Facepunch.Steamworks.Win64.dll
+* RG.ImGui.dll
+* RG.ImGui.Unity.dll
+* UniTask.Addressables.dll
+* UniTask.dll
+* UniTask.DOTween.dll
+* UniTask.Linq.dll
+* UniTask.TextMeshPro.dll
 * mscorlib.dll
 * netstandard.dll
 * System.dll
@@ -18,9 +26,7 @@ Please copy these .DLL files into this directory:
 * UnityEngine.JSONSerializeModule.dll
 * UnityEngine.UI.dll
 * UnityEngine.UIModule.dll
-* UnityEngine.UNETModule.dll
 * UnityEngine.UnityWebRequestModule.dll
-* com.unity.multiplayer-hlapi.Runtime.dll
 * Unity.TextMeshPro.dll
 
 The libraries that are listed above, can be found inside your game's installation directory, that is located usually there:
