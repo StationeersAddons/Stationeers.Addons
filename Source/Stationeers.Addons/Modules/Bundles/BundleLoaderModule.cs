@@ -1,8 +1,13 @@
 ﻿// Stationeers.Addons (c) 2018-2022 Damian 'Erdroy' Korczowski & Contributors
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts;
+using Assets.Scripts.Networking;
+using Assets.Scripts.Networking.Transports;
+using Cysharp.Threading.Tasks;
 using Stationeers.Addons.API;
 using Stationeers.Addons.Core;
 using Steamworks;
@@ -28,18 +33,18 @@ namespace Stationeers.Addons.Modules.Bundles
 
             if (!LoaderManager.IsDedicatedServer) // Load from workshop (if not dedicated server)
             {
-                // foreach (var workshopItemID in WorkshopManager.Instance.SubscribedItems)
-                // {
-                //     // TODO: Read XML file and get the real addon name to show
-                //
-                //     if (SteamUGC.GetItemInstallInfo(workshopItemID, out _, out var pchFolder, 1024U, out _))
-                //     {
-                //         // TODO: Prevent from loading local addons
-                //
-                //         var modDirectory = pchFolder;
-                //         yield return LoadBundleFromModDirectory(modDirectory);
-                //     }
-                // }
+                var query = NetManager.GetLocalAndWorkshopItems(SteamTransport.WorkshopType.Mod).GetAwaiter();
+                
+                while (!query.IsCompleted) // This is not how UniTask should be used, but it works for now. 
+                    yield return null;
+                
+                var result = query.GetResult();
+
+                foreach (var itemWrap in result)
+                {
+                    var modDirectory = itemWrap.DirectoryPath;
+                    yield return LoadBundleFromModDirectory(modDirectory);
+                }
             }
             
             foreach (var localModDirectory in LocalMods.GetLocalModDirectories())

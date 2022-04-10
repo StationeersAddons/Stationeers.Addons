@@ -20,8 +20,6 @@ namespace Stationeers.Addons.Modules.Plugins
         {
             Debug.Log("Checking for Stationeers.Addons version...");
 
-            // ProgressPanel.Instance.HideProgressBar();
-            
             // Perform simple web request to get the latest version from github
             using (var webRequest = UnityWebRequest.Get(Globals.VersionFile))
             {
@@ -60,8 +58,6 @@ namespace Stationeers.Addons.Modules.Plugins
                         yield return null;
                 }
             }
-
-            // ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
         }
 
         /// <inheritdoc />

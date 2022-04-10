@@ -4,6 +4,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Assets.Scripts.Networking;
+using Assets.Scripts.Networking.Transports;
 using Stationeers.Addons.Core;
 using UnityEngine;
 
@@ -130,59 +132,58 @@ namespace Stationeers.Addons.Modules.Plugins
         private IEnumerator LoadWorkshopPlugins(PluginCompiler pluginCompiler)
         {
             yield return null;
-            
-            // while(WorkshopManager.Instance == null) // Wait until WorkshopManager has started
-            // {
-            //     yield return null;
-            // }
-            //
-            // foreach (var workshopItemID in WorkshopManager.Instance.SubscribedItems)
-            // {
-            //     if (SteamUGC.GetItemInstallInfo(workshopItemID, out _, out var pchFolder, 1024U, out _))
-            //     {
-            //         try
-            //         {
-            //             var addonDirectory = pchFolder;
-            //
-            //             var addonName = "workshop-" + workshopItemID.m_PublishedFileId;
-            //             var assemblyName = addonName + "-Assembly"; // TODO: Make some shared project for string constants etc.
-            //             var assemblyFile = "AddonManager/AddonsCache/" + assemblyName + ".dll";
-            //
-            //             if (!Directory.Exists(addonDirectory))
-            //             {
-            //                 Debug.LogWarning($"Could not load addon plugin '{addonName}' because directory '{addonDirectory}' does not exist!");
-            //                 continue;
-            //             }
-            //
-            //             var addonScripts = Directory.GetFiles(pchFolder, "*.cs", SearchOption.AllDirectories);
-            //
-            //             if (addonScripts.Length == 0) continue;
-            //
-            //             if (File.Exists(assemblyFile))
-            //             {
-            //                 Debug.Log($"Removing old plugin assembly file '{assemblyFile}'");
-            //                 File.Delete(assemblyFile);
-            //             }
-            //
-            //             pluginCompiler.CompileScripts(addonName, addonDirectory, addonScripts, out var isSuccess);
-            //
-            //             if (isSuccess)
-            //             {
-            //                 CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
-            //             }
-            //             else
-            //             {
-            //                 throw new Exception(
-            //                     $"Addon's plugin ('{addonName}') failed to compile. Checks game logs for more info.");
-            //             }
-            //         }
-            //         catch (Exception ex)
-            //         {
-            //             Debug.LogError($"Failed to compile plugin from '{pchFolder}'. Exception:\n{ex}");
-            //         }
-            //     }
-            //     yield return new WaitForEndOfFrame();
-            // }
+
+            var query = NetManager.GetLocalAndWorkshopItems(SteamTransport.WorkshopType.Mod).GetAwaiter();
+            // Somehow GetLocalAndWorkshopItems should return local mods as well, but it doesn't... ? TODO: When plugins are loading twice, check this call above and fix it.
+
+            while (!query.IsCompleted) // This is not how UniTask should be used, but it works for now. 
+                yield return null;
+
+            var result = query.GetResult();
+
+            foreach (var itemWrap in result)
+            {
+                try
+                {
+                    var addonDirectory = itemWrap.DirectoryPath;
+                
+                    var addonName = "workshop-" + itemWrap.Id;
+                    var assemblyName = addonName + "-Assembly"; // TODO: Make some shared project for string constants etc.
+                    var assemblyFile = "AddonManager/AddonsCache/" + assemblyName + ".dll";
+                
+                    if (!Directory.Exists(addonDirectory))
+                    {
+                        Debug.LogWarning($"Could not load addon plugin '{addonName}' because directory '{addonDirectory}' does not exist!");
+                        continue;
+                    }
+                
+                    var addonScripts = Directory.GetFiles(addonDirectory, "*.cs", SearchOption.AllDirectories);
+                
+                    if (addonScripts.Length == 0) continue;
+                
+                    if (File.Exists(assemblyFile))
+                    {
+                        Debug.Log($"Removing old plugin assembly file '{assemblyFile}'");
+                        File.Delete(assemblyFile);
+                    }
+                
+                    pluginCompiler.CompileScripts(addonName, addonDirectory, addonScripts, out var isSuccess);
+                
+                    if (isSuccess)
+                    {
+                        CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
+                    }
+                    else
+                    {
+                        throw new Exception(
+                            $"Addon's plugin ('{addonName}') failed to compile. Checks game logs for more info.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Failed to compile plugin from '{itemWrap.DirectoryPath}'. Exception:\n{ex}");
+                }
+            }
         }
 
         /// <inheritdoc />
