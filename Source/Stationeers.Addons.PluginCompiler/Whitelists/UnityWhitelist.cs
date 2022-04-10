@@ -22,7 +22,6 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(UnityEngine.Rendering.AmbientMode),
                 typeof(UnityEngine.Video.VideoClip),
                 typeof(UnityEngine.JsonUtility),
-                typeof(UnityEngine.Networking.Utility),
                 typeof(UnityEngine.Assertions.Assert),
                 typeof(UnityEngine.EventSystems.BaseInput)
             );
