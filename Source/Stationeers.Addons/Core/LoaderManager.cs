@@ -136,7 +136,7 @@ namespace Stationeers.Addons.Core
             if (!_isLoading) 
                 return;
             
-            ImGuiLoadingScreen.ShowLoadingScreen(null, "Loading Stationeers.Addons Modules...", 0.1f);
+            ImGuiLoadingScreen.ShowLoadingScreen(null, ImGuiLoadingScreen.Singleton.State, 0.1f);
         }
 
         private IEnumerator Start()
@@ -194,6 +194,8 @@ namespace Stationeers.Addons.Core
         
         private void OnDestroy()
         {
+            ImGuiUn.Layout -= OnLayout;
+            
             foreach (var module in _modules)
                 module.Shutdown();
         }
