@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Linq;
 using Assets.Scripts.UI;
+using ImGuiNET;
 using Stationeers.Addons.Core;
 using UnityEngine;
 
@@ -22,6 +23,15 @@ namespace Stationeers.Addons.Modules.LiveReload
         /// <inheritdoc />
         public void Initialize()
         {
+            ImGuiUn.Layout += OnLayout;
+        }
+
+        private void OnLayout()
+        {
+            if (!_isRecompiling)
+                return;
+
+            ImGuiLoadingScreen.ShowLoadingScreen(null, ImGuiLoadingScreen.Singleton.State, 0.1f);
         }
 
         /// <inheritdoc />
@@ -37,6 +47,7 @@ namespace Stationeers.Addons.Modules.LiveReload
         /// <inheritdoc />
         public void Shutdown()
         {
+            ImGuiUn.Layout -= OnLayout;
         }
 
         /// <summary>
@@ -59,12 +70,17 @@ namespace Stationeers.Addons.Modules.LiveReload
                 Debug.LogWarning("Already recompiling!");
                 yield break;
             }
-            
-            _isRecompiling = true;
 
-            // ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
-            // ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Unloading plugins...");
-            // ProgressPanel.Instance.UpdateProgressBar(0.1f);
+            _isRecompiling = true;
+            
+            // Wait a frame
+            yield return null;
+
+            // Update caption
+            var uniTask = ImGuiLoadingScreen.Singleton.SetState("Live Reload - Unloading plugins...");
+            yield return uniTask;
+            uniTask = ImGuiLoadingScreen.Singleton.SetProgress(0.1f);
+            yield return uniTask;
 
             // Make sure that we show the progress bar
             yield return new WaitForSeconds(0.1f);
@@ -76,30 +92,34 @@ namespace Stationeers.Addons.Modules.LiveReload
             LoaderManager.Instance.Harmony.Initialize();
             LoaderManager.Instance.PluginLoader.UnloadAllPlugins();
 
-            // ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Recompiling plugins...");
-            // ProgressPanel.Instance.UpdateProgressBar(0.25f);
+            uniTask = ImGuiLoadingScreen.Singleton.SetState("Live Reload - Recompiling plugins...");
+            yield return uniTask;
+            uniTask = ImGuiLoadingScreen.Singleton.SetProgress(0.25f);
+            yield return uniTask;
             
             Debug.Log("Recompiling plugins");
             yield return new WaitForSeconds(0.1f);
             yield return LoaderManager.Instance.PluginCompiler.Load();
 
-            // ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Reloading plugins...");
-            // ProgressPanel.Instance.UpdateProgressBar(0.50f);
+            uniTask = ImGuiLoadingScreen.Singleton.SetState("Live Reload - Reloading plugins...");
+            yield return uniTask;
+            uniTask = ImGuiLoadingScreen.Singleton.SetProgress(0.50f);
+            yield return uniTask;
             
             Debug.Log("Reloading plugins");
             yield return new WaitForSeconds(0.1f);
             yield return LoaderManager.Instance.PluginLoader.Load();
 
-            // ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Patching plugins...");
-            // ProgressPanel.Instance.UpdateProgressBar(0.75f);
+            uniTask = ImGuiLoadingScreen.Singleton.SetState("Live Reload - Patching plugins...");
+            yield return uniTask;
+            uniTask = ImGuiLoadingScreen.Singleton.SetProgress(0.50f);
+            yield return uniTask;
 
             Debug.Log("Re-patching game using harmony");
             yield return new WaitForSeconds(0.1f);
             yield return LoaderManager.Instance.Harmony.Load();
             
             Debug.Log("Recompilation done");
-
-            // ProgressPanel.Instance.HideProgressBar();
             
             _isRecompiling = false;
         }
