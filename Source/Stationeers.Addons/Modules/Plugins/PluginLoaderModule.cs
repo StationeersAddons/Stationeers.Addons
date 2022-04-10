@@ -104,7 +104,7 @@ namespace Stationeers.Addons.Modules.Plugins
             // already loaded in the memory.
             
             var tempPluginFile = Path.GetFileNameWithoutExtension(pluginAssembly) + Guid.NewGuid() + ".dll";
-            var tempPluginPath = "AddonManager/AddonsCacheTemp/" + tempPluginFile;
+            var tempPluginPath = Path.GetFullPath("AddonManager/AddonsCacheTemp/" + tempPluginFile);
             File.Copy(pluginAssembly, tempPluginPath);
 
             var assembly = Assembly.LoadFile(tempPluginPath);
