@@ -1,14 +1,5 @@
 ﻿// Stationeers.Addons (c) 2018-2022 Damian 'Erdroy' Korczowski & Contributors
 
-using Assets.Scripts;
-using Assets.Scripts.Steam;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using JetBrains.Annotations;
-using Stationeers.Addons.Utilities;
-using UnityEngine;
-
 namespace Stationeers.Addons.Modules.Workshop
 {
     /// <summary>
@@ -16,7 +7,7 @@ namespace Stationeers.Addons.Modules.Workshop
     /// </summary>
     public static class WorkshopManagerPatch
     {
-        private static readonly Regex[] ValidFileNames =
+        /*private static readonly Regex[] ValidFileNames =
         {
             new Regex(@".*\.cs$"),
             new Regex(@".*\.xml$"),
@@ -88,6 +79,6 @@ namespace Stationeers.Addons.Modules.Workshop
 
             // Put things back how we found them
             ItemDetail.Path = origItemContentPath;
-        }
+        }*/
     }
 }

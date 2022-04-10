@@ -2,6 +2,7 @@
 
 using System.Collections;
 using Assets.Scripts.UI;
+using Stationeers.Addons.Core;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -19,7 +20,7 @@ namespace Stationeers.Addons.Modules.Plugins
         {
             Debug.Log("Checking for Stationeers.Addons version...");
 
-            ProgressPanel.Instance.HideProgressBar();
+            // ProgressPanel.Instance.HideProgressBar();
             
             // Perform simple web request to get the latest version from github
             using (var webRequest = UnityWebRequest.Get(Globals.VersionFile))
@@ -37,9 +38,6 @@ namespace Stationeers.Addons.Modules.Plugins
                         yield break;
 
                     Debug.Log("New version of Stationeers.Addons is available!");
-
-                    while (LoadingPanel.Instance.IsVisible)
-                        yield return null;
 
                     AlertPanel.Instance.ShowAlert($"New version of Stationeers.Addons ({data}) is available!\n",
                         AlertState.Alert);
@@ -63,7 +61,7 @@ namespace Stationeers.Addons.Modules.Plugins
                 }
             }
 
-            ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
+            // ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
         }
 
         /// <inheritdoc />

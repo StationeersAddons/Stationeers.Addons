@@ -24,17 +24,18 @@ namespace Stationeers.Addons.Modules.Workshop
         /// <inheritdoc />
         public IEnumerator Load()
         {
+            yield return null;
             // Start loading workshop
-            WorkshopManager.Instance.LoadWorkshopItems();
-            WorkshopManager.Instance.GetSubscribedItems();
-
-            // Hack to detect when items are loaded.
-            // Will be created inside steam callback
-            WorkshopManager.Instance.SubscribedItems = null;
-
-            // Wait until we get workshop loaded
-            while (WorkshopManager.Instance.SubscribedItems == null)
-                yield return null;
+            // WorkshopManager.Instance.LoadWorkshopItems();
+            // WorkshopManager.Instance.GetSubscribedItems();
+            //
+            // // Hack to detect when items are loaded.
+            // // Will be created inside steam callback
+            // WorkshopManager.Instance.SubscribedItems = null;
+            //
+            // // Wait until we get workshop loaded
+            // while (WorkshopManager.Instance.SubscribedItems == null)
+            //     yield return null;
 
             Debug.Log("Workshop loaded!");
         }

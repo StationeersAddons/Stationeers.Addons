@@ -1,19 +1,19 @@
 ﻿// Stationeers.Addons (c) 2018-2022 Damian 'Erdroy' Korczowski & Contributors
 
-using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Assets.Scripts.UI;
+using ImGuiNET;
 using Stationeers.Addons.Modules;
 using Stationeers.Addons.Modules.Bundles;
 using Stationeers.Addons.Modules.HarmonyLib;
 using Stationeers.Addons.Modules.LiveReload;
 using Stationeers.Addons.Modules.Plugins;
 using Stationeers.Addons.Modules.Workshop;
+using Stationeers.Addons.Utilities;
 using UnityEngine;
-using UnityEngine.Networking;
+using Util.Commands;
 
 namespace Stationeers.Addons.Core
 {
@@ -42,6 +42,7 @@ namespace Stationeers.Addons.Core
         }
 
         private readonly List<IModule> _modules = new List<IModule>();
+        private bool _isLoading;
 
         /// <summary>
         ///     Gets true when the debugging has been enabled.
@@ -121,15 +122,34 @@ namespace Stationeers.Addons.Core
             PluginLoader = InitializeModule<PluginLoaderModule>();
             Harmony = InitializeModule<HarmonyModule>();
             LiveReload = InitializeModule<LiveReloadModule>();
+            
+            ImGuiUn.Layout += OnLayout;
+        }
+
+        private void OnLayout()
+        {
+            if (!_isLoading) 
+                return;
+            
+            ImGuiLoadingScreen.ShowLoadingScreen(null, "Loading Stationeers.Addons Modules...", 0.1f);
         }
 
         private IEnumerator Start()
         {
             if(!IsDedicatedServer)
             {
-                ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
-                ProgressPanel.Instance.UpdateProgressBarCaption("Loading modules...");
-                ProgressPanel.Instance.UpdateProgressBar(0.1f);
+                // Wait for game to fully load into main menu
+                // Command line 'CommandLine._processedLaunchArgs' is set after the game has fully loaded (see: WorldManager::LoadGameDataAsync)
+                // hacky, but it works.
+                while (!(bool)ReflectionHelper.ReadStaticField(typeof(CommandLine), "_processedLaunchArgs"))
+                {
+                    yield return null;
+                }
+
+                _isLoading = true;
+                
+                // Wait for OnLayout to be called from ImGui
+                yield return null;
 
                 var numModules = _modules.Count;
                 var moduleIdx = 0;
@@ -139,15 +159,17 @@ namespace Stationeers.Addons.Core
                     var progress = Mathf.Clamp01(numModules / (float)moduleIdx);
 
                     // Update caption
-
-                    ProgressPanel.Instance.UpdateProgressBarCaption(module.LoadingCaption);
-                    ProgressPanel.Instance.UpdateProgressBar(Mathf.Lerp(0.35f, 1.0f, progress));
+                    var uniTask = ImGuiLoadingScreen.Singleton.SetState(module.LoadingCaption);
+                    yield return uniTask;
+                    
+                    uniTask = ImGuiLoadingScreen.Singleton.SetProgress(Mathf.Lerp(0.35f, 1.0f, progress));
+                    yield return uniTask;
 
                     yield return module.Load();
                     moduleIdx++;
                 }
 
-                ProgressPanel.Instance.HideProgressBar();
+                _isLoading = false;
             }
             else // Remove UI elements for dedicated server loading
             {
@@ -171,6 +193,7 @@ namespace Stationeers.Addons.Core
 
         private void OnGUI()
         {
+            // TODO: Maybe port to ImGui?
             GUI.color = new Color(1.0f, 1.0f, 1.0f, 0.15f);
             GUI.Label(new Rect(5.0f, 5.0f, Screen.width, 25.0f), $"Stationeers.Addons - {Globals.Version} - Loaded {PluginLoader.NumLoadedPlugins} plugins");
         }

@@ -62,9 +62,9 @@ namespace Stationeers.Addons.Modules.LiveReload
             
             _isRecompiling = true;
 
-            ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
-            ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Unloading plugins...");
-            ProgressPanel.Instance.UpdateProgressBar(0.1f);
+            // ProgressPanel.Instance.ShowProgressBar("<b>Stationeers.Addons</b>");
+            // ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Unloading plugins...");
+            // ProgressPanel.Instance.UpdateProgressBar(0.1f);
 
             // Make sure that we show the progress bar
             yield return new WaitForSeconds(0.1f);
@@ -76,22 +76,22 @@ namespace Stationeers.Addons.Modules.LiveReload
             LoaderManager.Instance.Harmony.Initialize();
             LoaderManager.Instance.PluginLoader.UnloadAllPlugins();
 
-            ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Recompiling plugins...");
-            ProgressPanel.Instance.UpdateProgressBar(0.25f);
+            // ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Recompiling plugins...");
+            // ProgressPanel.Instance.UpdateProgressBar(0.25f);
             
             Debug.Log("Recompiling plugins");
             yield return new WaitForSeconds(0.1f);
             yield return LoaderManager.Instance.PluginCompiler.Load();
 
-            ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Reloading plugins...");
-            ProgressPanel.Instance.UpdateProgressBar(0.50f);
+            // ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Reloading plugins...");
+            // ProgressPanel.Instance.UpdateProgressBar(0.50f);
             
             Debug.Log("Reloading plugins");
             yield return new WaitForSeconds(0.1f);
             yield return LoaderManager.Instance.PluginLoader.Load();
 
-            ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Patching plugins...");
-            ProgressPanel.Instance.UpdateProgressBar(0.75f);
+            // ProgressPanel.Instance.UpdateProgressBarCaption("Live Reload - Patching plugins...");
+            // ProgressPanel.Instance.UpdateProgressBar(0.75f);
 
             Debug.Log("Re-patching game using harmony");
             yield return new WaitForSeconds(0.1f);
@@ -99,7 +99,7 @@ namespace Stationeers.Addons.Modules.LiveReload
             
             Debug.Log("Recompilation done");
 
-            ProgressPanel.Instance.HideProgressBar();
+            // ProgressPanel.Instance.HideProgressBar();
             
             _isRecompiling = false;
         }

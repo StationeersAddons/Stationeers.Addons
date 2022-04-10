@@ -33,13 +33,13 @@ namespace Stationeers.Addons.Modules.HarmonyLib
             Debug.Log("Patching WorkshopManager using Harmony...");
             try
             {
-                var publishWorkshopMethod = typeof(WorkshopManager).GetMethod("PublishWorkshop", BindingFlags.Public | BindingFlags.Instance);
-                var onSubmitItemUpdateMethod = typeof(WorkshopManager).GetMethod("OnSubmitItemUpdate", BindingFlags.NonPublic | BindingFlags.Instance);
-                var publishWorkshopPrefixMethod = typeof(WorkshopManagerPatch).GetMethod("PublishWorkshopPrefix");
-                var onSubmitItemUpdatePostfixMethod = typeof(WorkshopManagerPatch).GetMethod("OnSubmitItemUpdatePostfix");
-
-                _harmony.Patch(publishWorkshopMethod, new HarmonyMethod(publishWorkshopPrefixMethod));
-                _harmony.Patch(onSubmitItemUpdateMethod, null, new HarmonyMethod(onSubmitItemUpdatePostfixMethod));
+                // var publishWorkshopMethod = typeof(WorkshopManager).GetMethod("PublishWorkshop", BindingFlags.Public | BindingFlags.Instance);
+                // var onSubmitItemUpdateMethod = typeof(WorkshopManager).GetMethod("OnSubmitItemUpdate", BindingFlags.NonPublic | BindingFlags.Instance);
+                // var publishWorkshopPrefixMethod = typeof(WorkshopManagerPatch).GetMethod("PublishWorkshopPrefix");
+                // var onSubmitItemUpdatePostfixMethod = typeof(WorkshopManagerPatch).GetMethod("OnSubmitItemUpdatePostfix");
+                //
+                // _harmony.Patch(publishWorkshopMethod, new HarmonyMethod(publishWorkshopPrefixMethod));
+                // _harmony.Patch(onSubmitItemUpdateMethod, null, new HarmonyMethod(onSubmitItemUpdatePostfixMethod));
             } 
             catch (Exception ex)
             {
