@@ -7,6 +7,7 @@ using System.IO;
 using Assets.Scripts.Networking;
 using Assets.Scripts.Networking.Transports;
 using Stationeers.Addons.Core;
+using Stationeers.Addons.PluginCompiler;
 using UnityEngine;
 
 // TODO: Read XML file and get the real addon name to show
@@ -45,27 +46,22 @@ namespace Stationeers.Addons.Modules.Plugins
 
             Debug.Log("Starting plugins compilation...");
 
-            var pluginCompiler = new PluginCompiler();
-
             if (!Directory.Exists("AddonManager/AddonsCache"))
                 Directory.CreateDirectory("AddonManager/AddonsCache");
 
             // TODO: Cleanup duplicated code
             
             // Load local plugins (but ignore if there is Debug version of it)
-            yield return LoadLocalPlugins(pluginCompiler);
+            yield return LoadLocalPlugins();
             
             // Load workshop plugins (if client)
             if(!LoaderManager.IsDedicatedServer)
             {
-                yield return LoadWorkshopPlugins(pluginCompiler);
+                yield return LoadWorkshopPlugins();
             }
-            
-            // Dispose the compiler
-            pluginCompiler.Dispose();
         }
 
-        private IEnumerator LoadLocalPlugins(PluginCompiler pluginCompiler)
+        private IEnumerator LoadLocalPlugins()
         {
             var localPluginDirectories = LocalMods.GetLocalModDirectories(false, true);
             
@@ -92,7 +88,7 @@ namespace Stationeers.Addons.Modules.Plugins
                     // */Properties/*
                     // */bin/*
                     // */obj/*
-                    List<string> sourceFilesList = new List<string>(addonScripts);
+                    var sourceFilesList = new List<string>(addonScripts);
 
                     sourceFilesList.RemoveAll(x => x.Contains(Path.DirectorySeparatorChar + "Properties" + Path.DirectorySeparatorChar));
                     sourceFilesList.RemoveAll(x => x.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar));
@@ -108,17 +104,14 @@ namespace Stationeers.Addons.Modules.Plugins
                         File.Delete(assemblyFile);
                     }
 
-                    pluginCompiler.CompileScripts(addonName, addonDirectory, addonScripts, out var isSuccess);
+                    // Compile addon source code
+                    if (!Compiler.Compile(addonName, addonScripts))
+                    {
+                        Debug.LogWarning($"Could not compile addon plugin '{addonName}'!");
+                        continue;
+                    }
 
-                    if (isSuccess)
-                    {
-                        CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
-                    }
-                    else
-                    {
-                        throw new Exception(
-                            $"Addon's plugin ('{addonName}') failed to compile. Checks game logs for more info.");
-                    }
+                    CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
                 }
                 catch (Exception ex)
                 {
@@ -129,7 +122,7 @@ namespace Stationeers.Addons.Modules.Plugins
             }
         }
 
-        private IEnumerator LoadWorkshopPlugins(PluginCompiler pluginCompiler)
+        private IEnumerator LoadWorkshopPlugins()
         {
             yield return null;
 
@@ -169,18 +162,15 @@ namespace Stationeers.Addons.Modules.Plugins
                         Debug.Log($"Removing old plugin assembly file '{assemblyFile}'");
                         File.Delete(assemblyFile);
                     }
-                
-                    pluginCompiler.CompileScripts(addonName, addonDirectory, addonScripts, out var isSuccess);
-                
-                    if (isSuccess)
+
+                    // Compile addon source code
+                    if (!Compiler.Compile(addonName, addonScripts))
                     {
-                        CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
+                        Debug.LogWarning($"Could not compile addon plugin '{addonName}'!");
+                        continue;
                     }
-                    else
-                    {
-                        throw new Exception(
-                            $"Addon's plugin ('{addonName}') failed to compile. Checks game logs for more info.");
-                    }
+
+                    CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
                 }
                 catch (Exception ex)
                 {

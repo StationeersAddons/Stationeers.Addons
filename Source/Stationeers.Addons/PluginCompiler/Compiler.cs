@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Stationeers.Addons.PluginCompiler.Analyzers;
+using UnityEngine;
 
 namespace Stationeers.Addons.PluginCompiler
 {
@@ -46,6 +46,9 @@ namespace Stationeers.Addons.PluginCompiler
             "UnityEngine.JSONSerializeModule.dll",
 
             "Unity.TextMeshPro.dll",
+            
+            "RG.ImGui.dll",
+            "RG.ImGui.Unity.dll"
         };
 
         private static readonly string[] AdditionalAssemblies = {
@@ -53,28 +56,26 @@ namespace Stationeers.Addons.PluginCompiler
             "0Harmony.dll"
         };
 
-        public static string Compile(string addonName, string[] sourceFiles, bool trustedCode = false)
+        public static bool Compile(string addonName, string[] sourceFiles, bool trustedCode = false)
         {
             var syntaxTrees = new List<SyntaxTree>();
 
             // Parse all files
             foreach (var sourceFile in sourceFiles)
             {
-                Console.WriteLine($"Compiling file '{sourceFile}'...");
+                Debug.Log($"Compiling file '{sourceFile}'...");
 
                 if (!File.Exists(sourceFile))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Could not find source file '{sourceFile}'.");
-                    Console.ResetColor();
-                    return string.Empty;
+                    Debug.LogError($"Could not find source file '{sourceFile}'.");
+                    return false;
                 }
 
                 syntaxTrees.Add(CSharpSyntaxTree.ParseText(File.ReadAllText(sourceFile)));
             }
 
             // Check server/game instance (might make this more thorough or include it as part of signature)
-            var installDirectory = Directory.Exists("../rocketstation_Data/Managed/") ? "../rocketstation_Data/Managed/" : "../rocketstation_DedicatedServer_Data/Managed/";
+            var installDirectory = Directory.Exists("rocketstation_Data/Managed/") ? "rocketstation_Data/Managed/" : "rocketstation_DedicatedServer_Data/Managed/";
 
             // Setup reference list
             var references = new List<MetadataReference>();
@@ -94,7 +95,7 @@ namespace Stationeers.Addons.PluginCompiler
             var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 
             // Compile
-            Console.WriteLine($"Linking addon '{addonName}'...");
+            Debug.Log($"Linking addon '{addonName}'...");
             
             var assemblyName = addonName + "-Assembly";
             var compilation = CSharpCompilation.Create($"{assemblyName}-{DateTime.UtcNow.Ticks}")
@@ -132,44 +133,33 @@ namespace Stationeers.Addons.PluginCompiler
                     CheckDiagnostics(diagnostics);
 
                     // If diagnostics result contains errors, we cannot compile this plugin
-                    if (!isSuccess)
-                    {
-                        Console.ResetColor();
-                        return string.Empty;
-                    }
+                    if (!isSuccess) return false;
                 }
                 
                 if (!result.Success)
                 {
                     foreach (var error in output)
                     {
-                        string prefix;
-                        switch (error.Severity)
-                        {
-                            case DiagnosticSeverity.Hidden: 
-                            case DiagnosticSeverity.Info: continue;
-                            case DiagnosticSeverity.Warning:
-                                Console.ForegroundColor = ConsoleColor.Yellow;
-                                prefix = "[Plugin Compiler - WARNING]";
-                                break;
-                            case DiagnosticSeverity.Error:
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                prefix = "[Plugin Compiler - ERROR]";
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException();
-                        }
-
                         var errorMessage = error.GetMessage();
 
                         // Ignore mscorlib warnings for now.
                         // Task: https://trello.com/c/akuaJbdp/25-mscorlib-plugin-build-issues
                         if (errorMessage.Contains("mscorlib, Version=2.0.0.0,")) continue;
 
-                        Console.WriteLine(prefix + " " + errorMessage);
+                        switch (error.Severity)
+                        {
+                            case DiagnosticSeverity.Hidden: 
+                            case DiagnosticSeverity.Info: continue;
+                            case DiagnosticSeverity.Warning:
+                                Debug.LogWarning("[Plugin Compiler - WARNING] " + errorMessage);
+                                return false;
+                            case DiagnosticSeverity.Error:
+                                Debug.LogError("[Plugin Compiler - ERROR]  " + errorMessage);
+                                return false;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
                     }
-                    Console.ResetColor();
-                    return string.Empty;
                 }
 
                 // Output as AddonsCache/AddonName-Assembly.dll
@@ -180,8 +170,9 @@ namespace Stationeers.Addons.PluginCompiler
                 }
 
                 whitelist.Dispose();
-                return assemblyFile;
             }
+
+            return true;
         }
 
         private static void CheckDiagnostics(ImmutableArray<Diagnostic> diagnostics)
@@ -199,7 +190,7 @@ namespace Stationeers.Addons.PluginCompiler
                 var line = location.StartLinePosition.Line;
                 var character = location.StartLinePosition.Character;
                 var severity = diagnostic.Severity.ToString().ToUpper();
-                Console.WriteLine($"[Plugin Compiler - {severity}] {file}({line}, {character}): {message}");
+                Debug.Log($"[Plugin Compiler - {severity}] {file}({line}, {character}): {message}");
             }
         }
     }

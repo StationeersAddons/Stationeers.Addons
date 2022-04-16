@@ -154,6 +154,21 @@
       <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>..\..\Libraries\Stationeers\UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>..\..\Libraries\Stationeers\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.StreamingModule">
+      <HintPath>..\..\Libraries\Stationeers\UnityEngine.StreamingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextCoreModule">
+      <HintPath>..\..\Libraries\Stationeers\UnityEngine.TextCoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\..\Libraries\Stationeers\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
@@ -165,6 +180,9 @@
     <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.VideoModule">
+      <HintPath>..\..\Libraries\Stationeers\UnityEngine.VideoModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -182,8 +200,17 @@
     <Compile Include="IPlugin.cs" />
     <Compile Include="Core\LoaderManager.cs" />
     <Compile Include="Loader.cs" />
-    <Compile Include="Modules\Plugins\PluginCompiler.cs" />
     <Compile Include="Modules\Plugins\PluginCompilerModule.cs" />
+    <Compile Include="PluginCompiler\Analyzers\PluginAnalyzer.cs" />
+    <Compile Include="PluginCompiler\Compiler.cs" />
+    <Compile Include="PluginCompiler\IWhitelistRegistry.cs" />
+    <Compile Include="PluginCompiler\PluginWhitelist.cs" />
+    <Compile Include="PluginCompiler\Whitelists\AddonsWhitelist.cs" />
+    <Compile Include="PluginCompiler\Whitelists\GameWhitelist.cs" />
+    <Compile Include="PluginCompiler\Whitelists\HarmonyWhitelist.cs" />
+    <Compile Include="PluginCompiler\Whitelists\JetbrainsWhitelist.cs" />
+    <Compile Include="PluginCompiler\Whitelists\SystemWhitelist.cs" />
+    <Compile Include="PluginCompiler\Whitelists\UnityWhitelist.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\DirectoryEx.cs" />
     <Compile Include="Utilities\ReflectionHelper.cs" />
