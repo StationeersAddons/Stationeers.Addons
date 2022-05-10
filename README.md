@@ -34,7 +34,7 @@ If you want to debug your own addon, read here: [DEBUGGING-ADDONS](Docs/DEBUGGIN
 * [NormalQuarry](https://steamcommunity.com/sharedfiles/filedetails/?id=2621212864) by mehanic321
 * [StationeersAddonsHelper](https://steamcommunity.com/sharedfiles/filedetails/?id=2798686984) by mehanic321
 
-*DM **Erdroy#0001** on Discord, if you would like to get your mod featured here.*
+*DM **`Erdroy#0001`** on Discord, if you would like to get your mod featured here.*
 
 ## Dependecies
 * Mono.Cecil
