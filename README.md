@@ -33,6 +33,7 @@ If you want to debug your own addon, read here: [DEBUGGING-ADDONS](Docs/DEBUGGIN
 * [SEGI - Sonic Ether Global Illumination](https://steamcommunity.com/sharedfiles/filedetails/?id=2308956244) by Erdroy
 * [NormalQuarry](https://steamcommunity.com/sharedfiles/filedetails/?id=2621212864) by mehanic321
 * [StationeersAddonsHelper](https://steamcommunity.com/sharedfiles/filedetails/?id=2798686984) by mehanic321
+* [Better Satellite Dish](https://steamcommunity.com/sharedfiles/filedetails/?id=2747308919) by silentdeth
 
 *DM **`Erdroy#0001`** on Discord, if you would like to get your mod featured here.*
 
