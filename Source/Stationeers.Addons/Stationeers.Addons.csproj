@@ -37,95 +37,95 @@
       <HintPath>..\packages\Lib.Harmony.2.0.4\lib\net45\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\Libraries\Stationeers\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\Libraries\Stationeers\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Facepunch.Steamworks.Win64">
-      <HintPath>..\..\Libraries\Stationeers\Facepunch.Steamworks.Win64.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\Facepunch.Steamworks.Win64.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
-      <HintPath>..\..\Libraries\Stationeers\mscorlib.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\mscorlib.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Libraries\Stationeers\netstandard.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\netstandard.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RG.ImGui">
-      <HintPath>..\..\Libraries\Stationeers\RG.ImGui.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\RG.ImGui.dll</HintPath>
     </Reference>
     <Reference Include="RG.ImGui.Unity">
-      <HintPath>..\..\Libraries\Stationeers\RG.ImGui.Unity.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\RG.ImGui.Unity.dll</HintPath>
     </Reference>
     <Reference Include="System.Core">
-      <HintPath>..\..\Libraries\Stationeers\System.Core.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\System.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Data">
-      <HintPath>..\..\Libraries\Stationeers\System.Data.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\System.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Xml">
-      <HintPath>..\..\Libraries\Stationeers\System.Xml.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\System.Xml.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System">
-      <HintPath>..\..\Libraries\Stationeers\System.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\System.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UniTask">
-      <HintPath>..\..\Libraries\Stationeers\UniTask.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UniTask.dll</HintPath>
     </Reference>
     <Reference Include="UniTask.Addressables">
-      <HintPath>..\..\Libraries\Stationeers\UniTask.Addressables.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UniTask.Addressables.dll</HintPath>
     </Reference>
     <Reference Include="UniTask.DOTween">
-      <HintPath>..\..\Libraries\Stationeers\UniTask.DOTween.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UniTask.DOTween.dll</HintPath>
     </Reference>
     <Reference Include="UniTask.Linq">
-      <HintPath>..\..\Libraries\Stationeers\UniTask.Linq.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UniTask.Linq.dll</HintPath>
     </Reference>
     <Reference Include="UniTask.TextMeshPro">
-      <HintPath>..\..\Libraries\Stationeers\UniTask.TextMeshPro.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UniTask.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.JSONSerializeModule">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.JSONSerializeModule.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.JSONSerializeModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="com.unity.multiplayer-hlapi.Runtime.dll">
-      <HintPath>..\..\Libraries\Stationeers\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\Libraries\Stationeers\UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -157,4 +157,5 @@
   <PropertyGroup>
     <PostBuildEvent>"$(SolutionDir)packages\Mono.Unofficial.pdb2mdb.4.2.3.4\tools\pdb2mdb.exe" "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)Stationeers.VS.props"/>
 </Project>

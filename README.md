@@ -17,10 +17,10 @@ Go to [Releases](https://github.com/Erdroy/Stationeers.Addons/releases), select 
 * [Trello](https://trello.com/b/zSHKh2XO/stationeersaddons)
 * [Official Github](https://github.com/Erdroy/Stationeers.Addons)
 
-## Building
-`Visual Studio 2019` is required and `Visual Studio Tools for Unity` installation is recommended.
-Please read Libraries [README](Libraries/Stationeers/README.md) file.
-Open `Source/Stationeers.Addons.sln` and start playing with it!
+## Building 
+`Visual Studio 2019` is required and `Visual Studio Tools for Unity` installation is recommended. 
+* Open `Source/Stationeers.VS.props` file, and set the path to your game installation directory (has to end with a backslash). 
+* Open `Source/Stationeers.Addons.sln` and start playing with it! See [Creating addons](https://github.com/Erdroy/Stationeers.Addons#creating-addons) to find out more.
 
 ## Creating addons
 If you want to create your own addon, read here: [CREATING-ADDONS](Docs/CREATING-ADDONS.md).
