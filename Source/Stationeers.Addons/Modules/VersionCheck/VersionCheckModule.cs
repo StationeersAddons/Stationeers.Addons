@@ -1,7 +1,10 @@
 ﻿// Stationeers.Addons (c) 2018-2022 Damian 'Erdroy' Korczowski & Contributors
 
+using System;
 using System.Collections;
+using Assets.Scripts;
 using Assets.Scripts.UI;
+using UI.ImGuiUi;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -35,22 +38,16 @@ namespace Stationeers.Addons.Modules.Plugins
                         yield break;
 
                     Debug.Log("New version of Stationeers.Addons is available!");
-
-                    AlertPanel.Instance.ShowAlert($"New version of Stationeers.Addons ({data}) is available!\n",
-                        AlertState.Alert);
-
-                    // Wait for the alert window to close
-                    while (AlertPanel.Instance.AlertWindow.activeInHierarchy)
-                        yield return null;
+                    
+                    // TODO: Figure out how to display alerts as devs broke the AlertPanel.Instance again...
+                    ConsoleWindow.Print($"New version of Stationeers.Addons ({data}) is available!\n", ConsoleColor.Red);
                 }
                 else
                 {
                     Debug.LogError(
                         $"Failed to request latest Stationeers.Addons version. Error: '\"{webRequest.error}\""
                     );
-
-                    AlertPanel.Instance.ShowAlert("Failed to check latest Stationeers.Addons version!\n",
-                        AlertState.Alert);
+                    ConsoleWindow.PrintError("Failed to check latest Stationeers.Addons version!\n");
 
                     // Wait for the alert window to close
                     while (AlertPanel.Instance.AlertWindow.activeInHierarchy)
