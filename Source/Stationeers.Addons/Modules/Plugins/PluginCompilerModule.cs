@@ -143,6 +143,9 @@ namespace Stationeers.Addons.Modules.Plugins
 
             foreach (var itemWrap in result)
             {
+                // Ignore local mods
+                if (itemWrap.IsLocal()) continue;
+
                 try
                 {
                     var addonDirectory = itemWrap.DirectoryPath;

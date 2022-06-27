@@ -12,6 +12,7 @@ using Stationeers.Addons.Modules.LiveReload;
 using Stationeers.Addons.Modules.Plugins;
 using Stationeers.Addons.Modules.Workshop;
 using Stationeers.Addons.Utilities;
+using Steamworks;
 using UnityEngine;
 using Util.Commands;
 
@@ -143,10 +144,8 @@ namespace Stationeers.Addons.Core
         {
             if(!IsDedicatedServer)
             {
-                // Wait for game to fully load into main menu
-                // Command line 'CommandLine._processedLaunchArgs' is set after the game has fully loaded (see: WorldManager::LoadGameDataAsync)
-                // hacky, but it works.
-                while (!(bool)ReflectionHelper.ReadStaticField(typeof(CommandLine), "_processedLaunchArgs"))
+                // Wait for the steam client to be initialized, otherwise we will not be able to load workshop items
+                while (!SteamClient.IsValid)
                 {
                     yield return null;
                 }

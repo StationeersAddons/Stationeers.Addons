@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using Assets.Scripts;
 using Assets.Scripts.UI;
-using UI.ImGuiUi;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -27,7 +26,7 @@ namespace Stationeers.Addons.Modules.Plugins
             {
                 yield return webRequest.SendWebRequest();
 
-                if (!webRequest.isHttpError && !webRequest.isNetworkError)
+                if (webRequest.result == UnityWebRequest.Result.Success)
                 {
                     var data = webRequest.downloadHandler.text.Trim();
 
@@ -45,7 +44,7 @@ namespace Stationeers.Addons.Modules.Plugins
                 else
                 {
                     Debug.LogError(
-                        $"Failed to request latest Stationeers.Addons version. Error: '\"{webRequest.error}\""
+                        $"Failed to request latest Stationeers.Addons version. Result: {webRequest.result} Error: '\"{webRequest.error}\""
                     );
                     ConsoleWindow.PrintError("Failed to check latest Stationeers.Addons version!\n");
 

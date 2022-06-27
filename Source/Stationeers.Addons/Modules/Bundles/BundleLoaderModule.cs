@@ -25,26 +25,18 @@ namespace Stationeers.Addons.Modules.Bundles
         public IEnumerator Load()
         {
             Debug.Log("Loading custom content bundles...");
-
-            if (!LoaderManager.IsDedicatedServer) // Load from workshop (if not dedicated server)
-            {
-                var query = NetManager.GetLocalAndWorkshopItems(SteamTransport.WorkshopType.Mod).GetAwaiter();
-                
-                while (!query.IsCompleted) // This is not how UniTask should be used, but it works for now. 
-                    yield return null;
-                
-                var result = query.GetResult();
-
-                foreach (var itemWrap in result)
-                {
-                    var modDirectory = itemWrap.DirectoryPath;
-                    yield return LoadBundleFromModDirectory(modDirectory);
-                }
-            }
             
-            foreach (var localModDirectory in LocalMods.GetLocalModDirectories())
+            var query = NetManager.GetLocalAndWorkshopItems(SteamTransport.WorkshopType.Mod).GetAwaiter();
+
+            while (!query.IsCompleted) // This is not how UniTask should be used, but it works for now. 
+                yield return null;
+
+            var result = query.GetResult();
+
+            foreach (var itemWrap in result)
             {
-                yield return LoadBundleFromModDirectory(localModDirectory);
+                var modDirectory = itemWrap.DirectoryPath;
+                yield return LoadBundleFromModDirectory(modDirectory);
             }
         }
 
@@ -55,6 +47,8 @@ namespace Stationeers.Addons.Modules.Bundles
             // Skip if this mod does not have any custom content
             if (!Directory.Exists(contentDirectory))  yield break;
 
+            Debug.Log(contentDirectory);
+            
             // Get all bundle files
             var bundles = Directory.GetFiles(contentDirectory, "*.asset", SearchOption.TopDirectoryOnly);
 
