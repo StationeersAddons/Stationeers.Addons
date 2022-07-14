@@ -30,7 +30,7 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(Assets.Scripts.Sound.AudioManager), 
                 typeof(Assets.Scripts.Util.Permutation), 
                 typeof(Assets.Scripts.Vehicles.Vehicle), 
-                typeof(Assets.Scripts.Voxel.Mineables), 
+                typeof(Assets.Scripts.Voxel.Minables), 
                 typeof(Assets.Scripts.Weather.StormDirection), 
                 typeof(Assets.Scripts.AssetCreation.ThingCreation), 
                 typeof(Assets.Scripts.AwayMission.AwayMissionInfo), 

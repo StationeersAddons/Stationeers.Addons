@@ -15,7 +15,7 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(UnityEngine.ParticleSystem),
                 typeof(UnityEngine.Physics),
                 typeof(UnityEngine.StreamingController),
-                typeof(UnityEngine.TextAlignment),
+                typeof(UnityEngine.TextCore.Text.Character),
                 typeof(UnityEngine.TextCore.Glyph),
                 typeof(UnityEngine.TextCore.LowLevel.FontEngine),
                 typeof(UnityEngine.Input),
