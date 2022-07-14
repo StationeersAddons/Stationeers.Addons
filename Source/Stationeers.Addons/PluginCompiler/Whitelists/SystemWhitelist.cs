@@ -32,7 +32,8 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(System.Collections.Generic.List<>),
                 typeof(System.Collections.Concurrent.Partitioner<>),
                 typeof(System.Linq.Enumerable),
-                typeof(System.Text.StringBuilder)
+                typeof(System.Text.StringBuilder),
+                typeof(System.Array)
             );
         }
     }
