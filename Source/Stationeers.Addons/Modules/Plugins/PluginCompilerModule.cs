@@ -162,9 +162,17 @@ namespace Stationeers.Addons.Modules.Plugins
                         Debug.Log($"Removing old plugin assembly file '{assemblyFile}'");
                         File.Delete(assemblyFile);
                     }
+                    
+                    // Check if the addon has been updated before we added the sandbox, if so, make it trusted
+                    var isTrusted = itemWrap.LastWriteTime < Globals.SandboxIntroductionDate;
 
+                    if (isTrusted)
+                    {
+                        Debug.LogWarning($"Addon '{addonName}' is trusted! (backwards-compatibility)");
+                    }
+                    
                     // Compile addon source code
-                    if (!Compiler.Compile(addonName, addonScripts))
+                    if (!Compiler.Compile(addonName, addonScripts, isTrusted))
                     {
                         Debug.LogWarning($"Could not compile addon plugin '{addonName}'!");
                         continue;
