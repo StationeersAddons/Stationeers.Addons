@@ -88,7 +88,7 @@ namespace Stationeers.Addons.PluginCompiler
 
             foreach (var file in AdditionalAssemblies)
             {
-                var reference = MetadataReference.CreateFromFile(Path.Combine(Environment.CurrentDirectory, file));
+                var reference = MetadataReference.CreateFromFile(Path.Combine(Environment.CurrentDirectory, "AddonManager", file));
                 references.Add(reference);
             }
 
@@ -162,8 +162,8 @@ namespace Stationeers.Addons.PluginCompiler
                     }
                 }
 
-                // Output as AddonsCache/AddonName-Assembly.dll
-                var assemblyFile = "AddonsCache/" + assemblyName + ".dll";
+                // Output as AddonsManager/AddonsCache/AddonName-Assembly.dll
+                var assemblyFile = "AddonManager/AddonsCache/" + assemblyName + ".dll";
                 using (var fs = new FileStream(assemblyFile, FileMode.Create))
                 {
                     fs.Write(ms.GetBuffer(), 0, (int)ms.Length);
@@ -181,6 +181,8 @@ namespace Stationeers.Addons.PluginCompiler
             foreach (var diagnostic in diagnostics)
             {
                 var message = diagnostic.GetMessage();
+
+                if (diagnostic.Severity == DiagnosticSeverity.Hidden) continue;
                 
                 // Ignore warnings about mscorlib
                 if (message.Contains("mscorlib, Version=2.0.0.0,")) continue;
