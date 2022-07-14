@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
+using UnityEngine;
 
 namespace Stationeers.Addons.PluginCompiler.Analyzers
 {
@@ -63,8 +64,13 @@ namespace Stationeers.Addons.PluginCompiler.Analyzers
                 return;
             
             // We have failed all the diagnostics' tests. So it means that this symbol is prohibited.
-            var report = Diagnostic.Create(DiagnosticError, node.GetLocation(), info.Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
+            var symbolName = info.Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+            var report = Diagnostic.Create(DiagnosticError, node.GetLocation(), symbolName);
             context.ReportDiagnostic(report);
+
+#if DEBUG
+            Debug.LogError($"Missing symbol ({symbolName}) namespace: {info.Symbol.ContainingNamespace}");
+#endif
         }
 
         private static bool IsLocalSymbol(ISymbol symbol)
