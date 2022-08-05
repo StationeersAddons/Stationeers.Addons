@@ -44,11 +44,9 @@ We are supporting workshop! Yes! It's as simple as publishing your mod (created 
 
 But please, make sure that people know that it's an addon and not a standard mod by following these steps:
 1. If you have custom thumbnail - include the addon [overlay](../Source/AddonOverlay.png).
-2. Add this text to the workshop description at the beginning:
+2. Add this text to the workshop description at the end:
 ```
-WARNING: This mod will not work, unless you install Stationeers.Addon mod loader.
-Read how to install it here: https://github.com/Erdroy/Stationeers.Addons
----
+This mod requires Stationeers.Addons, read how to install it here: https://github.com/Erdroy/Stationeers.Addons
 ```
 And that is it :) 
 
