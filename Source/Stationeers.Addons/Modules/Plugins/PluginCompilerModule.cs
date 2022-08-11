@@ -164,7 +164,7 @@ namespace Stationeers.Addons.Modules.Plugins
                     }
                     
                     // Check if the addon has been updated before we added the sandbox, if so, make it trusted
-                    var isTrusted = itemWrap.LastWriteTime < Globals.SandboxIntroductionDate;
+                    var isTrusted = itemWrap.LastWriteTime < Constants.SandboxIntroductionDate;
 
                     if (isTrusted)
                     {

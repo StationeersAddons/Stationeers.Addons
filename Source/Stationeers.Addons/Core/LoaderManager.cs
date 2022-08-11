@@ -97,7 +97,7 @@ namespace Stationeers.Addons.Core
 
         public void Activate()
         {
-            AddonsLogger.Log($"Version {Globals.Version}");
+            AddonsLogger.Log($"Version {Constants.Version}");
         }
 
         private void Awake()
@@ -203,7 +203,7 @@ namespace Stationeers.Addons.Core
         {
             // TODO: Maybe port to ImGui?
             GUI.color = new Color(1.0f, 1.0f, 1.0f, 0.15f);
-            GUI.Label(new Rect(5.0f, 5.0f, Screen.width, 25.0f), $"Stationeers.Addons - {Globals.Version} - Loaded {PluginLoader.NumLoadedPlugins} plugins");
+            GUI.Label(new Rect(5.0f, 5.0f, Screen.width, 25.0f), $"Stationeers.Addons - {Constants.Version} - Loaded {PluginLoader.NumLoadedPlugins} plugins");
         }
 
         private TModuleType InitializeModule<TModuleType>() where TModuleType : IModule, new()

@@ -23,7 +23,7 @@ namespace Stationeers.Addons.Modules.Plugins
             AddonsLogger.Log("Checking for Stationeers.Addons version...");
 
             // Perform simple web request to get the latest version from github
-            using (var webRequest = UnityWebRequest.Get(Globals.VersionFile))
+            using (var webRequest = UnityWebRequest.Get(Constants.VersionFile))
             {
                 yield return webRequest.SendWebRequest();
 
@@ -31,10 +31,10 @@ namespace Stationeers.Addons.Modules.Plugins
                 {
                     var data = webRequest.downloadHandler.text.Trim();
 
-                    AddonsLogger.Log($"Latest Stationeers.Addons version is {data}. Installed {Globals.Version}");
+                    AddonsLogger.Log($"Latest Stationeers.Addons version is {data}. Installed {Constants.Version}");
 
                     // If the current version is the same as the latest one, just exit the coroutine.
-                    if (Globals.Version == data)
+                    if (Constants.Version == data)
                         yield break;
 
                     AddonsLogger.Log("New version of Stationeers.Addons is available!");

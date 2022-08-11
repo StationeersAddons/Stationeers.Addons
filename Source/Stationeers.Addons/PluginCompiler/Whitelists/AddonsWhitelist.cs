@@ -10,7 +10,7 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
         {
             whitelist.WhitelistTypes(
                 typeof(IPlugin),
-                typeof(Globals)
+                typeof(Constants)
             );
 
             whitelist.WhitelistTypesNamespaces(

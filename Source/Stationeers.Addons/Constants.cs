@@ -4,7 +4,7 @@ using System;
 
 namespace Stationeers.Addons
 {
-    public static class Globals
+    public static class Constants
     {
         public const string Version = "v0.4.0-pre";
         public const string VersionFile = "https://raw.githubusercontent.com/Erdroy/Stationeers.Addons/master/VERSION";
