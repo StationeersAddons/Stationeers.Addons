@@ -60,7 +60,7 @@ namespace Stationeers.Addons.Modules.Workshop
             // Set workshop item info to use temporary path before ISteamUCG gets its hands on it.
             ItemDetail.Path = tempItemContentPath;
 
-            Debug.Log("Created temporary workshop item directory " + tempItemContentPath);
+            AddonsLogger.Log("Created temporary workshop item directory " + tempItemContentPath);
         }
 
         [UsedImplicitly]
@@ -69,11 +69,11 @@ namespace Stationeers.Addons.Modules.Workshop
             var tempItemContentPath = ItemDetail.Path;
             var origItemContentPath = tempItemContentPath.Replace("_temp", "");
 
-            Debug.Log("Checking for temporary workshop item directory " + tempItemContentPath);
+            AddonsLogger.Log("Checking for temporary workshop item directory " + tempItemContentPath);
             if (Directory.Exists(tempItemContentPath) && tempItemContentPath.Contains("_temp"))
             {
                 // Recursively remove the temp dir after steam is done with it.
-                Debug.Log("Cleared temporary workshop item directory " + tempItemContentPath);
+                AddonsLogger.Log("Cleared temporary workshop item directory " + tempItemContentPath);
                 Directory.Delete(tempItemContentPath, true);
             }
 

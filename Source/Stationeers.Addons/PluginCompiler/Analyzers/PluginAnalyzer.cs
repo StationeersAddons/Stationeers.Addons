@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Stationeers.Addons.Core;
 using UnityEngine;
 
 namespace Stationeers.Addons.PluginCompiler.Analyzers
@@ -69,7 +70,7 @@ namespace Stationeers.Addons.PluginCompiler.Analyzers
             context.ReportDiagnostic(report);
 
 #if DEBUG
-            Debug.LogError($"Missing symbol ({symbolName}) namespace: {info.Symbol.ContainingNamespace}");
+            AddonsLogger.Error($"Missing symbol ({symbolName}) namespace: {info.Symbol.ContainingNamespace}");
 #endif
         }
 

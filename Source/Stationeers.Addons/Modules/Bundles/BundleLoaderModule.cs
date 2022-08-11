@@ -24,9 +24,9 @@ namespace Stationeers.Addons.Modules.Bundles
 
         public IEnumerator Load()
         {
-            Debug.Log("Loading custom content bundles...");
+            AddonsLogger.Log("Loading custom content bundles...");
             
-            var query = NetManager.GetLocalAndWorkshopItems(SteamTransport.WorkshopType.Mod).GetAwaiter();
+            var query = NetworkManager.GetLocalAndWorkshopItems(SteamTransport.WorkshopType.Mod).GetAwaiter();
 
             while (!query.IsCompleted) // This is not how UniTask should be used, but it works for now. 
                 yield return null;
@@ -47,7 +47,7 @@ namespace Stationeers.Addons.Modules.Bundles
             // Skip if this mod does not have any custom content
             if (!Directory.Exists(contentDirectory))  yield break;
 
-            Debug.Log(contentDirectory);
+            AddonsLogger.Log(contentDirectory);
             
             // Get all bundle files
             var bundles = Directory.GetFiles(contentDirectory, "*.asset", SearchOption.TopDirectoryOnly);
@@ -63,7 +63,7 @@ namespace Stationeers.Addons.Modules.Bundles
                 // Wait for bundle to load
                 yield return bundle;
 
-                Debug.Log($"Loaded asset bundle '{bundle.assetBundle.name}'");
+                AddonsLogger.Log($"Loaded asset bundle '{bundle.assetBundle.name}'");
 
                 // We're done, just register the bundle and register it.
                 BundleManager.LoadedAssetBundles.Add(bundle.assetBundle);
@@ -72,7 +72,7 @@ namespace Stationeers.Addons.Modules.Bundles
 
         public void Shutdown()
         {
-            Debug.Log("Unloading all custom content bundles...");
+            AddonsLogger.Log("Unloading all custom content bundles...");
 
             // Unload all loaded asset bundles
             foreach (var bundle in BundleManager.LoadedAssetBundles)

@@ -97,7 +97,7 @@ namespace Stationeers.Addons.Core
 
         public void Activate()
         {
-            Debug.Log($"Stationeers.Addons {Globals.Version}");
+            AddonsLogger.Log($"Version {Globals.Version}");
         }
 
         private void Awake()
@@ -112,12 +112,12 @@ namespace Stationeers.Addons.Core
             // Check if we are running on a dedicated server instance
             IsDedicatedServer = File.Exists("rocketstation_DedicatedServer.exe"); // TODO: Executable file name for Linux dedicated server
             if (IsDedicatedServer)
-                Debug.Log("[Stationeers.Addons - DEDICATED SERVER] Stationeers.Addons is running on a dedicated server!");
+                AddonsLogger.Log("Running on a dedicated server!");
 
             // Check if we can debug addons
             IsDebuggingEnabled = File.Exists("addons-debugging.enable");
             if (IsDebuggingEnabled)
-                Debug.Log("[Stationeers.Addons - DEBUG] Stationeers.Addons debugging enabled!");
+                AddonsLogger.Log("Debugging enabled!");
 
             if(!IsDedicatedServer) // Only look for workshop if on client
                 Workshop = InitializeModule<WorkshopModule>();

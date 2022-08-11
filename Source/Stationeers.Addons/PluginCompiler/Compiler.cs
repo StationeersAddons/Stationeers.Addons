@@ -8,6 +8,7 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
+using Stationeers.Addons.Core;
 using Stationeers.Addons.PluginCompiler.Analyzers;
 using UnityEngine;
 
@@ -63,11 +64,11 @@ namespace Stationeers.Addons.PluginCompiler
             // Parse all files
             foreach (var sourceFile in sourceFiles)
             {
-                Debug.Log($"Compiling file '{sourceFile}'...");
+                AddonsLogger.Log($"Compiling file '{sourceFile}'...");
 
                 if (!File.Exists(sourceFile))
                 {
-                    Debug.LogError($"Could not find source file '{sourceFile}'.");
+                    AddonsLogger.Error($"Could not find source file '{sourceFile}'.");
                     return false;
                 }
 
@@ -95,7 +96,7 @@ namespace Stationeers.Addons.PluginCompiler
             var options = new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 
             // Compile
-            Debug.Log($"Linking addon '{addonName}'...");
+            AddonsLogger.Log($"Linking addon '{addonName}'...");
             
             var assemblyName = addonName + "-Assembly";
             var compilation = CSharpCompilation.Create($"{assemblyName}-{DateTime.UtcNow.Ticks}")
@@ -151,10 +152,10 @@ namespace Stationeers.Addons.PluginCompiler
                             case DiagnosticSeverity.Hidden: 
                             case DiagnosticSeverity.Info: continue;
                             case DiagnosticSeverity.Warning:
-                                Debug.LogWarning("[Plugin Compiler - WARNING] " + errorMessage);
+                                AddonsLogger.Warning("(Plugin Compiler - WARNING) " + errorMessage);
                                 return false;
                             case DiagnosticSeverity.Error:
-                                Debug.LogError("[Plugin Compiler - ERROR]  " + errorMessage);
+                                AddonsLogger.Error("(Plugin Compiler - ERROR) " + errorMessage);
                                 return false;
                             default:
                                 throw new ArgumentOutOfRangeException();
@@ -192,7 +193,7 @@ namespace Stationeers.Addons.PluginCompiler
                 var line = location.StartLinePosition.Line;
                 var character = location.StartLinePosition.Character;
                 var severity = diagnostic.Severity.ToString().ToUpper();
-                Debug.Log($"[Plugin Compiler - {severity}] {file}({line}, {character}): {message}");
+                AddonsLogger.Log($"(Plugin Compiler - {severity}) {file}({line}, {character}): {message}");
             }
         }
     }

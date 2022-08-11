@@ -27,7 +27,7 @@ namespace Stationeers.Addons.Modules.HarmonyLib
         /// <inheritdoc />
         public IEnumerator Load()
         {
-            Debug.Log("Patching WorkshopManager using Harmony...");
+            AddonsLogger.Log("Patching WorkshopManager using Harmony...");
             try
             {
                 // var publishWorkshopMethod = typeof(WorkshopManager).GetMethod("PublishWorkshop", BindingFlags.Public | BindingFlags.Instance);
@@ -41,17 +41,17 @@ namespace Stationeers.Addons.Modules.HarmonyLib
             catch (Exception ex)
             {
                 AlertPanel.Instance.ShowAlert($"Failed to initialize workshop publish patch!\n", AlertState.Alert);
-                Debug.LogError($"Failed to initialize workshop publish patch. Exception:\n{ex}");
+                AddonsLogger.Error($"Failed to initialize workshop publish patch. Exception:\n{ex}");
             }
 
-            Debug.Log("Patching game assembly using Harmony...");
+            AddonsLogger.Log("Patching game assembly using Harmony...");
             foreach (var plugin in LoaderManager.Instance.PluginLoader.LoadedPlugins)
             {
-                Debug.Log($"Applying patches from assembly '{plugin.Assembly.FullName}'");
+                AddonsLogger.Log($"Applying patches from assembly '{plugin.Assembly.FullName}'");
                 _harmony.PatchAll(plugin.Assembly);
                 yield return new WaitForEndOfFrame();
             }
-            Debug.Log($"Finished {LoaderManager.Instance.PluginLoader.LoadedPlugins.Count} patches to game assembly");
+            AddonsLogger.Log($"Finished {LoaderManager.Instance.PluginLoader.LoadedPlugins.Count} patches to game assembly");
         }
 
         /// <inheritdoc />

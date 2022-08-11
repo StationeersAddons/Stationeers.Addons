@@ -23,11 +23,11 @@ namespace Stationeers.Addons.Core
         {
             if ((LocalModsDirectory == null) || !Directory.Exists(LocalModsDirectory))
             {
-                Debug.Log("ModLoader ERROR: Could not locate mods directory, no mods getting initialized.");
+                AddonsLogger.Log("Could not locate mods directory, no mods getting initialized.");
                 return new string[] { };
             }
 
-            Debug.Log($"Trying to load mod from {LocalModsDirectory}");
+            AddonsLogger.Log($"Trying to load mod from {LocalModsDirectory}");
 
             var directories = Directory.GetDirectories(LocalModsDirectory);
             var modDirectory = new List<string>();
@@ -52,13 +52,13 @@ namespace Stationeers.Addons.Core
             // Find serverside default.ini
             // Currently needs to be in the root of the dedicated server directory (next to rocketstation_DedicatedServer.exe)
             if (!File.Exists("default.ini"))
-                Debug.LogWarning("default.ini file not found!");
+                AddonsLogger.Warning("default.ini file not found!");
             
             foreach(var line in File.ReadLines("default.ini"))
             {
                 if (!line.Contains("MODPATH=")) continue;
                 
-                Debug.Log($"Found mod path: {line.Substring(8)}");
+                AddonsLogger.Log($"Found mod path: {line.Substring(8)}");
                 return line.Substring(8);
             }
             

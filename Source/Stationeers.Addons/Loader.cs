@@ -1,7 +1,6 @@
 ﻿// Stationeers.Addons (c) 2018-2022 Damian 'Erdroy' Korczowski & Contributors
 
 using Stationeers.Addons.Core;
-using UnityEngine;
 
 /*
  * DO NOT MODIFY THIS FILE, unless you know what you are doing.
@@ -16,7 +15,7 @@ namespace Stationeers.Addons
         // ReSharper disable once UnusedMember.Local
         public void Load()
         {
-            Debug.Log("[Stationeers.Addons] Hello, World!");
+            AddonsLogger.Log("Hello, World!");
 
             // Create instance of ModLoader
             LoaderManager.Instance.Activate();

@@ -1,6 +1,7 @@
 ﻿// Stationeers.Addons (c) 2018-2022 Damian 'Erdroy' Korczowski & Contributors
 
 using System.Collections;
+using Stationeers.Addons.Core;
 using UnityEngine;
 
 namespace Stationeers.Addons.Modules.Workshop
@@ -24,7 +25,7 @@ namespace Stationeers.Addons.Modules.Workshop
         public IEnumerator Load()
         {
             yield return null;
-            Debug.Log("Workshop loaded!");
+            AddonsLogger.Log("Workshop loaded!");
         }
 
         /// <inheritdoc />
