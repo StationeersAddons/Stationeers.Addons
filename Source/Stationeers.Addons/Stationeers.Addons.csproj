@@ -78,7 +78,7 @@
     <Compile Include="API\PluginStorage.cs" />
     <Compile Include="Core\LocalMods.cs" />
     <Compile Include="Core\AddonsLogger.cs" />
-    <Compile Include="Globals.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Modules\Bundles\BundleLoaderModule.cs" />
     <Compile Include="Modules\HarmonyLib\HarmonyModule.cs" />
     <Compile Include="Modules\IModule.cs" />
