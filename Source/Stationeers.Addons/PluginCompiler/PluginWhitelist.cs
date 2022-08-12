@@ -44,7 +44,7 @@ namespace Stationeers.Addons.PluginCompiler
             Instance = null;
         }
 
-        public bool IsWhitelisted(ISymbol symbol)
+        public bool IsAllowed(ISymbol symbol)
         {
             switch (symbol)
             {

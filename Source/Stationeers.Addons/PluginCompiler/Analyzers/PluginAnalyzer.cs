@@ -61,7 +61,7 @@ namespace Stationeers.Addons.PluginCompiler.Analyzers
                 return;
 
             // When this symbol is whitelisted, we're allowing it.
-            if (PluginWhitelist.Instance.IsWhitelisted(info.Symbol))
+            if (PluginWhitelist.Instance.IsAllowed(info.Symbol))
                 return;
             
             // We have failed all the diagnostics' tests. So it means that this symbol is prohibited.
