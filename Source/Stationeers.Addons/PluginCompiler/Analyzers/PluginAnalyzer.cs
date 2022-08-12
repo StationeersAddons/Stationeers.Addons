@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Stationeers.Addons.Core;
 using UnityEngine;
 
+// TODO: Handle instruction counter exceptions
+
 namespace Stationeers.Addons.PluginCompiler.Analyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]

@@ -71,6 +71,25 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
             );
             whitelist.BlacklistTypes(/* none */);
             
+            whitelist.WhitelistMembers(
+                typeof(System.ValueType).GetMethod("ToString"),
+                typeof(System.ValueType).GetMethod("GetHashCode"),
+                typeof(System.ValueType).GetMethod("Equals"),
+                
+                typeof(System.Type).GetMethod("ToString"),
+                typeof(System.Type).GetMethod("GetHashCode"),
+                typeof(System.Type).GetMethod("Equals"),
+                typeof(System.Type).GetMethod("GetType"),
+                typeof(System.Type).GetMethod("GetTypeFromHandle"),
+                typeof(System.Type).GetMethod("op_Equality"),
+                typeof(System.Type).GetMethod("GetFields", new[] { typeof(System.Reflection.BindingFlags) }),
+                typeof(System.Type).GetProperty("FullName"),
+                
+                typeof(System.Environment).GetProperty("NewLine")
+                
+            );
+            whitelist.BlacklistMembers( /* none */);
+            
             whitelist.WhitelistTypesNamespaces(
                 // We no more allow the System.* namespace, but instead define all the types that are allowed above
                 typeof(System.Collections.IEnumerator),
