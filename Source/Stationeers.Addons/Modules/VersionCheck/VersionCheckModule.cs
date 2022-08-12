@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using Assets.Scripts;
 using Assets.Scripts.UI;
+using Stationeers.Addons.Core;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -19,10 +20,10 @@ namespace Stationeers.Addons.Modules.Plugins
         /// <inheritdoc />
         public IEnumerator Load()
         {
-            Debug.Log("Checking for Stationeers.Addons version...");
+            AddonsLogger.Log("Checking for Stationeers.Addons version...");
 
             // Perform simple web request to get the latest version from github
-            using (var webRequest = UnityWebRequest.Get(Globals.VersionFile))
+            using (var webRequest = UnityWebRequest.Get(Constants.VersionFile))
             {
                 yield return webRequest.SendWebRequest();
 
@@ -30,20 +31,20 @@ namespace Stationeers.Addons.Modules.Plugins
                 {
                     var data = webRequest.downloadHandler.text.Trim();
 
-                    Debug.Log($"Latest Stationeers.Addons version is {data}. Installed {Globals.Version}");
+                    AddonsLogger.Log($"Latest Stationeers.Addons version is {data}. Installed {Constants.Version}");
 
                     // If the current version is the same as the latest one, just exit the coroutine.
-                    if (Globals.Version == data)
+                    if (Constants.Version == data)
                         yield break;
 
-                    Debug.Log("New version of Stationeers.Addons is available!");
+                    AddonsLogger.Log("New version of Stationeers.Addons is available!");
                     
                     // TODO: Figure out how to display alerts as devs broke the AlertPanel.Instance again...
                     ConsoleWindow.Print($"New version of Stationeers.Addons ({data}) is available!\n", ConsoleColor.Red);
                 }
                 else
                 {
-                    Debug.LogError(
+                    AddonsLogger.Error(
                         $"Failed to request latest Stationeers.Addons version. Result: {webRequest.result} Error: '\"{webRequest.error}\""
                     );
                     ConsoleWindow.PrintError("Failed to check latest Stationeers.Addons version!\n");

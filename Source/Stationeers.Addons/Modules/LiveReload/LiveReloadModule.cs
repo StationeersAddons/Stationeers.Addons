@@ -39,7 +39,7 @@ namespace Stationeers.Addons.Modules.LiveReload
         {
             _liveReloadEnabled = System.Environment.GetCommandLineArgs().Any(a => a == "--live-reload");
             if (_liveReloadEnabled)
-                Debug.Log("[Stationeers.Addons] Live reload enabled! Press CTRL+R to reload all plugins.");
+                AddonsLogger.Log("Live reload enabled! Press CTRL+R to reload all plugins.");
             
             yield break;
         }
@@ -67,7 +67,7 @@ namespace Stationeers.Addons.Modules.LiveReload
         {
             if (_isRecompiling)
             {
-                Debug.LogWarning("Already recompiling!");
+                AddonsLogger.Warning("Already recompiling!");
                 yield break;
             }
 
@@ -85,7 +85,7 @@ namespace Stationeers.Addons.Modules.LiveReload
             // Make sure that we show the progress bar
             yield return new WaitForSeconds(0.1f);
             
-            Debug.Log("Unloading plugins");
+            AddonsLogger.Log("Unloading plugins");
             
             // Reinitialize Harmony, so we can call Load method again later to patch the game again
             LoaderManager.Instance.Harmony.Shutdown();
@@ -97,7 +97,7 @@ namespace Stationeers.Addons.Modules.LiveReload
             uniTask = ImGuiLoadingScreen.Singleton.SetProgress(0.25f);
             yield return uniTask;
             
-            Debug.Log("Recompiling plugins");
+            AddonsLogger.Log("Recompiling plugins");
             yield return new WaitForSeconds(0.1f);
             yield return LoaderManager.Instance.PluginCompiler.Load();
 
@@ -106,7 +106,7 @@ namespace Stationeers.Addons.Modules.LiveReload
             uniTask = ImGuiLoadingScreen.Singleton.SetProgress(0.50f);
             yield return uniTask;
             
-            Debug.Log("Reloading plugins");
+            AddonsLogger.Log("Reloading plugins");
             yield return new WaitForSeconds(0.1f);
             yield return LoaderManager.Instance.PluginLoader.Load();
 
@@ -115,11 +115,11 @@ namespace Stationeers.Addons.Modules.LiveReload
             uniTask = ImGuiLoadingScreen.Singleton.SetProgress(0.50f);
             yield return uniTask;
 
-            Debug.Log("Re-patching game using harmony");
+            AddonsLogger.Log("Re-patching game using harmony");
             yield return new WaitForSeconds(0.1f);
             yield return LoaderManager.Instance.Harmony.Load();
             
-            Debug.Log("Recompilation done");
+            AddonsLogger.Log("Recompilation done");
             
             _isRecompiling = false;
         }

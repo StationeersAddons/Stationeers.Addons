@@ -7,6 +7,7 @@ using System.IO;
 using Assets.Scripts.Networking;
 using Assets.Scripts.Networking.Transports;
 using Stationeers.Addons.Core;
+using Stationeers.Addons.PluginCompiler;
 using UnityEngine;
 
 // TODO: Read XML file and get the real addon name to show
@@ -43,9 +44,7 @@ namespace Stationeers.Addons.Modules.Plugins
         {
             CompiledPlugins.Clear();
 
-            Debug.Log("Starting plugins compilation...");
-
-            var pluginCompiler = new PluginCompiler();
+            AddonsLogger.Log("Starting plugins compilation...");
 
             if (!Directory.Exists("AddonManager/AddonsCache"))
                 Directory.CreateDirectory("AddonManager/AddonsCache");
@@ -53,19 +52,16 @@ namespace Stationeers.Addons.Modules.Plugins
             // TODO: Cleanup duplicated code
             
             // Load local plugins (but ignore if there is Debug version of it)
-            yield return LoadLocalPlugins(pluginCompiler);
+            yield return LoadLocalPlugins();
             
             // Load workshop plugins (if client)
             if(!LoaderManager.IsDedicatedServer)
             {
-                yield return LoadWorkshopPlugins(pluginCompiler);
+                yield return LoadWorkshopPlugins();
             }
-            
-            // Dispose the compiler
-            pluginCompiler.Dispose();
         }
 
-        private IEnumerator LoadLocalPlugins(PluginCompiler pluginCompiler)
+        private IEnumerator LoadLocalPlugins()
         {
             var localPluginDirectories = LocalMods.GetLocalModDirectories(false, true);
             
@@ -81,7 +77,7 @@ namespace Stationeers.Addons.Modules.Plugins
 
                     if (!Directory.Exists(addonDirectory))
                     {
-                        Debug.LogWarning(
+                        AddonsLogger.Warning(
                             $"Could not load addon plugin '{addonName}' because directory '{addonDirectory}' does not exist!");
                         continue;
                     }
@@ -92,7 +88,7 @@ namespace Stationeers.Addons.Modules.Plugins
                     // */Properties/*
                     // */bin/*
                     // */obj/*
-                    List<string> sourceFilesList = new List<string>(addonScripts);
+                    var sourceFilesList = new List<string>(addonScripts);
 
                     sourceFilesList.RemoveAll(x => x.Contains(Path.DirectorySeparatorChar + "Properties" + Path.DirectorySeparatorChar));
                     sourceFilesList.RemoveAll(x => x.Contains(Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar));
@@ -104,36 +100,33 @@ namespace Stationeers.Addons.Modules.Plugins
 
                     if (File.Exists(assemblyFile))
                     {
-                        Debug.Log($"Removing old plugin assembly file '{assemblyFile}'");
+                        AddonsLogger.Log($"Removing old plugin assembly file '{assemblyFile}'");
                         File.Delete(assemblyFile);
                     }
 
-                    pluginCompiler.CompileScripts(addonName, addonDirectory, addonScripts, out var isSuccess);
+                    // Compile addon source code
+                    if (!Compiler.Compile(addonName, addonScripts))
+                    {
+                        AddonsLogger.Warning($"Could not compile addon plugin '{addonName}'!");
+                        continue;
+                    }
 
-                    if (isSuccess)
-                    {
-                        CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
-                    }
-                    else
-                    {
-                        throw new Exception(
-                            $"Addon's plugin ('{addonName}') failed to compile. Checks game logs for more info.");
-                    }
+                    CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError($"Failed to compile plugin from '{localPluginDirectory}'. Exception:\n{ex}");
+                    AddonsLogger.Error($"Failed to compile plugin from '{localPluginDirectory}'. Exception:\n{ex}");
                 }
                 
                 yield return new WaitForEndOfFrame();
             }
         }
 
-        private IEnumerator LoadWorkshopPlugins(PluginCompiler pluginCompiler)
+        private IEnumerator LoadWorkshopPlugins()
         {
             yield return null;
 
-            var query = NetManager.GetLocalAndWorkshopItems(SteamTransport.WorkshopType.Mod).GetAwaiter();
+            var query = NetworkManager.GetLocalAndWorkshopItems(SteamTransport.WorkshopType.Mod).GetAwaiter();
             // Somehow GetLocalAndWorkshopItems should return local mods as well, but it doesn't... ? TODO: When plugins are loading twice, check this call above and fix it.
 
             while (!query.IsCompleted) // This is not how UniTask should be used, but it works for now. 
@@ -156,7 +149,7 @@ namespace Stationeers.Addons.Modules.Plugins
                 
                     if (!Directory.Exists(addonDirectory))
                     {
-                        Debug.LogWarning($"Could not load addon plugin '{addonName}' because directory '{addonDirectory}' does not exist!");
+                        AddonsLogger.Warning($"Could not load addon plugin '{addonName}' because directory '{addonDirectory}' does not exist!");
                         continue;
                     }
                 
@@ -166,25 +159,30 @@ namespace Stationeers.Addons.Modules.Plugins
                 
                     if (File.Exists(assemblyFile))
                     {
-                        Debug.Log($"Removing old plugin assembly file '{assemblyFile}'");
+                        AddonsLogger.Log($"Removing old plugin assembly file '{assemblyFile}'");
                         File.Delete(assemblyFile);
                     }
-                
-                    pluginCompiler.CompileScripts(addonName, addonDirectory, addonScripts, out var isSuccess);
-                
-                    if (isSuccess)
+                    
+                    // Check if the addon has been updated before we added the sandbox, if so, make it trusted
+                    var isTrusted = itemWrap.LastWriteTime < Constants.SandboxIntroductionDate;
+
+                    if (isTrusted)
                     {
-                        CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
+                        AddonsLogger.Warning($"Addon '{addonName}' is trusted! (backwards-compatibility)");
                     }
-                    else
+                    
+                    // Compile addon source code
+                    if (!Compiler.Compile(addonName, addonScripts, isTrusted))
                     {
-                        throw new Exception(
-                            $"Addon's plugin ('{addonName}') failed to compile. Checks game logs for more info.");
+                        AddonsLogger.Warning($"Could not compile addon plugin '{addonName}'!");
+                        continue;
                     }
+
+                    CompiledPlugins.Add(new AddonPlugin(addonName, assemblyFile));
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError($"Failed to compile plugin from '{itemWrap.DirectoryPath}'. Exception:\n{ex}");
+                    AddonsLogger.Error($"Failed to compile plugin from '{itemWrap.DirectoryPath}'. Exception:\n{ex}");
                 }
             }
         }

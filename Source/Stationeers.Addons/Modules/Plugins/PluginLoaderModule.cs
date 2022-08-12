@@ -39,13 +39,13 @@ namespace Stationeers.Addons.Modules.Plugins
             // Using PluginCompilerModule.CompiledPlugins we have to be sure that it has been created
             // TODO: Better way to reference cross-module or don't reference it at all.
 
-            Debug.Log("Loading plugin assemblies...");
+            AddonsLogger.Log("Loading plugin assemblies...");
 
             foreach (var compiledPlugin in PluginCompilerModule.CompiledPlugins)
             {
                 // TODO: Prevent from loading local addons
 
-                Debug.Log($"Loading plugin assembly '{compiledPlugin.AssemblyFile}'");
+                AddonsLogger.Log($"Loading plugin assembly '{compiledPlugin.AssemblyFile}'");
                 LoadPlugin(compiledPlugin.AddonName, compiledPlugin.AssemblyFile);
                 yield return new WaitForEndOfFrame();
             }
@@ -57,14 +57,14 @@ namespace Stationeers.Addons.Modules.Plugins
 
                 foreach (var debugAssembly in localModAssemblies)
                 {
-                    Debug.Log($"Loading plugin debug assembly '{debugAssembly}'");
+                    AddonsLogger.Log($"Loading plugin debug assembly '{debugAssembly}'");
 
                     var fileName = Path.GetFileNameWithoutExtension(debugAssembly);
                     LoadPlugin(fileName, debugAssembly);
                 }
             }
 
-            Debug.Log($"Loaded {_plugins.Count} plugins");
+            AddonsLogger.Log($"Loaded {_plugins.Count} plugins");
         }
 
         /// <inheritdoc />
@@ -83,7 +83,7 @@ namespace Stationeers.Addons.Modules.Plugins
         {
             if (_plugins.TryGetValue(addonName, out var prevPlugin))
             {
-                Debug.LogError("Plugin '" + addonName + "' already loaded!");
+                AddonsLogger.Error("Plugin '" + addonName + "' already loaded!");
                 foreach (var prevPluginPlugin in prevPlugin.Plugins)
                 {
                     try
@@ -107,7 +107,7 @@ namespace Stationeers.Addons.Modules.Plugins
             File.Copy(pluginAssembly, tempPluginPath);
 
             var assembly = Assembly.LoadFile(tempPluginPath);
-            Debug.Log($"Plugin assembly {pluginAssembly} loaded from {tempPluginPath}");
+            AddonsLogger.Log($"Plugin assembly {pluginAssembly} loaded from {tempPluginPath}");
 
             var plugins = new List<IPlugin>();
             // TODO: Maybe we do not want to allow multiple plugins per addon...?
@@ -121,7 +121,7 @@ namespace Stationeers.Addons.Modules.Plugins
                         instance.OnLoad();
                         plugins.Add(instance);
 
-                        Debug.Log("Activated plugin " + type);
+                        AddonsLogger.Log("Activated plugin " + type);
                     }
                     catch (Exception e)
                     {
