@@ -23,7 +23,10 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(UnityEngine.Video.VideoClip),
                 typeof(UnityEngine.JsonUtility),
                 typeof(UnityEngine.Assertions.Assert),
-                typeof(UnityEngine.EventSystems.BaseInput)
+                typeof(UnityEngine.EventSystems.BaseInput),
+
+                // TextMeshPro
+                typeof(TMPro.TextMeshPro)
             );
             whitelist.BlacklistTypes(
                 //typeof(UnityEngine.Networking.UnityWebRequest) // DLL not included in compilation, we can omit this.

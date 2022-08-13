@@ -53,10 +53,25 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(System.FlagsAttribute),
                 typeof(System.Random),
                 typeof(System.Convert),
-                
                 typeof(System.Guid),
                 typeof(System.SerializableAttribute),
+                
+                typeof(System.Globalization.CultureInfo),
                 typeof(System.ComponentModel.DefaultValueAttribute),
+                
+                // AssemblyInfo.cs types
+                typeof(System.Reflection.AssemblyTitleAttribute),
+                typeof(System.Reflection.AssemblyDescriptionAttribute),
+                typeof(System.Reflection.AssemblyConfigurationAttribute),
+                typeof(System.Reflection.AssemblyCompanyAttribute),
+                typeof(System.Reflection.AssemblyProductAttribute),
+                typeof(System.Reflection.AssemblyCopyrightAttribute),
+                typeof(System.Reflection.AssemblyTrademarkAttribute),
+                typeof(System.Reflection.AssemblyCultureAttribute),
+                typeof(System.Runtime.InteropServices.ComVisibleAttribute), // Not sure about these two...
+                typeof(System.Runtime.InteropServices.GuidAttribute),
+                typeof(System.Reflection.AssemblyVersionAttribute),
+                typeof(System.Reflection.AssemblyFileVersionAttribute),
 
                 // TODO: System.Reflection.Assembly* attributes?
                 // Kinda needed, but we do not have Assembly.cs, we don't need this
@@ -64,6 +79,7 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 // System.* Exceptions
                 typeof(System.Exception),
                 typeof(System.DivideByZeroException),
+                typeof(System.NotImplementedException),
                 typeof(System.InvalidCastException),
                 typeof(System.ArgumentException),
                 typeof(System.ArgumentNullException),
