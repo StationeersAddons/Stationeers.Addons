@@ -41,7 +41,6 @@
   
   <ItemGroup>
     <Compile Include="Scripts\ExampleMod.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\SimplePatch.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -69,5 +68,5 @@
   </PropertyGroup>
   
   <!-- Import Stationeers VS properties - paths etc. -->
-  <Import Project="$(SolutionDir)Stationeers.VS.props"/>
+  <Import Project="$(SolutionDir)Stationeers.VS.props" />
 </Project>
