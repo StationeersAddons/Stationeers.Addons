@@ -5,8 +5,6 @@ using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
-using Stationeers.Addons.Core;
-using UnityEngine;
 
 // TODO: Handle instruction counter exceptions
 
@@ -28,7 +26,6 @@ namespace Stationeers.Addons.PluginCompiler.Analyzers
 
         private static readonly SyntaxKind[] SyntaxKinds =
         {
-            SyntaxKind.FinallyClause,
             SyntaxKind.AliasQualifiedName,
             SyntaxKind.QualifiedName,
             SyntaxKind.GenericName,
@@ -52,27 +49,27 @@ namespace Stationeers.Addons.PluginCompiler.Analyzers
         private static void AnalyzeSyntax(SyntaxNodeAnalysisContext context)
         {
             var node = context.Node;
-            var info = context.SemanticModel.GetSymbolInfo(node);
-
+            var symbolInfo = context.SemanticModel.GetSymbolInfo(node);
+            
             // How symbol can be null...?
-            if (info.Symbol == null)
+            if (symbolInfo.Symbol == null)
                 return;
             
             // When this symbol is created locally (by the plugin's author), then always allow it.
-            if (IsLocalSymbol(info.Symbol))
+            if (IsLocalSymbol(symbolInfo.Symbol))
                 return;
 
             // When this symbol is whitelisted, we're allowing it.
-            if (PluginWhitelist.Instance.IsAllowed(info.Symbol))
+            if (PluginWhitelist.Instance.IsAllowed(symbolInfo.Symbol))
                 return;
             
             // We have failed all the diagnostics' tests. So it means that this symbol is prohibited.
-            var symbolName = info.Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+            var symbolName = symbolInfo.Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
             var report = Diagnostic.Create(DiagnosticError, node.GetLocation(), symbolName);
             context.ReportDiagnostic(report);
 
-#if DEBUG
-            AddonsLogger.Error($"Missing symbol ({symbolName}) namespace: {info.Symbol.ContainingNamespace}");
+#if DEBUG && false
+            AddonsLogger.Error($"Missing symbol {symbolInfo.Symbol.ContainingNamespace} {symbolName}");
 #endif
         }
 

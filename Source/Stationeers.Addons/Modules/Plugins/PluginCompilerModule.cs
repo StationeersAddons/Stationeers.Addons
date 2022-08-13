@@ -107,7 +107,7 @@ namespace Stationeers.Addons.Modules.Plugins
                     // Compile addon source code
                     if (!Compiler.Compile(addonName, addonScripts))
                     {
-                        AddonsLogger.Warning($"Could not compile addon plugin '{addonName}'!");
+                        AddonsLogger.Error($"Could not compile addon plugin '{addonName}'!");
                         continue;
                     }
 
@@ -174,7 +174,7 @@ namespace Stationeers.Addons.Modules.Plugins
                     // Compile addon source code
                     if (!Compiler.Compile(addonName, addonScripts, isTrusted))
                     {
-                        AddonsLogger.Warning($"Could not compile addon plugin '{addonName}'!");
+                        AddonsLogger.Error($"Could not compile addon plugin '{addonName}'!");
                         continue;
                     }
 
