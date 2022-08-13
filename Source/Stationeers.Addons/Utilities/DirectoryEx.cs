@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Stationeers.Addons.Utilities
 {
-    public static class DirectoryEx
+    internal static class DirectoryEx
     {
         /// <summary>
         ///     Copies contents of source into the destination directory.

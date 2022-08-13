@@ -4,7 +4,7 @@ using Stationeers.Addons.API;
 
 namespace Stationeers.Addons.PluginCompiler.Whitelists
 {
-    public sealed class AddonsWhitelist : IWhitelistRegistry
+    internal sealed class AddonsWhitelist : IWhitelistRegistry
     {
         public void Register(PluginWhitelist whitelist)
         {

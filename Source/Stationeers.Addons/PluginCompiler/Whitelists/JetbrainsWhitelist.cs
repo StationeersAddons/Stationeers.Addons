@@ -2,7 +2,7 @@
 
 namespace Stationeers.Addons.PluginCompiler.Whitelists
 {
-    public sealed class JetbrainsWhitelist : IWhitelistRegistry
+    internal sealed class JetbrainsWhitelist : IWhitelistRegistry
     {
         public void Register(PluginWhitelist whitelist)
         {

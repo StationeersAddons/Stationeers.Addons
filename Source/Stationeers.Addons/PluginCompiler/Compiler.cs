@@ -14,7 +14,7 @@ using UnityEngine;
 
 namespace Stationeers.Addons.PluginCompiler
 {
-    public static class Compiler
+    internal static class Compiler
     {
         private static readonly string[] GameAssemblies = {
             "mscorlib.dll",

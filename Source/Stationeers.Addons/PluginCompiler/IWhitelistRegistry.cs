@@ -2,7 +2,7 @@
 
 namespace Stationeers.Addons.PluginCompiler
 {
-    public interface IWhitelistRegistry
+    internal interface IWhitelistRegistry
     {
         void Register(PluginWhitelist whitelist);
     }

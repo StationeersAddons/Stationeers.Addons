@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace Stationeers.Addons.PluginCompiler.Analyzers
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
-    public class PluginAnalyzer : DiagnosticAnalyzer
+    internal class PluginAnalyzer : DiagnosticAnalyzer
     {
 #pragma warning disable RS2008
         private static readonly DiagnosticDescriptor DiagnosticError = new DiagnosticDescriptor(

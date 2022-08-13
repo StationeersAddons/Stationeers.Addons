@@ -2,7 +2,7 @@
 
 namespace Stationeers.Addons.PluginCompiler.Whitelists
 {
-    public sealed class HarmonyWhitelist : IWhitelistRegistry
+    internal sealed class HarmonyWhitelist : IWhitelistRegistry
     {
         public void Register(PluginWhitelist whitelist)
         {

@@ -10,7 +10,7 @@ using Stationeers.Addons.PluginCompiler.Whitelists;
 
 namespace Stationeers.Addons.PluginCompiler
 {
-    public class PluginWhitelist : IDisposable
+    internal class PluginWhitelist : IDisposable
     {
         public static PluginWhitelist Instance { get; private set; }
         

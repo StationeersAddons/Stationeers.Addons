@@ -2,7 +2,7 @@
 
 namespace Stationeers.Addons.PluginCompiler.Whitelists
 {
-    public sealed class UnityWhitelist : IWhitelistRegistry
+    internal sealed class UnityWhitelist : IWhitelistRegistry
     {
         public void Register(PluginWhitelist whitelist)
         {
