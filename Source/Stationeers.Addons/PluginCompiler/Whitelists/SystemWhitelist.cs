@@ -1,13 +1,15 @@
 // Stationeers.Addons (c) 2018-2022 Damian 'Erdroy' Korczowski & Contributors
 
+// Note: We do not use using keyword here, to keep things clean
+
+// TODO: Make a list of allowed types etc.
+
 namespace Stationeers.Addons.PluginCompiler.Whitelists
 {
     internal sealed class SystemWhitelist : IWhitelistRegistry
     {
         public void Register(PluginWhitelist whitelist)
         {
-            // Note: We do not use namespaces here, to keep things clean
-            
             whitelist.WhitelistTypes(
                 typeof(object),
                 typeof(string),
@@ -105,6 +107,9 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 ReflectionUtilities.GetPropertyInfo(typeof(System.Environment), "NewLine")
                 
             );
+            
+            whitelist.WhitelistMembers(ReflectionUtilities.GetMethodInfos<System.Reflection.FieldInfo>("SetValue")); // This might not be safe :/
+            whitelist.WhitelistMembers(ReflectionUtilities.GetMethodInfos<System.Reflection.FieldInfo>("GetValue"));
             whitelist.WhitelistMembers(ReflectionUtilities.GetMethodInfos<System.Type>("ToString"));
             whitelist.WhitelistMembers(ReflectionUtilities.GetMethodInfos<System.Type>("GetType"));
             //whitelist.WhitelistMembers(ReflectionUtilities.GetMethodInfos(typeof(System.IO.Path), "Combine")); // Just for testing, not really needed
