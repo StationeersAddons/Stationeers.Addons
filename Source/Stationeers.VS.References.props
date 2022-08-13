@@ -109,12 +109,12 @@
       <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.TextCoreTextEngineModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.UI.dll</HintPath>
+    <Reference Include="UnityEngine.TextCoreTextEngineModule">
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="com.unity.multiplayer-hlapi.Runtime.dll">
-      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(StationeersDirectory)\rocketstation_Data\Managed\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
