@@ -14,10 +14,12 @@ namespace Stationeers.Addons.PluginCompiler
     {
         public static PluginWhitelist Instance { get; private set; }
         
-        private readonly List<ISymbol> _whitelist = new List<ISymbol>();
-        private readonly List<ISymbol> _blacklist = new List<ISymbol>();
+        private readonly List<string> _namespaceWhitelist = new List<string>();
+        private readonly List<string> _typeWhitelist = new List<string>();
+        private readonly List<string> _typeBlacklist = new List<string>();
         private readonly List<MemberInfo> _memberWhitelist = new List<MemberInfo>();
-        private readonly List<MemberInfo> _memberBlacklist = new List<MemberInfo>();
+        private readonly List<string> _memberTypeWhitelist = new List<string>();
+        
         private readonly Dictionary<string, IAssemblySymbol> _assemblySymbols = new Dictionary<string, IAssemblySymbol>();
 
         private static readonly IWhitelistRegistry[] Whitelists =
@@ -43,8 +45,8 @@ namespace Stationeers.Addons.PluginCompiler
 
         public void Dispose()
         {
-            _whitelist.Clear();
-            _blacklist.Clear();
+            _namespaceWhitelist.Clear();
+            _typeWhitelist.Clear();
             Instance = null;
         }
 
@@ -57,11 +59,12 @@ namespace Stationeers.Addons.PluginCompiler
                 
                 // Check types
                 case INamedTypeSymbol namedTypeSymbol:
-                    return IsWhitelisted(namedTypeSymbol);
-
+                    return IsTypeWhitelisted(namedTypeSymbol);
+                
+                // Check events
                 case IEventSymbol _:
                     // For events, we just check the namespace. It should be enough.
-                    return IsWhitelisted(symbol.ContainingNamespace);
+                    return IsNamespaceWhitelisted(symbol.ContainingNamespace);
 
                 // Check members
                 case IFieldSymbol _:
@@ -77,26 +80,52 @@ namespace Stationeers.Addons.PluginCompiler
             return true;
         }
 
-        private bool IsWhitelisted(ISymbol symbol)
+        private bool IsNamespaceWhitelisted(INamespaceSymbol symbol)
         {
-            // Check if type is not in blacklist and it is in our whitelist
-            return !_blacklist.Contains(symbol) && _whitelist.Contains(symbol);
+            return _namespaceWhitelist.Contains(symbol.ToDisplayString());
         }
 
-        private bool IsMemberWhitelisted(ISymbol symbol) // TODO: Refactor so we can use blacklist
+        private bool IsTypeWhitelisted(INamedTypeSymbol symbol, bool skipMemberTypeCheck = false)
+        {
+            // Note: I do not like the skipMemberTypeCheck parameter, TODO: Figure out a way, how to clean this up
+            
+            var symbolName = symbol.ToDisplayString();
+            
+            // Check the blacklist at first
+            if (_typeBlacklist.Contains(symbolName)) return false;
+            
+            // If type's namespace is whitelisted, then always allow it.
+            if (IsNamespaceWhitelisted(symbol.ContainingNamespace))
+                return true;
+            
+            // Check if the type is whitelisted, and not blacklisted
+            if (_typeWhitelist.Contains(symbolName))
+                return true;
+
+            // This is a last check, allow this type, only when member from this type is whitelisted.
+            if (skipMemberTypeCheck) return false;
+            
+            return _memberTypeWhitelist.Contains(symbolName);
+        }
+
+        private bool IsMemberWhitelisted(ISymbol symbol)
         {
             // We allow all fields to be used.
             // This should be fine, as fields do not call any methods underneath,
             // and should not expose any "unsafe" data.
             if (symbol is IFieldSymbol)
                 return true;
-            
+
             // If the type symbol is whitelisted, allow.
-            if (IsWhitelisted(symbol))
+            if (IsTypeWhitelisted(symbol.ContainingType, true))
                 return true;
             
             // If the whole namespace is whitelisted, allow.
-            if (IsWhitelisted(symbol.ContainingNamespace))
+            if (IsNamespaceWhitelisted(symbol.ContainingNamespace))
+                return true;
+            
+            // Handle delegates
+            if (symbol is INamedTypeSymbol delegateSymbol && delegateSymbol.SpecialType == SpecialType.System_Delegate) // TODO: Does not work for event delegates, fix
                 return true;
 
             switch (symbol)
@@ -115,40 +144,45 @@ namespace Stationeers.Addons.PluginCompiler
         private bool IsMethodWhitelisted(IMethodSymbol symbol)
         {
             // This has to be recursive, as we have to check for overrides etc.
-            
             if (symbol.IsOverride)
             {
                 // TODO: Handle this
+                // symbol = symbol.GetOverriddenSymbol(); etc.
                 return false;
             }
-
+            
+            // This part is the same for properties TODO: Refactor
             foreach (var member in _memberWhitelist)
             {
                 // At first, check if the symbol is contained within the member's declaring type
                 var memberDeclType = GetNamedTypeSymbol(member.DeclaringType);
-                if (memberDeclType != symbol.ContainingType) continue;
+                if (!SymbolEqualityComparer.Default.Equals(memberDeclType, symbol.ContainingType)) continue;
 
-                // Check all registered members for methods, compare param length, names etc.
-                //var members = memberDeclType.GetMembers().Where(x => x is MethodInfo);
+                // Now, if any member in the member's declaring type.
+                // If so, this is all we need to check, if property is in the list.
+                if (memberDeclType.GetMembers().Any(x => x.MetadataName == symbol.MetadataName) && member.Name == symbol.Name)
+                    return true;
             }
 
             return false;
         }
 
         private bool IsPropertyWhitelisted(IPropertySymbol symbol)
-        {
+        { 
             foreach (var member in _memberWhitelist)
             {
                 // At first, check if the symbol is contained within the member's declaring type
                 var memberDeclType = GetNamedTypeSymbol(member.DeclaringType);
-                if (memberDeclType != symbol.ContainingType) continue;
+                if (!SymbolEqualityComparer.Default.Equals(memberDeclType, symbol.ContainingType)) continue;
                 
                 // Now, if any member in the member's declaring type.
                 // If so, this is all we need to check, if property is in the list.
-                if (memberDeclType.GetMembers().Any(x => x.Name == symbol.MetadataName))
+                if (memberDeclType.GetMembers().Any(x => x.MetadataName == symbol.MetadataName) && member.Name == symbol.Name)
+                {
                     return true;
+                }
             }
-            
+
             return false;
         }
 
@@ -158,7 +192,7 @@ namespace Stationeers.Addons.PluginCompiler
             {
                 Debug.Assert(type != null, "type is null!");
                 var symbol = GetNamedTypeSymbol(type);
-                _whitelist.Add(symbol.ContainingNamespace);
+                _namespaceWhitelist.Add(symbol.ContainingNamespace.ToDisplayString());
             }
         }
 
@@ -168,7 +202,7 @@ namespace Stationeers.Addons.PluginCompiler
             {
                 Debug.Assert(type != null, "type is null!");
                 var symbol = GetNamedTypeSymbol(type);
-                _whitelist.Add(symbol);
+                _typeWhitelist.Add(symbol.ToDisplayString());
             }
         }
 
@@ -178,7 +212,7 @@ namespace Stationeers.Addons.PluginCompiler
             {
                 Debug.Assert(type != null, "type is null!");
                 var symbol = GetNamedTypeSymbol(type);
-                _blacklist.Add(symbol);
+                _typeBlacklist.Add(symbol.ToDisplayString());
             }
         }
 
@@ -189,17 +223,23 @@ namespace Stationeers.Addons.PluginCompiler
             foreach (var member in members)
             {
                 Debug.Assert(member != null, "member is null!");
-                _memberWhitelist.Add(member);
-            }
-        }
+                Debug.Assert(member.DeclaringType != null, "member's declaring type is null!");
+                
+                // TODO: Find a way to check members for non-static types.
+                // For now, we just allow only static classes, as we do not have a way, to check, if type
+                // is being used only for member access (call, i.e.: System.IO.Path.Combine) or something like:
+                // System.IO.Path myPath; (this is not a valid C# code, because Path is static, but you get the idea),
+                // and not checking for static types would allow all member-declaring types to be used like so.
+                //var isStaticDeclType = member.DeclaringType.IsAbstract && member.DeclaringType.IsSealed;
+               // Debug.Assert(isStaticDeclType, "Cannot register members from non-static types! (yet)");
 
-        public void BlacklistMembers(params MemberInfo[] members)
-        {
-            foreach (var member in members)
-            {
-                Debug.Assert(member != null, "member is null!");
-                _memberBlacklist.Add(member);
-            }                                                                                          
+                // Register member
+                _memberWhitelist.Add(member);
+                
+                // Register declaring type as well
+                var symbol = GetNamedTypeSymbol(member.DeclaringType);
+                _memberTypeWhitelist.Add(symbol.ToDisplayString());
+            }
         }
         
         private INamedTypeSymbol GetNamedTypeSymbol(Type type)

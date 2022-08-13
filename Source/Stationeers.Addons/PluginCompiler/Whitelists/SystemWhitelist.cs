@@ -6,6 +6,8 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
     {
         public void Register(PluginWhitelist whitelist)
         {
+            // Note: We do not use namespaces here, to keep things clean
+            
             whitelist.WhitelistTypes(
                 typeof(object),
                 typeof(string),
@@ -24,12 +26,15 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(decimal),
                 
                 // These IO types are safe.
-                typeof(System.IO.Path),
                 typeof(System.IO.Stream),
                 typeof(System.IO.TextWriter),
                 typeof(System.IO.TextReader),
                 typeof(System.IO.BinaryReader),
                 typeof(System.IO.BinaryWriter),
+                typeof(System.IO.StreamReader),
+                typeof(System.IO.StreamWriter),
+                typeof(System.IO.StringReader),
+                typeof(System.IO.StringWriter),
                 typeof(System.IO.MemoryStream), // Should be safe
 
                 // System.* types
@@ -50,9 +55,6 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(System.Convert),
                 
                 typeof(System.Guid),
-                typeof(System.Runtime.InteropServices.LayoutKind),
-                typeof(System.Runtime.InteropServices.StructLayoutAttribute),
-                typeof(System.Runtime.InteropServices.GuidAttribute),
                 typeof(System.SerializableAttribute),
                 typeof(System.ComponentModel.DefaultValueAttribute),
 
@@ -72,23 +74,24 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
             whitelist.BlacklistTypes(/* none */);
             
             whitelist.WhitelistMembers(
-                typeof(System.ValueType).GetMethod("ToString"),
-                typeof(System.ValueType).GetMethod("GetHashCode"),
-                typeof(System.ValueType).GetMethod("Equals"),
+                ReflectionUtilities.GetMethodInfo<System.ValueType>("ToString"),
+                ReflectionUtilities.GetMethodInfo<System.ValueType>("GetHashCode"),
+                ReflectionUtilities.GetMethodInfo<System.ValueType>("Equals", new[] { typeof(System.Type) }),
+                ReflectionUtilities.GetMethodInfo<System.ValueType>("Equals", new[] { typeof(System.Object) }),
                 
-                typeof(System.Type).GetMethod("ToString"),
-                typeof(System.Type).GetMethod("GetHashCode"),
-                typeof(System.Type).GetMethod("Equals"),
-                typeof(System.Type).GetMethod("GetType"),
-                typeof(System.Type).GetMethod("GetTypeFromHandle"),
-                typeof(System.Type).GetMethod("op_Equality"),
-                typeof(System.Type).GetMethod("GetFields", new[] { typeof(System.Reflection.BindingFlags) }),
-                typeof(System.Type).GetProperty("FullName"),
+                ReflectionUtilities.GetMethodInfo<System.Type>("GetHashCode"),
+                ReflectionUtilities.GetMethodInfo<System.Type>("Equals", new[] { typeof(System.Type) }),
+                ReflectionUtilities.GetMethodInfo<System.Type>("Equals", new[] { typeof(System.Object) }),
+                ReflectionUtilities.GetMethodInfo<System.Type>("op_Equality"),
+                ReflectionUtilities.GetMethodInfo<System.Type>("GetFields", new[] { typeof(System.Reflection.BindingFlags) }),
                 
-                typeof(System.Environment).GetProperty("NewLine")
+                ReflectionUtilities.GetPropertyInfo<System.Type>("FullName"),
+                ReflectionUtilities.GetPropertyInfo(typeof(System.Environment), "NewLine")
                 
             );
-            whitelist.BlacklistMembers( /* none */);
+            whitelist.WhitelistMembers(ReflectionUtilities.GetMethodInfos<System.Type>("ToString"));
+            whitelist.WhitelistMembers(ReflectionUtilities.GetMethodInfos<System.Type>("GetType"));
+            //whitelist.WhitelistMembers(ReflectionUtilities.GetMethodInfos(typeof(System.IO.Path), "Combine")); // Just for testing, not really needed
             
             whitelist.WhitelistTypesNamespaces(
                 // We no more allow the System.* namespace, but instead define all the types that are allowed above

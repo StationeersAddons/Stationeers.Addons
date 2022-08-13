@@ -54,7 +54,8 @@ namespace Stationeers.Addons.PluginCompiler
 
         private static readonly string[] AdditionalAssemblies = {
             "Stationeers.Addons.dll",
-            "0Harmony.dll"
+            "0Harmony.dll",
+            "System.Collections.Immutable.dll",
         };
 
         public static bool Compile(string addonName, string[] sourceFiles, bool trustedCode = false)
@@ -193,7 +194,22 @@ namespace Stationeers.Addons.PluginCompiler
                 var line = location.StartLinePosition.Line;
                 var character = location.StartLinePosition.Character;
                 var severity = diagnostic.Severity.ToString().ToUpper();
-                AddonsLogger.Log($"(Plugin Compiler - {severity}) {file}({line}, {character}): {message}");
+
+                switch (diagnostic.Severity)
+                {
+                    case DiagnosticSeverity.Hidden:
+                    case DiagnosticSeverity.Info:
+                        AddonsLogger.Log($"(Plugin Compiler - {severity}) {file}({line}, {character}): {message}");
+                        break;
+                    case DiagnosticSeverity.Warning:
+                        AddonsLogger.Warning($"(Plugin Compiler - {severity}) {file}({line}, {character}): {message}");
+                        break;
+                    case DiagnosticSeverity.Error:
+                        AddonsLogger.Error($"(Plugin Compiler - {severity}) {file}({line}, {character}): {message}");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
     }

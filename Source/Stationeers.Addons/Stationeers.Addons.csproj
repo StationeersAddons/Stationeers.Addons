@@ -94,6 +94,7 @@
     <Compile Include="PluginCompiler\Analyzers\PluginAnalyzer.cs" />
     <Compile Include="PluginCompiler\Compiler.cs" />
     <Compile Include="PluginCompiler\IWhitelistRegistry.cs" />
+    <Compile Include="PluginCompiler\ReflectionUtilities.cs" />
     <Compile Include="PluginCompiler\PluginWhitelist.cs" />
     <Compile Include="PluginCompiler\Whitelists\AddonsWhitelist.cs" />
     <Compile Include="PluginCompiler\Whitelists\GameWhitelist.cs" />
