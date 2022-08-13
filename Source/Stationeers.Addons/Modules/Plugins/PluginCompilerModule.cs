@@ -96,7 +96,11 @@ namespace Stationeers.Addons.Modules.Plugins
 
                     addonScripts = sourceFilesList.ToArray();
 
-                    if (addonScripts.Length == 0) continue;
+                    if (addonScripts.Length == 0)
+                    {
+                        AddonsLogger.Warning($"No scripts found in addon '{addonName}'!");
+                        continue;
+                    }
 
                     if (File.Exists(assemblyFile))
                     {

@@ -40,7 +40,8 @@ namespace Stationeers.Addons.Core
                 // Messy, but works for now
                 if (!directory.EndsWith(DebugPluginPostfix) && skipIfDebugPluginExists &&
                     directories.Any(x => x != directory && x.Contains(directory))) continue;
-                
+
+                AddonsLogger.Log($"Found local mod {directory}");
                 modDirectory.Add(directory);
             }
 
