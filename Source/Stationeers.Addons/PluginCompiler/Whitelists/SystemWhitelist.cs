@@ -75,9 +75,6 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(System.Reflection.AssemblyVersionAttribute),
                 typeof(System.Reflection.AssemblyFileVersionAttribute),
 
-                // TODO: System.Reflection.Assembly* attributes?
-                // Kinda needed, but we do not have Assembly.cs, we don't need this
-                
                 // System.* Exceptions
                 typeof(System.Exception),
                 typeof(System.DivideByZeroException),

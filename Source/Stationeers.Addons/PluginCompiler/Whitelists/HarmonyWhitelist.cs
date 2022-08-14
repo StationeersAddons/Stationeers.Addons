@@ -15,7 +15,7 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(HarmonyLib.Memory)
             );
             whitelist.WhitelistTypesNamespaces(
-                typeof(HarmonyLib.Memory) // Just allow everything
+                typeof(HarmonyLib.Harmony) // Just allow everything
             );
         }
     }
