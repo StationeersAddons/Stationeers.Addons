@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.UI;
 using HarmonyLib;
 using Stationeers.Addons.Core;
@@ -16,6 +17,7 @@ namespace Stationeers.Addons.Modules.HarmonyLib
     {
         public string LoadingCaption => "Initializing Harmony library...";
 
+        private static List<Action<Harmony>> _patchers = new List<Action<Harmony>>();
         private Harmony _harmony;
 
         /// <inheritdoc />
@@ -27,23 +29,6 @@ namespace Stationeers.Addons.Modules.HarmonyLib
         /// <inheritdoc />
         public IEnumerator Load()
         {
-            AddonsLogger.Log("Patching WorkshopManager using Harmony...");
-            try
-            {
-                // var publishWorkshopMethod = typeof(WorkshopManager).GetMethod("PublishWorkshop", BindingFlags.Public | BindingFlags.Instance);
-                // var onSubmitItemUpdateMethod = typeof(WorkshopManager).GetMethod("OnSubmitItemUpdate", BindingFlags.NonPublic | BindingFlags.Instance);
-                // var publishWorkshopPrefixMethod = typeof(WorkshopManagerPatch).GetMethod("PublishWorkshopPrefix");
-                // var onSubmitItemUpdatePostfixMethod = typeof(WorkshopManagerPatch).GetMethod("OnSubmitItemUpdatePostfix");
-                //
-                // _harmony.Patch(publishWorkshopMethod, new HarmonyMethod(publishWorkshopPrefixMethod));
-                // _harmony.Patch(onSubmitItemUpdateMethod, null, new HarmonyMethod(onSubmitItemUpdatePostfixMethod));
-            } 
-            catch (Exception ex)
-            {
-                AlertPanel.Instance.ShowAlert($"Failed to initialize workshop publish patch!\n", AlertState.Alert);
-                AddonsLogger.Error($"Failed to initialize workshop publish patch. Exception:\n{ex}");
-            }
-
             AddonsLogger.Log("Patching game assembly using Harmony...");
             foreach (var plugin in LoaderManager.Instance.PluginLoader.LoadedPlugins)
             {
@@ -51,6 +36,13 @@ namespace Stationeers.Addons.Modules.HarmonyLib
                 _harmony.PatchAll(plugin.Assembly);
                 yield return new WaitForEndOfFrame();
             }
+
+            foreach (var patcher in _patchers)
+            {
+                AddonsLogger.Log($"Applying patches from assembly '{patcher.Target.GetType().Name}'");
+                patcher(_harmony);
+            }
+            
             AddonsLogger.Log($"Finished {LoaderManager.Instance.PluginLoader.LoadedPlugins.Count} patches to game assembly");
         }
 
@@ -59,6 +51,11 @@ namespace Stationeers.Addons.Modules.HarmonyLib
         {
             _harmony.UnpatchAll();
             _harmony = null;
+        }
+        
+        public static void RegisterPatcher(Action<Harmony> patcher)
+        {
+            _patchers.Add(patcher);
         }
     }
 }

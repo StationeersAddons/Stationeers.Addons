@@ -1,7 +1,10 @@
 ﻿// Stationeers.Addons (c) 2018-2022 Damian 'Erdroy' Korczowski & Contributors
 
+using System;
 using System.Collections;
+using HarmonyLib;
 using Stationeers.Addons.Core;
+using Stationeers.Addons.Modules.HarmonyLib;
 using UnityEngine;
 
 namespace Stationeers.Addons.Modules.Workshop
@@ -19,6 +22,7 @@ namespace Stationeers.Addons.Modules.Workshop
         public void Initialize()
         {
             // Nothing to initialize
+            HarmonyModule.RegisterPatcher(OnHarmonyPatch);
         }
 
         /// <inheritdoc />
@@ -32,6 +36,26 @@ namespace Stationeers.Addons.Modules.Workshop
         public void Shutdown()
         {
             // Cleanup?
+        }
+
+        private void OnHarmonyPatch(Harmony harmony)
+        {
+            AddonsLogger.Log("Patching WorkshopManager using Harmony...");
+            try
+            {
+                var publishWorkshopMethod = typeof(WorkshopMenu).GetMethod("PublishMod", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                var publishPrefix = typeof(WorkshopManagerPatch).GetMethod("PublishModPrefix");
+                var publishPostfix = typeof(WorkshopManagerPatch).GetMethod("PublishModPostfix");
+
+                harmony.Patch(publishWorkshopMethod, new HarmonyMethod(publishPrefix));
+                harmony.Patch(publishWorkshopMethod, null, new HarmonyMethod(publishPostfix));
+            }
+            catch (Exception ex)
+            {
+                //AlertPanel.Instance.ShowAlert($"Failed to initialize workshop publish patch!\n", AlertState.Alert);
+                AddonsLogger.Error($"Failed to initialize workshop publish patch. Exception:\n{ex}");
+            }
+
         }
     }
 }

@@ -1,13 +1,20 @@
 ﻿// Stationeers.Addons (c) 2018-2022 Damian 'Erdroy' Korczowski & Contributors
 
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using JetBrains.Annotations;
+using Stationeers.Addons.Core;
+using Stationeers.Addons.Utilities;
+
 namespace Stationeers.Addons.Modules.Workshop
 {
     /// <summary>
-    ///     Class containing methods for workshop upload patches (PublishWorkshopPrefix, OnSubmitItemUpdatePostfix).
+    ///     Class containing methods for workshop upload patches (PublishModPrefix, OnSubmitItemUpdatePostfix).
     /// </summary>
-    public static class WorkshopManagerPatch
+    internal static class WorkshopManagerPatch
     {
-        /*private static readonly Regex[] ValidFileNames =
+        private static readonly Regex[] ValidFileNames =
         {
             new Regex(@".*\.cs$"),
             new Regex(@".*\.xml$"),
@@ -24,10 +31,20 @@ namespace Stationeers.Addons.Modules.Workshop
             new Regex(@"^Scripts$")
         };
 
-        [UsedImplicitly]
-        public static void PublishWorkshopPrefix(WorkshopManager __instance, ref WorkShopItemDetail ItemDetail, ref string changeNote)
+        private static ModData GetSelectedModData(WorkshopMenu inst)
         {
-            var origItemContentPath = ItemDetail.Path;
+            // Use reflection to read _selectedModItem field from inst
+            var selectedModItem = inst.GetType().GetField("_selectedModItem", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.GetValue(inst);
+            return (ModData) selectedModItem;
+        }
+
+        [UsedImplicitly]
+        public static void PublishModPrefix(WorkshopMenu __instance)
+        {
+            var modData = GetSelectedModData(__instance);
+            
+            // _selectedModItem.Data
+            var origItemContentPath = modData.LocalPath;
             var tempItemContentPath = origItemContentPath + "_temp";
 
             if (!Directory.Exists(tempItemContentPath))
@@ -58,15 +75,18 @@ namespace Stationeers.Addons.Modules.Workshop
             }
 
             // Set workshop item info to use temporary path before ISteamUCG gets its hands on it.
-            ItemDetail.Path = tempItemContentPath;
+            modData.LocalPath = tempItemContentPath;
 
             AddonsLogger.Log("Created temporary workshop item directory " + tempItemContentPath);
         }
 
         [UsedImplicitly]
-        public static void OnSubmitItemUpdatePostfix(WorkshopManager __instance, SteamAsyncSubmitItemUpdate Parent, bool WasSuccessful, WorkShopItemDetail ItemDetail, bool UserNeedsToAcceptWorkshopLegalAgreement)
+        public static void PublishModPostfix(WorkshopMenu __instance)
         {
-            var tempItemContentPath = ItemDetail.Path;
+            var modData = GetSelectedModData(__instance);
+            
+            // _selectedModItem.Data
+            var tempItemContentPath = modData.LocalPath;
             var origItemContentPath = tempItemContentPath.Replace("_temp", "");
 
             AddonsLogger.Log("Checking for temporary workshop item directory " + tempItemContentPath);
@@ -78,7 +98,7 @@ namespace Stationeers.Addons.Modules.Workshop
             }
 
             // Put things back how we found them
-            ItemDetail.Path = origItemContentPath;
-        }*/
+            modData.LocalPath = origItemContentPath;
+        }
     }
 }
