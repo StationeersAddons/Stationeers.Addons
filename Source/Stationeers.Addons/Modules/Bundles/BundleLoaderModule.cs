@@ -38,7 +38,7 @@ namespace Stationeers.Addons.Modules.Bundles
                 var modDirectory = itemWrap.DirectoryPath;
                 if (modDirectory == null) {
                     AddonsLogger.Warning($"Missing mod directory for mod with id={itemWrap.Id}");
-                    yield break;
+                    continue;
                 }
                 yield return LoadBundleFromModDirectory(modDirectory);
             }
