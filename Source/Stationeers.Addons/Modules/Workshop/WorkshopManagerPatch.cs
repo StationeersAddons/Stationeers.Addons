@@ -43,7 +43,6 @@ namespace Stationeers.Addons.Modules.Workshop
         {
             var modData = GetSelectedModData(__instance);
             
-            // _selectedModItem.Data
             var origItemContentPath = modData.LocalPath;
             var tempItemContentPath = origItemContentPath + "_temp";
 

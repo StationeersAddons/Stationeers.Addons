@@ -5,7 +5,6 @@ using System.Collections;
 using HarmonyLib;
 using Stationeers.Addons.Core;
 using Stationeers.Addons.Modules.HarmonyLib;
-using UnityEngine;
 
 namespace Stationeers.Addons.Modules.Workshop
 {
@@ -52,7 +51,7 @@ namespace Stationeers.Addons.Modules.Workshop
             }
             catch (Exception ex)
             {
-                //AlertPanel.Instance.ShowAlert($"Failed to initialize workshop publish patch!\n", AlertState.Alert);
+                //AlertPanel.Instance.ShowAlert($"Failed to initialize workshop publish patch!\n", AlertState.Alert); // TODO
                 AddonsLogger.Error($"Failed to initialize workshop publish patch. Exception:\n{ex}");
             }
 
