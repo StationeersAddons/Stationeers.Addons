@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections;
+using Assets.Scripts.UI;
 using HarmonyLib;
 using Stationeers.Addons.Core;
 using Stationeers.Addons.Modules.HarmonyLib;
@@ -42,12 +43,9 @@ namespace Stationeers.Addons.Modules.Workshop
             AddonsLogger.Log("Patching WorkshopManager using Harmony...");
             try
             {
-                var publishWorkshopMethod = typeof(WorkshopMenu).GetMethod("PublishMod", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-                var publishPrefix = typeof(WorkshopManagerPatch).GetMethod("PublishModPrefix");
-                var publishPostfix = typeof(WorkshopManagerPatch).GetMethod("PublishModPostfix");
-
-                harmony.Patch(publishWorkshopMethod, new HarmonyMethod(publishPrefix));
-                harmony.Patch(publishWorkshopMethod, null, new HarmonyMethod(publishPostfix));
+                var refreshButtonsMethod = typeof(WorkshopMenu).GetMethod("RefreshButtons", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                var refreshButtonsPostfixPrefix = typeof(WorkshopManagerPatch).GetMethod("RefreshButtonsPostfix");
+                harmony.Patch(refreshButtonsMethod, null, new HarmonyMethod(refreshButtonsPostfixPrefix));
             }
             catch (Exception ex)
             {

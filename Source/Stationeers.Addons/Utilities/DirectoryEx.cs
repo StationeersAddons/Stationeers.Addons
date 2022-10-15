@@ -24,7 +24,7 @@ namespace Stationeers.Addons.Utilities
 
             foreach (var file in files)
             {
-                file.CopyTo(Path.Combine(destination, file.Name));
+                file.CopyTo(Path.Combine(destination, file.Name), true);
             }
 
             foreach (var tempDirectory in directories)
