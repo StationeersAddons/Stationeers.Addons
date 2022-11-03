@@ -40,14 +40,14 @@ namespace Stationeers.Addons.Modules.Plugins
                     AddonsLogger.Log("New version of Stationeers.Addons is available!");
                     
                     // TODO: Figure out how to display alerts as devs broke the AlertPanel.Instance again...
-                    ConsoleWindow.Print($"New version of Stationeers.Addons ({data}) is available!\n", ConsoleColor.Red);
+                    AddonsLogger.Log($"New version of Stationeers.Addons ({data}) is available!\n");
                 }
                 else
                 {
                     AddonsLogger.Error(
                         $"Failed to request latest Stationeers.Addons version. Result: {webRequest.result} Error: '\"{webRequest.error}\""
                     );
-                    ConsoleWindow.PrintError("Failed to check latest Stationeers.Addons version!\n");
+                    AddonsLogger.Error("Failed to check latest Stationeers.Addons version!\n");
 
                     // Wait for the alert window to close
                     while (AlertPanel.Instance.AlertWindow.activeInHierarchy)
