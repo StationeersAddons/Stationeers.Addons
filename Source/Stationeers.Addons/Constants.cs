@@ -6,7 +6,7 @@ namespace Stationeers.Addons
 {
     public static class Constants
     {
-        public const string Version = "v0.4.1";
+        public const string Version = "v0.4.2";
         public const string VersionFile = "https://raw.githubusercontent.com/Erdroy/Stationeers.Addons/master/VERSION";
         public static DateTime SandboxIntroductionDate => new DateTime(2022, 9, 30);
     }
