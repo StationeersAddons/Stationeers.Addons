@@ -63,7 +63,13 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
 
                 // ImGui
                 typeof(ImGuiNET.ImGui),
-                typeof(ImGuiNET.Unity.DearImGui)
+                typeof(ImGuiNET.Unity.DearImGui),
+                
+                // UniTask
+                typeof(Cysharp.Threading.Tasks.Channel),
+                typeof(Cysharp.Threading.Tasks.Linq.IAsyncWriter<>),
+                typeof(Cysharp.Threading.Tasks.Triggers.AsyncAwakeTrigger),
+                typeof(Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder<>)
             );
         }
     }

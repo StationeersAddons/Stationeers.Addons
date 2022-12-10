@@ -48,6 +48,12 @@ namespace Stationeers.Addons.PluginCompiler
 
             "Unity.TextMeshPro.dll",
             
+            "UniTask.dll",
+            "UniTask.DOTween.dll",
+            "UniTask.Addressables.dll",
+            "UniTask.Linq.dll",
+            "UniTask.TextMeshPro.dll",
+            
             "RG.ImGui.dll",
             "RG.ImGui.Unity.dll"
         };
