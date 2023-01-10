@@ -6,7 +6,7 @@ Our addons work this standard mods. Besides the `About` and `GameData` folders, 
 To get basic addon with simple plugin, follow these steps:
 1. Make sure that you have Visual Studio 2019 installed with C# support. You can also install `Visual Studio Tools for Unity`, this will come in handy later, when you will want to debug your addon. Additionally it will be helpful, if you know how to make standard mods - [read this](https://stationeers-wiki.com/Guide_(Modding)).
 2. Clone [Stationeers.Addons](https://github.com/Erdroy/Stationeers.Addons) repository using git or download it using Download button, open the resulting folder.
-3. Copy dll files from your game installation directory into Libraries/Stationeers, [read this](https://github.com/Erdroy/Stationeers.Addons/blob/master/Libraries/Stationeers/README.md).
+3. Open [Source/Stationeers.VS.props](https://github.com/Erdroy/Stationeers.Addons/blob/master/Source/Stationeers.VS.props) file, and edit the path, to where your game is installed.
 4. Copy ExampleMod from `Source/ExampleMods` into `Source/MyMods/` directory.
 5. Rename copied directory to whatever name you want, let's keep it simple, and call it MyFirstAddon.
 6. Rename `ExampleMod.csproj` to `MyFirstAddon.csproj` and  `ExampleMod.csproj.user` to `MyFirstAddon.csproj.user`.
