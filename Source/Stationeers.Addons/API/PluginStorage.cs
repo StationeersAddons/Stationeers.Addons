@@ -92,7 +92,14 @@ namespace Stationeers.Addons.API
             where TPlugin : IPlugin
         {
             // Use name of the TPlugin class and fileIndex, to get a unique file for that plugin
-            return Path.Combine(GetBasePluginPath<TPlugin>(), $"{fileName}.{extension}");
+            var directory = GetBasePluginPath<TPlugin>();
+            
+            // Create directory if it doesn't exist
+            if(!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+            
+            // Return the full path to the file
+            return Path.Combine(directory, $"{fileName}.{extension}");
         }
     }
 }
