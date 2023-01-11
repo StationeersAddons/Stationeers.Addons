@@ -186,6 +186,34 @@ namespace Stationeers.Addons.PluginCompiler
             return false;
         }
 
+        public void WhitelistAssembly(Type baseAssemblyType, params Type[] excludedTypes)
+        {
+            var excludedNamespaces = new List<string>();
+            foreach (var type in excludedTypes)
+            {
+                Debug.Assert(type != null, "type is null!");
+                var symbol = GetNamedTypeSymbol(type);
+                excludedNamespaces.Add(symbol.ContainingNamespace.ToDisplayString());
+            }
+            
+            var assembly = baseAssemblyType.Assembly;
+            
+            // Whitelist all namespaces from the assembly
+            foreach (var type in assembly.GetTypes())
+            {
+                var symbol = GetNamedTypeSymbol(type);
+                if (symbol != null)
+                {
+                    var namespaceName = symbol.ContainingNamespace.ToDisplayString();
+
+                    if (excludedNamespaces.Contains(namespaceName))
+                        continue;
+                    
+                    _namespaceWhitelist.Add(namespaceName);
+                }
+            }
+        }
+
         public void WhitelistTypesNamespaces(params Type[] types)
         {
             foreach (var type in types)
