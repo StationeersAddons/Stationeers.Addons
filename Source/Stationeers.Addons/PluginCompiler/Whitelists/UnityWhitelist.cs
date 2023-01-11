@@ -24,6 +24,7 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(UnityEngine.JsonUtility),
                 typeof(UnityEngine.Assertions.Assert),
                 typeof(UnityEngine.EventSystems.BaseInput),
+                typeof(UnityEngine.Profiling.Profiler),
 
                 // TextMeshPro
                 typeof(TMPro.TextMeshPro)

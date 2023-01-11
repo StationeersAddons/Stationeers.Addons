@@ -34,7 +34,6 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(System.IO.BinaryReader),
                 typeof(System.IO.BinaryWriter),
                 typeof(System.IO.StreamReader),
-                typeof(System.IO.StreamWriter),
                 typeof(System.IO.StringReader),
                 typeof(System.IO.StringWriter),
                 typeof(System.IO.MemoryStream), // Should be safe
@@ -86,7 +85,6 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 typeof(System.InvalidOperationException),
                 typeof(System.NotSupportedException)
             );
-            whitelist.BlacklistTypes(/* none */);
             
             whitelist.WhitelistMembers(
                 ReflectionUtilities.GetMethodInfo<System.ValueType>("ToString"),
