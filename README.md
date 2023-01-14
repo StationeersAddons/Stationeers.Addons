@@ -6,11 +6,26 @@
 **Current status:** Available for early testing.<br>
 
 ## Download & Installation
+### Windows
 If you have already installed the Addons, make sure to run file verification through Steam before installing a new version (go to Steam, click RMB on the game, open **Properties**, go to **Local Files** and click on **Verify integrity of game files...**)!
  
 Go to [Releases](https://github.com/Erdroy/Stationeers.Addons/releases), select latest release and download zip file named 'Stationeers.Addons-vX.X-X.zip'. Now go to Steam, click RMB on the game, open **Properties**, go to **Local Files** and click on **BROWSE LOCAL FILES**. It should open new window for you. Next, you have to open the downloaded zip and drag all of its contents into the game folder (`AddonManager` folder and `version.dll`). And that's it! Enjoy your mods!
 
 ***Note:** After you've subscribed to an addon on the workshop, you have to restart the game. This will be improved in the future.*
+
+### Linux (client, not tested for servers)
+*(this is in beta, might not work)*
+Installing:
+1) Do the same unzipping as in windows (extract all zip content on the game installation root folder)
+2) In a shell, navigate to the Addons folder you've just extracted
+3) Run `mono Stationeers.Addons.Patcher.exe`
+4) Enjoy (hopefully)
+
+Updating:
+1) Like in windows, verify the files from steam
+2) Extract new version of this package
+3) Run the exe (step 3 of `Installing`)
+
 
 ## Links
 * [Discord](https://discord.gg/b6kFrUATdm)

@@ -28,6 +28,7 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
         private AssemblyDefinition _assembly;
         private ModuleDefinition _module;
         private TypeDefinition _type;
+        private string _installResourcesDir;
 
         public string AssemblyFileName;
         public string TemporaryAssemblyFileName;
@@ -39,7 +40,7 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
 
             if (!File.Exists(AssemblyFileName))
                 Logger.Current.LogFatal($"Could not find game/server assembly '{AssemblyFileName}'.");
-            
+
             // Copy the assembly into temporary file
             File.Copy(AssemblyFileName, TemporaryAssemblyFileName, true);
 
@@ -101,6 +102,9 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
             // Backup the assembly first
             Backup();
 
+            // Copy dlls to the Managed folder, required for linux to be auto loaded
+            CopyRequiredAssemblies();
+
             // We are clear here, go ahead and patch the game
             Inject();
         }
@@ -121,14 +125,13 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
         private void GetInstanceAssemblies(string installInstance)
         {
             // This is kind of verbose, might need to be rewritten in a more concise manner
-            string installResourcesDir = null;
-            if(installInstance == Constants.GameExe)
+            if (installInstance == Constants.GameExe)
             {
-                installResourcesDir = Constants.GameResourcesDir;
+                _installResourcesDir = Constants.GameResourcesDir;
             }
-            else if(installInstance == Constants.ServerExe)
+            else if (installInstance == Constants.ServerExe)
             {
-                installResourcesDir = Constants.ServerResourcesDir;
+                _installResourcesDir = Constants.ServerResourcesDir;
             }
             System.Diagnostics.Debug.Assert(!string.IsNullOrEmpty(installResourcesDir), "Invalid install dir!");
 
@@ -210,6 +213,15 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
                 typeof(Type)
             }));
 
+            // Get Environment.CurrentDirectory in the runtime
+            var curDir = _module.ImportReference(typeof(Environment).GetMethod("get_CurrentDirectory"));
+            // Path combine for joining the assembly full path
+            var pathCombine = _module.ImportReference(typeof(Path).GetMethod("Combine", new[]
+            {
+                typeof(string),
+                typeof(string)
+            }));
+
             var invokeMember = _module.ImportReference(typeof(Type).GetMethod("InvokeMember", new[]
             {
                 typeof(string),
@@ -226,8 +238,11 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
             method.Body.Variables.Add(new VariableDefinition(_module.ImportReference(typeof(object))));
 
             // Create instructions
-            processor.Append(processor.Create(OpCodes.Ldstr, Constants.LoaderAssemblyFileName));
-            processor.Append(processor.Create(OpCodes.Call, loadFile));
+            processor.Append(processor.Create(OpCodes.Nop));
+            processor.Append(processor.Create(OpCodes.Call, curDir));                               // load current dir
+            processor.Append(processor.Create(OpCodes.Ldstr, Constants.LoaderAssemblyFileName));    // load assembly path
+            processor.Append(processor.Create(OpCodes.Call, pathCombine));                          // call Path.Combine
+            processor.Append(processor.Create(OpCodes.Call, loadFile));                             // call Assembly.LoadFile(resultingPath)
 
             processor.Append(processor.Create(OpCodes.Ldstr, Constants.LoaderTypeName));
             processor.Append(processor.Create(OpCodes.Callvirt, getType));
@@ -239,7 +254,7 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
             processor.Append(processor.Create(OpCodes.Ldloc_0));
 
             processor.Append(processor.Create(OpCodes.Ldstr, Constants.LoaderFunctionName));
-            processor.Append(processor.Create(OpCodes.Ldc_I4, (int) BindingFlags.InvokeMethod));
+            processor.Append(processor.Create(OpCodes.Ldc_I4, (int)BindingFlags.InvokeMethod));
 
             processor.Append(processor.Create(OpCodes.Ldnull));
             processor.Append(processor.Create(OpCodes.Ldloc_1));
@@ -249,6 +264,34 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
 
             processor.Append(processor.Create(OpCodes.Pop));
             processor.Append(processor.Create(OpCodes.Ret));
+        }
+
+        private void CopyRequiredAssemblies()
+        {
+            // This was taken from Stationeers.Addons csproj
+            // Perhaps it could be "cecilled" in a PreBuild Script?
+            // Copies required runtime assemblies to the Managed folder which seems to load them
+            // (without doing this, you get filenotfoundexceptions in the game runtime console for 0harmony, etc)
+            var assemblies = new[]
+            {
+                "0Harmony",
+                "Microsoft.CodeAnalysis",
+                "Microsoft.CodeAnalysis.CSharp",
+                "System.Buffers",
+                "System.Collections.Immutable",
+                "System.Memory",
+                "System.Numerics.Vectors",
+                "System.Reflection.Metadata",
+                "System.Runtime.CompilerServices.Unsafe",
+                "System.Text.Encoding.CodePages",
+                "System.Threading.Tasks.Extensions"
+            };
+            foreach (var assemblyFile in assemblies.Select(i => i + ".dll"))
+            {
+                var from = Path.Combine(Environment.CurrentDirectory, assemblyFile);
+                var to = Path.Combine(Environment.CurrentDirectory, _installResourcesDir, AssemblyDir, assemblyFile);
+                File.Copy(from, to, true);
+            }
         }
     }
 }
