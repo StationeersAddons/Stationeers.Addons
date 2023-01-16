@@ -11,8 +11,8 @@ namespace Stationeers.Addons.PluginCompiler.Whitelists
                 // Do not allow for transpile for now TODO: We have to figure something out
                 typeof(HarmonyLib.HarmonyTranspiler),
                 typeof(HarmonyLib.Transpilers),
-                typeof(HarmonyLib.FileLog),
-                typeof(HarmonyLib.Memory)
+                typeof(HarmonyLib.FileLog)//,
+                //typeof(HarmonyLib.Memory)
             );
             whitelist.WhitelistTypesNamespaces(
                 typeof(HarmonyLib.Harmony) // Just allow everything
