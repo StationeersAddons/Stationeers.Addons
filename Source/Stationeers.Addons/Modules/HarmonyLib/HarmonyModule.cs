@@ -49,7 +49,7 @@ namespace Stationeers.Addons.Modules.HarmonyLib
         /// <inheritdoc />
         public void Shutdown()
         {
-            _harmony.UnpatchAll();
+            _harmony.UnpatchSelf();
             _harmony = null;
         }
         
