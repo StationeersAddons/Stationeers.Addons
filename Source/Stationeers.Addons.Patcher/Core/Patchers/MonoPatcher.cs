@@ -133,10 +133,10 @@ namespace Stationeers.Addons.Patcher.Core.Patchers
             {
                 _installResourcesDir = Constants.ServerResourcesDir;
             }
-            System.Diagnostics.Debug.Assert(!string.IsNullOrEmpty(installResourcesDir), "Invalid install dir!");
+            System.Diagnostics.Debug.Assert(!string.IsNullOrEmpty(_installResourcesDir), "Invalid install dir!");
 
-            AssemblyFileName = Path.Combine(Environment.CurrentDirectory, installResourcesDir, AssemblyDir, AssemblyName);
-            TemporaryAssemblyFileName = Path.Combine(Environment.CurrentDirectory, installResourcesDir, AssemblyDir, AssemblyName + ".temp.dll");
+            AssemblyFileName = Path.Combine(Environment.CurrentDirectory, _installResourcesDir, AssemblyDir, AssemblyName);
+            TemporaryAssemblyFileName = Path.Combine(Environment.CurrentDirectory, _installResourcesDir, AssemblyDir, AssemblyName + ".temp.dll");
         }
 
         private void Backup()
